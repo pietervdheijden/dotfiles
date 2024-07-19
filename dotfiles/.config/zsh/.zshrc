@@ -121,9 +121,9 @@ source <(ng completion script)
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-# Kubectl
+# Load Kubectl CLI autocompletion
 source <(kubectl completion zsh)
 
-# Load
+# Load configuration
 zsh_dir=$HOME/.config/zsh
 source $zsh_dir/aliases.sh
