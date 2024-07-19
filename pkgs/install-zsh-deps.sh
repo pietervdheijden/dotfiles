@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo "*** Installing zsh dependencies"
+
 # Download GitHub repositories for zsh
 get_gh_repository() {
   local repository=$1
@@ -23,3 +25,36 @@ get_gh_repository romkatv/powerlevel10k $HOME/.oh-my-zsh/custom/themes/powerleve
 if [ $SHELL != "/bin/zsh" ]; then
   chsh -s $(which zsh)
 fi
+
+# Determine fonts directory
+if [[ $(uname -s) == MINGW* ]]; then
+  # Windows
+  fonts_directory="C:\Windows\Fonts"
+elif [[ $(uname -s) == "Darwin" ]]; then
+  # Mac OS
+  fonts_directory=$HOME/Library/Fonts
+else
+  # Unix
+  fonts_directory=$HOME/.fonts
+fi
+
+# Ensure fonts directory exists
+mkdir -p $fonts_directory
+
+# Download powerlevel10k fonts
+# Source: https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#fonts
+download_font() {
+  local name=$1
+  local url=$2
+  local target_folder=$3
+
+  target_file=$target_folder/$name
+  if [ ! -f "$target_file" ]; then
+    echo "Downloading font: $name"
+    wget -O "$target_file" $url
+  fi
+}
+download_font "MesloLGS NF Regular.ttf" "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf" $fonts_directory
+download_font "MesloLGS NF Bold.ttf" "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf" $fonts_directory
+download_font "MesloLGS NF Italic.ttf" "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf" $fonts_directory
+download_font "MesloLGS NF Bold Italic.ttf" "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf" $fonts_directory
