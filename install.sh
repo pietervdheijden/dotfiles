@@ -1,31 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Create symlinks for dotfiles
-stow zsh -t $HOME
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
-## ZSH
-# TODO: use brew / apt-get to install zsh
-# TODO: install powerlevel10k fonts: https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#meslo-nerd-font-patched-for-powerlevel10k
-# Download GitHub repositories for zsh
-get_gh_repository() {
-  local repository=$1
-  local target_folder=$2
-
-  if [ ! -d $target_folder ]; then
-    echo "Cloning ${repository}"
-    git clone https://github.com/$repository.git $target_folder
-  else
-    echo "Updating ${repository}"
-    git -C $target_folder pull
-  fi
-}
-get_gh_repository ohmyzsh/ohmyzsh $HOME/.oh-my-zsh
-get_gh_repository zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-get_gh_repository zsh-users/zsh-completions $HOME/.oh-my-zsh/custom/plugins/zsh-completions
-get_gh_repository zsh-users/zsh-syntax-highlighting $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-get_gh_repository romkatv/powerlevel10k $HOME/.oh-my-zsh/custom/themes/powerlevel10k
-
-# Change default shell to zsh
-if [ $SHELL != "/bin/zsh" ]; then
-  chsh -s $(which zsh)
+# Install Homebrew
+if ! [ -x "$(command -v brew)" ]; then
+  echo "*** Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
+
+# Install packages with Homebrew
+echo "*** Installing software via Homebrew..."
+brew bundle install --no-upgrade --file="$SCRIPT_DIR/pkgs/Brewfile"
+
+# Install 'packages' without package manager
+$SCRIPT_DIR/pkgs/install-fonts.sh
+$SCRIPT_DIR/pkgs/install-zsh-deps.sh
+
+# Create symlink for dotfiles
+stow -d $SCRIPT_DIR/dotfiles -t $HOME zsh
