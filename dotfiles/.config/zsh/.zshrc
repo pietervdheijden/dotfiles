@@ -123,15 +123,7 @@ complete -o nospace -C /usr/local/bin/terraform terraform
 
 # Kubectl
 source <(kubectl completion zsh)
-alias k="kubectl"
-alias kx='f() { [ "$1" ] && kubectl config use-context $1 || kubectl config current-context ; } ; f'
-alias kn='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
 
-# Terraform aliases
-alias tf='terraform'
-alias tfv='terraform validate'
-alias tfi='terraform init -upgrade'
-alias tfp='terraform plan'
-alias tfa='terraform apply'
-alias tfm='terraform fmt -recursive'
-
+# Load
+zsh_dir=$HOME/.config/zsh
+source $zsh_dir/aliases.sh

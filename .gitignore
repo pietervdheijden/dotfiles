@@ -1,2 +1,4 @@
 .idea
 Brewfile.lock.json
+.zcompdump*
+.zsh_history
