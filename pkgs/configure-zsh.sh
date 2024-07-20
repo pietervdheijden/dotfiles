@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "*** Installing zsh dependencies"
+echo "*** Configuring zsh"
 
 # Download GitHub repositories for zsh
 get_gh_repository() {

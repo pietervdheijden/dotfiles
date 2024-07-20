@@ -12,5 +12,6 @@ fi
 echo "*** Installing software via Homebrew..."
 brew bundle install --no-upgrade --file="$SCRIPT_DIR/Brewfile"
 
-# Install 'packages' without package manager
-$SCRIPT_DIR/install-zsh-deps.sh
+# Configure packages
+$SCRIPT_DIR/configure-zsh.sh
+$SCRIPT_DIR/configure-git.sh
