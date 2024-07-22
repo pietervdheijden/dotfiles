@@ -19,5 +19,4 @@ alias tm='terramate'
 alias tmg='terramate generate'
 
 # Other
-alias ls='ls -al'
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
