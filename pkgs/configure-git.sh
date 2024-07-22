@@ -11,6 +11,7 @@ git config --global alias.ci "commit -v"
 git config --global alias.co checkout
 git config --global alias.cpick cherry-pick
 
+# Platform specific configuration
 if [[ $(uname -s) == MINGW* ]]; then
   # Windows
   git config --global core.autocrlf true
