@@ -11,7 +11,13 @@ alias tfv='terraform validate'
 alias tfi='terraform init -upgrade'
 alias tfp='terraform plan'
 alias tfa='terraform apply'
+alias tfaa='terraform apply -auto-approve'
 alias tfm='terraform fmt -recursive'
 
-# General
+# Terramate
+alias tm='terramate'
+alias tmg='terramate generate'
+
+# Other
 alias ls='ls -al'
+alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
