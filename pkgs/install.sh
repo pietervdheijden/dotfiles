@@ -28,6 +28,8 @@ else
   sudo apt-get install zsh -y
 fi
 
+echo "*** Installing npm packages..."
+npm install -g @angular/cli
 
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh
