@@ -18,7 +18,9 @@ if [[ $(uname -s) == MINGW* ]]; then
 elif [[ $(uname -s) == "Darwin" ]]; then
   # Mac OS
   git config --global credential.helper osxkeychain
+  git config --global core.autocrlf false
 else
   # Unix
   git config --global credential.helper cache
+  git config --global core.autocrlf false
 fi
