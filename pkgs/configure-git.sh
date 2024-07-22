@@ -5,11 +5,20 @@
 
 echo "*** Configuring git"
 
+# User
 git config --global user.name "Pieter van der Heijden"
 
+# Alias
 git config --global alias.ci "commit -v"
 git config --global alias.co checkout
 git config --global alias.cpick cherry-pick
+
+# Push
+git config --global push.autoSetupRemote true
+git config --global push.default current
+
+# Pull
+git config --global pull.rebase false
 
 # Platform specific configuration
 if [[ $(uname -s) == MINGW* ]]; then
