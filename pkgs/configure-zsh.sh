@@ -8,10 +8,10 @@ get_gh_repository() {
   local target_folder=$2
 
   if [ ! -d $target_folder ]; then
-    echo "Cloning ${repository}"
+    echo "Cloning repository: ${repository}"
     git clone https://github.com/$repository.git $target_folder
   else
-    echo "Updating ${repository}"
+    echo "Updating repository: ${repository}"
     git -C $target_folder pull
   fi
 }
@@ -22,7 +22,8 @@ get_gh_repository zsh-users/zsh-syntax-highlighting $HOME/.oh-my-zsh/custom/plug
 get_gh_repository romkatv/powerlevel10k $HOME/.oh-my-zsh/custom/themes/powerlevel10k
 
 # Change default shell to zsh
-if [ $SHELL != "/bin/zsh" ]; then
+if [[ $SHELL != *"/bin/zsh" ]]; then
+  echo "Changing default shell to ZSH"
   chsh -s $(which zsh)
 fi
 
@@ -35,11 +36,14 @@ elif [[ $(uname -s) == "Darwin" ]]; then
   fonts_directory=$HOME/Library/Fonts
 else
   # Unix
-  fonts_directory=$HOME/.fonts
+  fonts_directory=$HOME/.local/share/fonts
 fi
 
 # Ensure fonts directory exists
-mkdir -p $fonts_directory
+if [ ! -d $fonts_directory ]; then
+  echo "Creating fonts directory: $fonts_directory"
+  mkdir -p $fonts_directory
+fi
 
 # Download powerlevel10k fonts
 # Source: https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#fonts

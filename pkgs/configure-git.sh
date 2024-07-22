@@ -15,6 +15,7 @@ if [[ $(uname -s) == MINGW* ]]; then
   # Windows
   git config --global core.autocrlf true
 elif [[ $(uname -s) == "Darwin" ]]; then
+  # Mac OS
   git config --global credential.helper osxkeychain
 else
   # Unix
