@@ -121,9 +121,6 @@ source $ZSH/oh-my-zsh.sh
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
-
 # Load Terraform CLI autocompletion.
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
@@ -134,8 +131,3 @@ source <(kubectl completion zsh)
 # Load ZSH configuration
 zsh_dir=$HOME/.config/zsh
 source $zsh_dir/aliases.sh
-
-# Load NVM configuration
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
