@@ -2,8 +2,8 @@
 
 # Kubectl
 alias k="kubectl"
-alias kx='kubectl_change_context'
-alias kn='kubectl_change_namespace'
+alias kx='kubectl_context'
+alias kn='kubectl_namespace'
 
 # Terraform
 alias tf='terraform'

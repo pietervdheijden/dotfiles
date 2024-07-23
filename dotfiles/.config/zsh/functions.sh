@@ -1,4 +1,4 @@
-kubectl_change_context() {
+kubectl_context() {
   local context=$1
   if [ "$context" ]; then
     kubectl config use-context $context
@@ -7,7 +7,7 @@ kubectl_change_context() {
   fi
 }
 
-kubectl_change_namespace() {
+kubectl_namespace() {
   local namespace=$1
   if [ "$namespace" ]; then
     kubectl config set-context --current --namespace $namespace
