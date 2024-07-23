@@ -13,6 +13,9 @@ git config --global alias.ci "commit -v"
 git config --global alias.co checkout
 git config --global alias.cpick cherry-pick
 
+# Core
+git config --global core.editor vim
+
 # Push
 git config --global push.autoSetupRemote true
 git config --global push.default current
