@@ -26,6 +26,7 @@ else
 
   sudo apt-get install stow -y
   sudo apt-get install zsh -y
+  sudo apt-get install neovim -y
 fi
 
 echo "*** Installing npm packages..."
