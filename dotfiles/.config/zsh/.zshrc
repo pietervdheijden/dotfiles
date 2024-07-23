@@ -131,3 +131,4 @@ source <(kubectl completion zsh)
 # Load ZSH configuration
 zsh_dir=$HOME/.config/zsh
 source $zsh_dir/aliases.sh
+source $zsh_dir/functions.sh
