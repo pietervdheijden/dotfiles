@@ -2,6 +2,21 @@ if [[ -d /home/linuxbrew/.linuxbrew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
+# Zsh configs
+zstyle ':omz:update' mode auto      # update automatically without asking
+
+# Plugins
+# Set plugins before loading oh-my-zsh, otherwise plugins will not be used
+plugins=(
+    git
+    sudo
+    colored-man-pages
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+    zsh-completions
+    kubectl
+)
+
 # command for zsh-completions
 autoload -U compinit && compinit
 
@@ -23,17 +38,3 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-
-# Zsh configs
-zstyle ':omz:update' mode auto      # update automatically without asking
-
-# Plugins
-plugins=(
-    git
-    sudo
-    colored-man-pages
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-    zsh-completions
-    kubectl
-)
