@@ -34,7 +34,10 @@ else
   sudo apt-get install -y zsh
 fi
 
-echo "*** Installing npm packages..."
+# NPM
+echo "*** Installing global npm packages..."
+mkdir -p "${HOME}/.npm-packages"
+npm config set prefix "${HOME}/.npm-packages" # Store global packages in home folder, so global *user* packages can be installed without sudo
 npm install -g @angular/cli
 
 # Configure packages
