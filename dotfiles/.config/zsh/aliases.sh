@@ -18,5 +18,9 @@ alias tfm='terraform fmt -recursive'
 alias tm='terramate'
 alias tmg='terramate generate'
 
+# Vim
+alias vim='nvim'
+alias nv='nvim'
+
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
