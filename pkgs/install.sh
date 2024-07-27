@@ -32,6 +32,7 @@ else
 
   sudo apt-get install -y stow
   sudo apt-get install -y zsh
+  sudo apt-get install -y ripgrep
 
   # Install Google Cloud SDK
   echo "*** Installing Google Cloud SDK..."
