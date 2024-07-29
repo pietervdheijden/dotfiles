@@ -12,6 +12,7 @@ get_gh_repository() {
     git clone https://github.com/$repository.git $target_folder
   else
     echo "Updating repository: ${repository}"
+    git -C $target_folder restore .
     git -C $target_folder pull
   fi
 }
