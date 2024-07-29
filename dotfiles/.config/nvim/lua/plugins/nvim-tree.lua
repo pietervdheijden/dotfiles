@@ -18,5 +18,8 @@ return {
         filters = {
             dotfiles = false,
         },
+        git = {
+            ignore = false,
+        }
     }
 }
