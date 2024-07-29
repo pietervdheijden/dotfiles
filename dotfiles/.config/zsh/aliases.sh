@@ -24,3 +24,5 @@ alias nv='nvim'
 
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
+alias cl='clear'
+alias cls='clear'
