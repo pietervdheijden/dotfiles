@@ -51,15 +51,15 @@ fi
 if ! [ -x "$(command -v nvm)" ]; then
  echo "*** Installing NVM..."
  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+ # Load NVM
  export NVM_DIR="$HOME/.nvm"
- [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 nvm use node
 
 # NPM
 echo "*** Installing global npm packages..."
-mkdir -p "${HOME}/.npm-packages"
-npm config set prefix "${HOME}/.npm-packages" # Store global packages in home folder, so global *user* packages can be installed without sudo
 npm install -g @angular/cli
 npm install -g neovim
 
