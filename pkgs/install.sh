@@ -51,6 +51,7 @@ echo "*** Installing global npm packages..."
 mkdir -p "${HOME}/.npm-packages"
 npm config set prefix "${HOME}/.npm-packages" # Store global packages in home folder, so global *user* packages can be installed without sudo
 npm install -g @angular/cli
+npm install -g neovim
 
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh
