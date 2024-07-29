@@ -134,6 +134,11 @@ export MAVEN_HOME="/usr/share/maven"
 # Java home directory
 export JAVA_HOME="/usr/lib/jvm/zulu11-ca-amd64"
 
+# Homebrew
 if [[ -d /home/linuxbrew/.linuxbrew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

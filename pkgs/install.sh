@@ -33,6 +33,8 @@ else
   sudo apt-get install -y stow
   sudo apt-get install -y zsh
   sudo apt-get install -y ripgrep
+  sudo apt-get install -y fd-find
+  sudo apt-get install -y luarocks
 
   # Install Google Cloud SDK
   echo "*** Installing Google Cloud SDK..."
@@ -43,8 +45,16 @@ else
   sudo apt-get update
   sudo apt-get -y install google-cloud-cli
   sudo apt-get -y install google-cloud-sdk-gke-gcloud-auth-plugin
-
 fi
+
+# Install nvm
+if ! [ -x "$(command -v nvm)" ]; then
+ echo "*** Installing NVM..."
+ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+ export NVM_DIR="$HOME/.nvm"
+ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+fi
+nvm use node
 
 # NPM
 echo "*** Installing global npm packages..."
