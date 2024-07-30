@@ -4,7 +4,11 @@
 alias k="kubectl"
 alias kx='kubectl_context'
 alias kn='kubectl_namespace'
-alias kgn='kubectl get namespaces'
+alias kgi='kubectl get ingress'
+alias kgn='kubectl get namespace'
+alias kgnp='kubectl get netpol'
+alias kgp='kubectl get pod'
+alias kgs='kubectl get service'
 
 # Terraform
 alias tf='terraform'
