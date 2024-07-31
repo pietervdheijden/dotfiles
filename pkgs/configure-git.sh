@@ -23,6 +23,9 @@ git config --global push.default current
 # Pull
 git config --global pull.rebase false
 
+# Advice
+git config --global advice.addIgnoredFile false
+
 # Platform specific configuration
 if [[ $(uname -s) == MINGW* ]]; then
   # Windows
