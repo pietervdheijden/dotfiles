@@ -10,7 +10,8 @@ return {
         telescope = {
           enabled = true
         },
-        which_key = true
+        which_key = true,
+        noice = true,
       }
     },
     config = function () 
