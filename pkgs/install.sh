@@ -66,3 +66,4 @@ npm install -g neovim
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh
 $SCRIPT_DIR/configure-git.sh
+$SCRIPT_DIR/configure-fonts.sh
