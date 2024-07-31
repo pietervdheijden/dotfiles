@@ -11,3 +11,4 @@ Inspired by:
 - https://github.com/elijahmanor/youtube-lazyvim
 - https://github.com/LazyVim/starter
 - https://github.com/LazyVim/LazyVim
+

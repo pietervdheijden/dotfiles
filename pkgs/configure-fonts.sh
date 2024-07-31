@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Note: on WSL2, the fonts should be manually downloaded and installed on Windows, and configured in the Windows Terminal
+
 echo "*** Configuring fonts"
 
 # Set variables
