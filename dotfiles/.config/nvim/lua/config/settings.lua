@@ -10,6 +10,7 @@ function This.setup()
   vim.g.loaded_python3_provider = 0
   vim.g.loaded_ruby_provider = 0
 
+  -- Configure leader
   vim.g.mapleader = " "
   vim.g.maplocalleader = "\\"
 
@@ -18,6 +19,10 @@ function This.setup()
   vim.opt.tabstop = 2
   vim.opt.softtabstop = 2
   vim.opt.shiftwidth = 2
+
+  -- Configure line numbers
+  vim.opt.number = true
+  vim.opt.relativenumber = true
 
   -- Configure clipboard
   if vim.fn.has('wsl') == 1 then
