@@ -63,6 +63,10 @@ echo "*** Installing global npm packages..."
 npm install -g @angular/cli
 npm install -g neovim
 
+# PIP
+echo "*** Installing pip packages..."
+pip install azure-servicebus
+
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh
 $SCRIPT_DIR/configure-git.sh
