@@ -27,6 +27,9 @@ alias tmg='terramate generate'
 alias vim='nvim'
 alias nv='nvim'
 
+# Python
+alias py='python3'
+
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
 alias cl='clear'
