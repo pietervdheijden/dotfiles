@@ -1,5 +1,6 @@
 import os
 from azure.servicebus import ServiceBusClient
+from azure.identity import DefaultAzureCredential
 
 def receive_and_delete_all_messages(servicebus_client, queue_name):
     with servicebus_client.get_queue_receiver(queue_name) as receiver:
@@ -17,11 +18,11 @@ def receive_and_delete_all_messages(servicebus_client, queue_name):
 
 def main():
     # Get connection string and queue name from environment variables
-    connection_str = os.getenv('CONNECTION_STR')
+    fully_qualified_namespace = os.getenv('FQN')
     queue_name = os.getenv('QUEUE_NAME')
     dlq = os.getenv('DLQ', 'false').lower() in ('true', '1', 't', 'yes')
     
-    if not connection_str:
+    if not fully_qualified_namespace:
         raise ValueError("CONNECTION_STR environment variable must be set.")
 
     if not queue_name:
@@ -31,7 +32,8 @@ def main():
         queue_name += "/$DeadLetterQueue"
 
     # Create a ServiceBusClient object to interact with the Service Bus
-    servicebus_client = ServiceBusClient.from_connection_string(conn_str=connection_str)
+    credential = DefaultAzureCredential()
+    servicebus_client = ServiceBusClient(fully_qualified_namespace, credential)
 
     try:
         # Receive and delete all messages

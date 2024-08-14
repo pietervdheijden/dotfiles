@@ -66,6 +66,7 @@ npm install -g neovim
 # PIP
 echo "*** Installing pip packages..."
 pip install azure-servicebus
+pip install azure-identity
 
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh

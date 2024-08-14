@@ -16,10 +16,10 @@ kubectl_namespace() {
   fi
 }
 
-receive_and_delete_az_sb_messages() {
-  local connection_str=$1
+az_receive_and_delete_sb_messages() {
+  local fqn=$1
   local queue_name=$2
   local dlq=$3
 
-  CONNECTION_STR=$connection_str QUEUE_NAME=$queue_name DLQ=$dlq py $HOME/.scripts/receive-and-delete-az-sb-messages.py
+  FQN=$fqn QUEUE_NAME=$queue_name DLQ=$dlq py $HOME/.scripts/az-receive-and-delete-sb-messages.py
 }
