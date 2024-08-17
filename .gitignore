@@ -2,3 +2,4 @@
 *Brewfile.lock.json
 .zcompdump*
 .zsh_history
+dotfiles/.config/zsh/secrets.sh
