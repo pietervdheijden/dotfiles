@@ -24,6 +24,12 @@ function This.setup()
   vim.opt.number = true
   vim.opt.relativenumber = false
 
+  -- Configure winbar
+  vim.o.winbar = '%f'
+
+  -- Configure bufferline
+  vim.opt.termguicolors = true
+
   -- Configure clipboard
   if vim.fn.has('wsl') == 1 then
     vim.g.clipboard = {
