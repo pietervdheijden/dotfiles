@@ -30,7 +30,7 @@ return {
     }
 
     -- Custom function to delete buffer and avoid focusing on Nvim Tree
-    _G.delete_buffer = function()
+    _G.delete_current_buffer = function()
       local bufnr = vim.fn.bufnr()
       -- Cycle to the next buffer
       vim.cmd('BufferLineCycleNext')
@@ -43,7 +43,23 @@ return {
       vim.cmd('bdelete! '..bufnr)
     end
 
+    -- Custom function to delete all buffers except current
+    _G.delete_other_buffers = function()
+      local current_buf = vim.api.nvim_get_current_buf()
+      local buffers = vim.api.nvim_list_bufs()
+
+      for _, buf in ipairs(buffers) do
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        local is_nvim_tree = string.match(buf_name, "NvimTree_")
+
+        if vim.api.nvim_buf_is_loaded(buf) and buf ~= current_buf and not is_nvim_tree then
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
+      end
+    end
+
     -- Key mappings for deleting buffers
-    vim.keymap.set('n', '<leader>bd', ':lua delete_buffer()<CR>', { noremap = true, silent = true, desc = "Delete buffer" })
+    vim.keymap.set('n', '<leader>bdc', ':lua delete_current_buffer()<CR>', { noremap = true, silent = true, desc = "Delete current buffer" })
+    vim.keymap.set('n', '<leader>bdo', ':lua delete_other_buffers()<CR>', { noremap = true, silent = true, desc = "Delete other buffers" })
   end,
 }
