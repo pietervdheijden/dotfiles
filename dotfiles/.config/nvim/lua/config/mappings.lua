@@ -12,6 +12,9 @@ function This.setup()
   map('n', '<leader>fg', telescope.live_grep, { desc = "TS: Live grep" })
   map('n', '<leader>fb', telescope.buffers, { desc = "TS: Buffers" })
   map('n', '<leader>fh', telescope.help_tags, {desc = "TS: Help tags" })
+
+  -- LazyVim
+  map('n', '<leader>ln', ':Lazy<CR>', { desc = 'Open LazyVim' })
 end
 
 return This
