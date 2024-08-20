@@ -22,7 +22,7 @@ function This.setup()
 
   -- Configure line numbers
   vim.opt.number = true
-  vim.opt.relativenumber = true
+  vim.opt.relativenumber = false
 
   -- Configure clipboard
   if vim.fn.has('wsl') == 1 then
