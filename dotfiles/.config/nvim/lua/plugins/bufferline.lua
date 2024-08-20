@@ -58,8 +58,46 @@ return {
       end
     end
 
-    -- Key mappings for deleting buffers
+    -- Custom function to delete all buffers to the left
+    _G.delete_left_buffers = function()
+      local current_buf = vim.api.nvim_get_current_buf()
+      local buffers = vim.api.nvim_list_bufs()
+      local current_buf_num = vim.fn.bufnr()
+
+      for _, buf in ipairs(buffers) do
+        local buf_num = vim.fn.bufnr(buf)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        local is_nvim_tree = string.match(buf_name, "NvimTree_")
+
+        if vim.api.nvim_buf_is_loaded(buf) and buf_num < current_buf_num and not is_nvim_tree then
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
+      end
+    end
+
+    -- Custom function to delete all buffers to the right
+    _G.delete_right_buffers = function()
+      local current_buf = vim.api.nvim_get_current_buf()
+      local buffers = vim.api.nvim_list_bufs()
+      local current_buf_num = vim.fn.bufnr()
+
+      for _, buf in ipairs(buffers) do
+        local buf_num = vim.fn.bufnr(buf)
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+        local is_nvim_tree = string.match(buf_name, "NvimTree_")
+
+        if vim.api.nvim_buf_is_loaded(buf) and buf_num > current_buf_num and not is_nvim_tree then
+          vim.api.nvim_buf_delete(buf, { force = true })
+        end
+      end
+    end
+
+    -- Key mappings
+    vim.keymap.set('n', '<leader>bn', ':bnext<CR>', { desc = "Switch to the next buffer" })
+    vim.keymap.set('n', '<leader>bp', ':bprevious<CR>', { desc = "Switch to the previous buffer" })
     vim.keymap.set('n', '<leader>bdc', ':lua delete_current_buffer()<CR>', { noremap = true, silent = true, desc = "Delete current buffer" })
     vim.keymap.set('n', '<leader>bdo', ':lua delete_other_buffers()<CR>', { noremap = true, silent = true, desc = "Delete other buffers" })
+    vim.keymap.set('n', '<leader>bdl', ':lua delete_left_buffers()<CR>', { desc = "Delete all buffers to the left of the current one" })
+    vim.keymap.set('n', '<leader>bdr', ':lua delete_right_buffers()<CR>', { desc = "Delete all buffers to the right of the current one" })
   end,
 }
