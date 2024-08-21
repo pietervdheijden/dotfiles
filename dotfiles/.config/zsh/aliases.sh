@@ -9,6 +9,7 @@ alias kgn='kubectl get namespace'
 alias kgnp='kubectl get netpol'
 alias kgp='kubectl get pod'
 alias kgs='kubectl get service'
+alias kge="kubectl get events --sort-by='.lastTimestamp'"
 
 # Terraform
 alias tf='terraform'
