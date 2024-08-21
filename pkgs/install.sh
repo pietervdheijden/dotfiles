@@ -35,6 +35,7 @@ else
   sudo apt-get install -y ripgrep
   sudo apt-get install -y fd-find
   sudo apt-get install -y luarocks
+  sudo apt-get install -y fzf
 
   # Install Google Cloud SDK
   echo "*** Installing Google Cloud SDK..."
