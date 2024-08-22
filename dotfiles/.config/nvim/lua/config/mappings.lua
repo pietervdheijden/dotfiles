@@ -16,6 +16,9 @@ function This.setup()
 
   -- LazyVim
   map('n', '<leader>ln', ':Lazy<CR>', { desc = 'Open LazyVim' })
+
+  -- Other
+  map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
 end
 
 return This
