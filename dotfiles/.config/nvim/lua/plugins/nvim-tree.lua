@@ -1,3 +1,5 @@
+local map = vim.keymap.set
+
 return {
   "nvim-tree/nvim-tree.lua",
   version = "*",
@@ -6,11 +8,33 @@ return {
     "nvim-tree/nvim-web-devicons"
   },
   opts = {
+    on_attach = function(bufnr)
+      local api = require('nvim-tree.api')
+
+      local function opts(desc)
+        return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+      end
+
+      map('n', '<CR>', api.node.open.edit, opts('Open'))
+      map('n', 'J', api.node.open.horizontal, opts('Open in horitzontal split'))
+      map('n', 'L', api.node.open.vertical, opts('Open in vertical split'))
+      map('n', 'K', api.node.show_info_popup, opts('Info'))
+      map('n', 'R', api.tree.reload, opts('Refresh'))
+      map('n', 'a', api.fs.create, opts('Create'))
+      map('n', 'd', api.fs.remove, opts('Delete'))
+      map('n', 'g?', api.tree.toggle_help, opts('Help'))
+      map('n', 'p', api.fs.paste, opts('Paste'))
+      map('n', 'r', api.fs.rename, opts('Rename'))
+      map('n', 'x', api.fs.cut, opts('Cut'))
+    end,
     sort = {
       sorter = "case_sensitive",
     },
     view = {
-      width = 30,
+      adaptive_size = true,
+    },
+    update_focused_file = {
+      enable = true
     },
     renderer = {
       group_empty = true,
@@ -23,29 +47,4 @@ return {
       ignore = false,
     },
   },
-  config = function()
-    require("nvim-tree").setup(opts)
-
-    -- Helper function to check if Neovim was opened by `kubectl edit`
-    local function is_kubectl_edit()
-      -- Check the command line arguments for "kubectl edit"
-      local arglist = vim.fn.argv()
-      for _, arg in ipairs(arglist) do
-        if arg:match("kubectl") and arg:match("edit") then
-          return true
-        end
-      end
-
-      return false
-    end
-
-    -- Ensure nvim-tree tracks the open file
-    vim.api.nvim_create_autocmd({"BufEnter", "BufWinEnter", "TabEnter"}, {
-      callback = function()
-        if not is_kubectl_edit() then
-          require("nvim-tree.api").tree.find_file({ open = true })
-        end  
-      end,
-    })
-  end
 }

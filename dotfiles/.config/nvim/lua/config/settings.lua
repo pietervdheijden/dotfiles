@@ -30,6 +30,9 @@ function This.setup()
   -- Configure bufferline
   vim.opt.termguicolors = true
 
+  -- Configure splitright
+  vim.opt.splitright = true
+
   -- Configure clipboard
   if vim.fn.has('wsl') == 1 then
     vim.g.clipboard = {
