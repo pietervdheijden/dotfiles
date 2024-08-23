@@ -13,6 +13,11 @@ return {
                     '--line-number', '--column', '--smart-case', '--hidden',
                     "-g", "!.git"
                 },
+                path_display = function(opts, path)
+                  local tail = require("telescope.utils").path_tail(path)
+                  return string.format("%s - %s", tail, path)
+                end,
+                dynamic_preview_title = true,
             },
             pickers = {
                 find_files = {
