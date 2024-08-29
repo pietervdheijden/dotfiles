@@ -78,3 +78,6 @@ pip install fastavro
 $SCRIPT_DIR/configure-zsh.sh
 $SCRIPT_DIR/configure-git.sh
 $SCRIPT_DIR/configure-fonts.sh
+$SCRIPT_DIR/configure-tmux.sh
+
+
