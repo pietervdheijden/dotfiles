@@ -64,16 +64,6 @@ echo "*** Installing global npm packages..."
 npm install -g @angular/cli
 npm install -g neovim
 
-# PIP
-echo "*** Installing pip packages..."
-pip install azure-servicebus
-pip install azure-identity
-pip install openai
-pip install pandas
-pip install pyarrow
-pip install fastparquet
-pip install fastavro
-
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh
 $SCRIPT_DIR/configure-git.sh
