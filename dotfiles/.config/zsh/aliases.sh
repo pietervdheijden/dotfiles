@@ -30,6 +30,7 @@ alias nv='nvim'
 
 # Python
 alias py='python3'
+alias python='python3'
 
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print

@@ -17,13 +17,16 @@ def receive_and_delete_all_messages(servicebus_client, queue_name):
             print(f"Completed {len(received_msgs)} messages.")
 
 def main():
-    # Get connection string and queue name from environment variables
+    # Get fqn and queue name from environment variables
     fully_qualified_namespace = os.getenv('FQN')
     queue_name = os.getenv('QUEUE_NAME')
     dlq = os.getenv('DLQ', 'false').lower() in ('true', '1', 't', 'yes')
     
     if not fully_qualified_namespace:
-        raise ValueError("CONNECTION_STR environment variable must be set.")
+        raise ValueError("FQN environment variable must be set.")
+
+    if not fully_qualified_namespace.endswith(".servicebus.windows.net"):
+        fully_qualified_namespace += ".servicebus.windows.net"
 
     if not queue_name:
         raise ValueError("QUEUE_NAME environment variable must be set.")

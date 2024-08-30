@@ -4,3 +4,4 @@
 .zsh_history
 dotfiles/.config/zsh/secrets.sh
 dotfiles/.config/tmux/plugins
+myenv

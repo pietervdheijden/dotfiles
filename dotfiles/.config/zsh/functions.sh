@@ -21,5 +21,5 @@ az_receive_and_delete_sb_messages() {
   local queue_name=$2
   local dlq=$3
 
-  FQN=$fqn QUEUE_NAME=$queue_name DLQ=$dlq py $HOME/.scripts/az-receive-and-delete-sb-messages.py
+  FQN=$fqn QUEUE_NAME=$queue_name DLQ=$dlq $HOME/.scripts/az-receive-and-delete-sb-messages/run.sh
 }
