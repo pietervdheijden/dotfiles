@@ -38,7 +38,7 @@ return {
           previewer = false,
         },
         live_grep = {
-            theme = 'ivy',
+          theme = 'ivy',
         }
       }
     }) 
