@@ -9,4 +9,4 @@ if [ ! -d $SCRIPT_DIR/myenv ]; then
 fi
 
 # Run script
-$SCRIPT_DIR/myenv/bin/python $SCRIPT_DIR/az-receive-and-delete-sb-messages.py 
+$SCRIPT_DIR/myenv/bin/python $SCRIPT_DIR/az-cosmos-delete-partitions.py 
