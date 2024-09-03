@@ -26,6 +26,9 @@ return {
       map('n', 'p', api.fs.paste, opts('Paste'))
       map('n', 'r', api.fs.rename, opts('Rename'))
       map('n', 'x', api.fs.cut, opts('Cut'))
+
+      -- Add mapping for mouse double-click to open files
+      map('n', '<2-LeftMouse>', api.node.open.edit, opts('Open with mouse double-click'))
     end,
     sort = {
       sorter = "case_sensitive",
