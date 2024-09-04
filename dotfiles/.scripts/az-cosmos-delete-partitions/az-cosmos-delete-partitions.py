@@ -18,7 +18,6 @@ def delete_partitions(container, partition_key_prefix):
     num_partition_keys = len(partition_keys)
     print(f"Number of partition keys to be deleted: {num_partition_keys}")
 
-    max_retries = 5
     retry_delay = 30  # seconds
     current_index = 0
     while True:
