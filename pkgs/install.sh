@@ -63,6 +63,7 @@ nvm use node
 echo "*** Installing global npm packages..."
 npm install -g @angular/cli
 npm install -g neovim
+npm install -g pyright
 
 # Configure packages
 $SCRIPT_DIR/configure-zsh.sh
