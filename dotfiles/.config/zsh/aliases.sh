@@ -15,6 +15,7 @@ alias kge="kubectl get events --sort-by='.lastTimestamp'"
 alias tf='terraform'
 alias tfv='terraform validate'
 alias tfi='terraform init -upgrade'
+alias tfia='terraform init -upgrade && terraform apply'
 alias tfp='terraform plan'
 alias tfa='terraform apply'
 alias tfaa='terraform apply -auto-approve'
