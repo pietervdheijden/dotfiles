@@ -78,6 +78,7 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S kubectl
   sudo pacman --noconfirm -S tmux
   sudo pacman --noconfirm -S lazygit
+  sudo pacman --noconfirm -S ttf-fira-coda
 fi
 
 
