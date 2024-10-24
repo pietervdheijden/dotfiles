@@ -11,6 +11,9 @@ alias kgp='kubectl get pod'
 alias kgs='kubectl get service'
 alias kge="kubectl get events --sort-by='.lastTimestamp'"
 
+# Helm
+alias h="helm"
+
 # Terraform
 alias tf='terraform'
 alias tfv='terraform validate'
@@ -33,6 +36,9 @@ alias nv='nvim'
 alias py='python3'
 alias python='python3'
 alias pip='pip3'
+
+# LazyGit
+alias lg='lazygit'
 
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
