@@ -15,6 +15,7 @@ plugins=(
     zsh-autosuggestions
     zsh-completions
     kubectl
+    helm
 )
 
 # command for zsh-completions
