@@ -23,6 +23,7 @@ alias tfp='terraform plan'
 alias tfa='terraform apply'
 alias tfaa='terraform apply -auto-approve'
 alias tfm='terraform fmt -recursive'
+alias tfd='terraform destroy'
 
 # Terramate
 alias tm='terramate'
