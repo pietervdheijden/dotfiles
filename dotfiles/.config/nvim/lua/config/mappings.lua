@@ -19,6 +19,7 @@ function This.setup()
 
   -- Other
   map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
+  map('n', '<leader>qf', ':copen<CR>', { desc = "Open Quickfix List" })
 end
 
 return This
