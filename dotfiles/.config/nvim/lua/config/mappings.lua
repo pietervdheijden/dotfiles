@@ -15,7 +15,7 @@ function This.setup()
   map('n', '<leader>fr', telescope.resume, { desc = "TS: Resume" })
 
   -- LazyVim
-  map('n', '<leader>ln', ':Lazy<CR>', { desc = 'Open LazyVim' })
+  map('n', '<leader>lv', ':Lazy<CR>', { desc = 'Open LazyVim' })
 
   -- Other
   map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
