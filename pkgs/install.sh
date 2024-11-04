@@ -17,11 +17,11 @@ elif [[ -x "$(command -v apt-get)" ]]; then
   fi
   
   echo "*** Installing software with Homebrew..."
-  brew "neovim"
-  brew "jesseduffield/lazygit/lazygit"
-  brew "zoxide"
-  brew "openjdk@11"
-  brew "openjdk@17"
+  brew install "neovim"
+  brew install "jesseduffield/lazygit/lazygit"
+  brew install "zoxide"
+  brew install "openjdk@11"
+  brew install "openjdk@17"
 
   # Install packages with apt-get
   echo "*** Installing software via apt-get..."
