@@ -79,6 +79,10 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S tmux
   sudo pacman --noconfirm -S lazygit
   sudo pacman --noconfirm -S ttf-fira-coda
+  sudo pacman --noconfirm -S man-db # manpath
+
+  echo "*** Installing AUR packages with yay..."
+  yay --noconfirm -S jdtls # Java Development Tools Language Server  
 fi
 
 
