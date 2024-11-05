@@ -5,18 +5,12 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-
 if [[ -d /home/linuxbrew/.linuxbrew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
 # Zsh configs
 zstyle ':omz:update' mode auto      # update automatically without asking
-
-# Oh My ZSH
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"
-source $ZSH/oh-my-zsh.sh
 
 # Plugins
 # Set plugins before loading oh-my-zsh, otherwise plugins will not be used
@@ -31,6 +25,11 @@ plugins=(
     helm
     docker
 )
+
+# Oh My ZSH
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+source $ZSH/oh-my-zsh.sh
 
 # command for zsh-completions
 autoload -U compinit && compinit
