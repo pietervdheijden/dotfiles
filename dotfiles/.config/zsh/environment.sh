@@ -11,3 +11,9 @@ export LC_ALL=en_US.UTF-8
 NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$PATH:$NPM_PACKAGES/bin"
 export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+
+# WSL2 specific variables
+if grep -qi microsoft /proc/version; then
+  # Use Windows browser (instead of WSL2 browser)
+  export BROWSER=wslview
+fi
