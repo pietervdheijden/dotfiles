@@ -41,6 +41,10 @@ alias pip='pip3'
 # LazyGit
 alias lg='lazygit'
 
+# Base64
+alias b64='base64'
+alias b64d='base64 -d'
+
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
 alias cl='clear'
