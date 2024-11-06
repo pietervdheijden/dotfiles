@@ -5,6 +5,7 @@ local map = vim.keymap.set
 function This.setup()
   -- Nvim-tree  
   map('n', '<leader>fn', vim.cmd.NvimTreeFindFileToggle, { desc = 'open file tree' })
+  map('n', '<leader>e', vim.cmd.NvimTreeFindFileToggle, { desc = 'open file tree' })
 
   -- Telescope
   local telescope = require('telescope.builtin')
