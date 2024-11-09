@@ -18,6 +18,9 @@ function This.setup()
   -- LazyVim
   map('n', '<leader>lv', ':Lazy<CR>', { desc = 'Open LazyVim' })
 
+  -- LSP
+  -- map('n', '<leader>gd', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'go to declaration' })
+
   -- Other
   map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
   map('n', '<leader>qf', ':copen<CR>', { desc = "Open Quickfix List" })

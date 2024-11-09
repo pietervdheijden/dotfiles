@@ -83,6 +83,9 @@ elif [[ -x "$(command -v pacman)" ]]; then
 
   echo "*** Installing AUR packages with yay..."
   yay --noconfirm -S jdtls # Java Development Tools Language Server  
+
+  # Rebind caps lock to ctrl
+  gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
 fi
 
 

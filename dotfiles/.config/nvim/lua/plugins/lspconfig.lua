@@ -32,20 +32,28 @@ return {
             debounce_text_changes = 150,
         }
     }
-
-    local lombok_jar = '/home/pietervanderheijden/lombok.jar'  -- Update this path
+   
+    local home = os.getenv('HOME')
+    local lombok_jar = home .. '/.local/share/eclipse/lombok.jar'  -- Update this path
 
     -- Configure jdtls for Java
     nvim_lsp.jdtls.setup{
-        cmd = { 'jdtls' },
+        cmd = { 
+          'jdtls',
+          '-javaagent:' .. lombok_jar,
+        },
         init_options = {
             bundles = {
                 lombok_jar
             },
+            vmargs = { '-javaagent:' .. lombok_jar },
+
         },
         settings = {
             java = {
-                home = '/home/linuxbrew/.linuxbrew/opt/openjdk@17/libexec',  -- Optional: specify your Java home
+                home = '/usr/lib/jvm/java-23-openjdk/bin/java',
+                -- home = '/home/linuxbrew/.linuxbrew/opt/openjdk@17/libexec',  -- Optional: specify your Java home
+                use_lombok_agent = true,
                 configuration = {
                     -- Specify the Lombok JAR in the Java runtime options
                     runtimes = {
@@ -54,9 +62,14 @@ return {
                         --     path = '/path/to/your/jdk1.8',
                         --     vmargs = { '-javaagent:' .. lombok_jar }
                         -- },
+                        -- {
+                        --     name = 'JavaSE-17',
+                        --     path = '/home/linuxbrew/.linuxbrew/opt/openjdk@17/libexec',
+                        --     vmargs = { '-javaagent:' .. lombok_jar }
+                        -- }
                         {
-                            name = 'JavaSE-17',
-                            path = '/home/linuxbrew/.linuxbrew/opt/openjdk@17/libexec',
+                            name = 'JavaSE-23',
+                            path = '/usr/lib/jvm/java-23-openjdk',
                             vmargs = { '-javaagent:' .. lombok_jar }
                         }
                     }
