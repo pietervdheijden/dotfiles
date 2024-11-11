@@ -22,6 +22,7 @@ elif [[ -x "$(command -v apt-get)" ]]; then
   brew install "zoxide"
   brew install "openjdk@11"
   brew install "openjdk@17"
+  brew install "hashicorp/tap/terraform-ls"
 
   # Install packages with apt-get
   echo "*** Installing software via apt-get..."
@@ -80,6 +81,7 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S lazygit
   sudo pacman --noconfirm -S ttf-fira-coda
   sudo pacman --noconfirm -S man-db # manpath
+  sudo pacman --noconfirm -S terraform-ls
 
   echo "*** Installing AUR packages with yay..."
   yay --noconfirm -S jdtls # Java Development Tools Language Server  
