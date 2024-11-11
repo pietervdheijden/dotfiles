@@ -23,6 +23,7 @@ elif [[ -x "$(command -v apt-get)" ]]; then
   brew install "openjdk@11"
   brew install "openjdk@17"
   brew install "hashicorp/tap/terraform-ls"
+  brew install "git-delta"
 
   # Install packages with apt-get
   echo "*** Installing software via apt-get..."
