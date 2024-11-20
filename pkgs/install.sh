@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e  # Exit immediately if a command exits with a non-zero status
+
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 if [[ $(uname -s) == MINGW* ]]; then
@@ -65,7 +67,10 @@ elif [[ -x "$(command -v apt-get)" ]]; then
   npm install -g neovim
   npm install -g pyright
 elif [[ -x "$(command -v pacman)" ]]; then
-  echo "*** Update pacman..."
+  echo "** Some dependencies need the administrator password:"
+  sudo -v
+  
+  echo "*** Updating pacman..."
   sudo pacman --noconfirm -Syu
 
   echo "*** Installing software via pacman..."
@@ -75,7 +80,7 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S vim
   sudo pacman --noconfirm -S neovim
   sudo pacman --noconfirm -S ripgrep
-  sudo pacman --noconfirm -S fd-find
+  sudo pacman --noconfirm -S fd
   sudo pacman --noconfirm -S luarocks
   sudo pacman --noconfirm -S fzf
   sudo pacman --noconfirm -S github-cli
@@ -83,7 +88,7 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S kubectl
   sudo pacman --noconfirm -S tmux
   sudo pacman --noconfirm -S lazygit
-  sudo pacman --noconfirm -S ttf-fira-coda
+  sudo pacman --noconfirm -S ttf-fira-code
   sudo pacman --noconfirm -S man-db # manpath
   sudo pacman --noconfirm -S git-delta
   sudo pacman --noconfirm -S --needed git base-devel
@@ -101,10 +106,28 @@ elif [[ -x "$(command -v pacman)" ]]; then
     
   echo "*** Installing AUR packages with yay..."
   yay --noconfirm -S jdtls # Java Development Tools Language Server  
-  yay --noconfirm -S terraform-ls # Terraform Language Server
+  yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 
-  # Rebind caps lock to ctrl
-  gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+  # Install wslu on WSL
+  if [[ ! -x "$(command -v wslview)" ]] && grep -qi microsoft /proc/version; then
+    echo "*** Installing wslu"
+    mkdir -p $HOME/tmp
+    wget https://pkg.wslutiliti.es/public.key -O $HOME/tmp/public.key
+    sudo pacman-key --add $HOME/tmp/public.key
+    rm $HOME/tmp/public.key
+    sudo pacman-key --lsign-key 2D4C887EB08424F157151C493DD50AA7E055D853
+    echo "[wslutilities]" | sudo tee -a /etc/pacman.conf
+    echo "Server = https://pkg.wslutiliti.es/arch/" | sudo tee -a /etc/pacman.conf
+    sudo pacman -Sy
+    sudo pacman --noconfirm -S wslu 
+  fi
+  
+  # Configure GNOME desktop environment settings
+  # Skip configuration when running on WSL as it operates without a GUI
+  if ! grep -qi microsoft /proc/version; then
+    # Rebind caps lock to ctrl
+    gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+  fi
 fi
 
 
@@ -115,4 +138,4 @@ $SCRIPT_DIR/configure-git.sh
 $SCRIPT_DIR/configure-fonts.sh
 $SCRIPT_DIR/configure-tmux.sh
 
-
+echo "[SUCCESS] Installed all packages!"
