@@ -37,6 +37,7 @@ sudo pacman --noconfirm --needed -S man-db # manpath
 sudo pacman --noconfirm --needed -S git-delta
 sudo pacman --noconfirm --needed -S --needed git base-devel
 sudo pacman --noconfirm --needed -S azure-cli
+sudo pacman --noconfirm --needed -S azure-kubelogin
 
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
