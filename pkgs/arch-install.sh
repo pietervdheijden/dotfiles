@@ -38,6 +38,7 @@ sudo pacman --noconfirm --needed -S git-delta
 sudo pacman --noconfirm --needed -S --needed git base-devel
 sudo pacman --noconfirm --needed -S azure-cli
 sudo pacman --noconfirm --needed -S azure-kubelogin
+sudo pacman --noconfirm --needed -S terraform
 
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
