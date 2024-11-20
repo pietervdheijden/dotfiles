@@ -39,3 +39,6 @@ else
   git config --global credential.helper cache
   git config --global core.autocrlf false
 fi
+
+# Let gh manage git credentials
+gh auth setup-git
