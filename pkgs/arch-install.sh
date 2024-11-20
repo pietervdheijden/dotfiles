@@ -18,25 +18,25 @@ echo "*** Updating pacman..."
 sudo pacman --noconfirm -Syu
 
 echo "*** Installing software via pacman..."
-sudo pacman --noconfirm -S stow
-sudo pacman --noconfirm -S zsh
-sudo pacman --noconfirm -S wget
-sudo pacman --noconfirm -S vim
-sudo pacman --noconfirm -S neovim
-sudo pacman --noconfirm -S ripgrep
-sudo pacman --noconfirm -S fd
-sudo pacman --noconfirm -S luarocks
-sudo pacman --noconfirm -S fzf
-sudo pacman --noconfirm -S github-cli
-sudo pacman --noconfirm -S zoxide
-sudo pacman --noconfirm -S kubectl
-sudo pacman --noconfirm -S tmux
-sudo pacman --noconfirm -S lazygit
-sudo pacman --noconfirm -S ttf-fira-code
-sudo pacman --noconfirm -S man-db # manpath
-sudo pacman --noconfirm -S git-delta
-sudo pacman --noconfirm -S --needed git base-devel
-sudo pacman --noconfirm -S azure-cli
+sudo pacman --noconfirm --needed -S stow
+sudo pacman --noconfirm --needed -S zsh
+sudo pacman --noconfirm --needed -S wget
+sudo pacman --noconfirm --needed -S vim
+sudo pacman --noconfirm --needed -S neovim
+sudo pacman --noconfirm --needed -S ripgrep
+sudo pacman --noconfirm --needed -S fd
+sudo pacman --noconfirm --needed -S luarocks
+sudo pacman --noconfirm --needed -S fzf
+sudo pacman --noconfirm --needed -S github-cli
+sudo pacman --noconfirm --needed -S zoxide
+sudo pacman --noconfirm --needed -S kubectl
+sudo pacman --noconfirm --needed -S tmux
+sudo pacman --noconfirm --needed -S lazygit
+sudo pacman --noconfirm --needed -S ttf-fira-code
+sudo pacman --noconfirm --needed -S man-db # manpath
+sudo pacman --noconfirm --needed -S git-delta
+sudo pacman --noconfirm --needed -S --needed git base-devel
+sudo pacman --noconfirm --needed -S azure-cli
 
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
@@ -50,7 +50,7 @@ if [[ ! -x "$(command -v yay)" ]]; then
 fi
   
 echo "*** Installing AUR packages with yay..."
-yay --noconfirm -S jdtls # Java Development Tools Language Server  
+yay --noconfirm --needed -S jdtls # Java Development Tools Language Server  
 yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 
 # Install wslu on WSL
@@ -64,7 +64,7 @@ if [[ ! -x "$(command -v wslview)" ]] && grep -qi microsoft /proc/version; then
   echo "[wslutilities]" | sudo tee -a /etc/pacman.conf
   echo "Server = https://pkg.wslutiliti.es/arch/" | sudo tee -a /etc/pacman.conf
   sudo pacman -Sy
-  sudo pacman --noconfirm -S wslu 
+  sudo pacman --noconfirm --needed -S wslu 
 fi
 
 
