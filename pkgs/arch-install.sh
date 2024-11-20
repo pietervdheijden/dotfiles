@@ -36,6 +36,7 @@ sudo pacman --noconfirm -S ttf-fira-code
 sudo pacman --noconfirm -S man-db # manpath
 sudo pacman --noconfirm -S git-delta
 sudo pacman --noconfirm -S --needed git base-devel
+sudo pacman --noconfirm -S azure-cli
 
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
