@@ -83,6 +83,7 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S ttf-fira-coda
   sudo pacman --noconfirm -S man-db # manpath
   sudo pacman --noconfirm -S terraform-ls
+  sudo pacman --noconfirm -S git-delta
 
   echo "*** Installing AUR packages with yay..."
   yay --noconfirm -S jdtls # Java Development Tools Language Server  
