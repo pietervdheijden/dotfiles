@@ -40,6 +40,7 @@ sudo pacman --noconfirm --needed -S azure-cli
 sudo pacman --noconfirm --needed -S azure-kubelogin
 sudo pacman --noconfirm --needed -S terraform
 sudo pacman --noconfirm --needed -S openssh
+sudo pacman --noconfirm --needed -S pyright # Python Language Server
 
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
