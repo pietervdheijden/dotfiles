@@ -39,6 +39,7 @@ sudo pacman --noconfirm --needed -S --needed git base-devel
 sudo pacman --noconfirm --needed -S azure-cli
 sudo pacman --noconfirm --needed -S azure-kubelogin
 sudo pacman --noconfirm --needed -S terraform
+sudo pacman --noconfirm --needed -S openssh
 
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
