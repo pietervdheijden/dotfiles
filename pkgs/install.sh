@@ -65,6 +65,9 @@ elif [[ -x "$(command -v apt-get)" ]]; then
   npm install -g neovim
   npm install -g pyright
 elif [[ -x "$(command -v pacman)" ]]; then
+  echo "*** Update pacman..."
+  sudo pacman --noconfirm -Syu
+
   echo "*** Installing software via pacman..."
   sudo pacman --noconfirm -S stow
   sudo pacman --noconfirm -S zsh
@@ -82,11 +85,23 @@ elif [[ -x "$(command -v pacman)" ]]; then
   sudo pacman --noconfirm -S lazygit
   sudo pacman --noconfirm -S ttf-fira-coda
   sudo pacman --noconfirm -S man-db # manpath
-  sudo pacman --noconfirm -S terraform-ls
   sudo pacman --noconfirm -S git-delta
+  sudo pacman --noconfirm -S --needed git base-devel
 
+  # Install yay
+  if [[ ! -x "$(command -v yay)" ]]; then
+    echo "*** Installing yay..."
+    mkdir -p $HOME/tmp
+    git clone https://aur.archlinux.org/yay.git $HOME/tmp/yay
+    cd $HOME/tmp/yay
+    makepkg -si
+    cd -
+    rm -rf $HOME/tmp/yay    
+  fi
+    
   echo "*** Installing AUR packages with yay..."
   yay --noconfirm -S jdtls # Java Development Tools Language Server  
+  yay --noconfirm -S terraform-ls # Terraform Language Server
 
   # Rebind caps lock to ctrl
   gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
