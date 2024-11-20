@@ -14,4 +14,9 @@ fi
 
 # Create symlink for dotfiles
 echo "*** Stowing dotfiles..."
+
+# Create .config directory to prevent symlink on all subfolders
+# Now only a symlink will be created on the folders in the dotfiles repository
+# Otherwise, potentially sensitive configurations (like the gh folder) will be added to the Git repo
+mkdir -p $HOME/.config
 stow -d $SCRIPT_DIR -t $HOME dotfiles
