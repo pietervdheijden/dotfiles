@@ -46,6 +46,9 @@ alias lg='lazygit'
 alias b64='base64'
 alias b64d='base64 -d'
 
+# Tmux
+alias t='tmux'
+
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
 alias cl='clear'
