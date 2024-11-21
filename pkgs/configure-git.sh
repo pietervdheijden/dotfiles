@@ -16,6 +16,9 @@ git config --global alias.cpick cherry-pick
 # Core
 git config --global core.editor vim
 
+# Commit
+git config --global commit.gpgsign true
+
 # Push
 git config --global push.autoSetupRemote true
 git config --global push.default current
