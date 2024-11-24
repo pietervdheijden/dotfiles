@@ -17,7 +17,8 @@ git config --global alias.cpick cherry-pick
 git config --global core.editor vim
 
 # Commit
-git config --global commit.gpgsign true
+REQUIRE_GPGSIGN=$(gpg --list-keys --with-colons | grep -q "Git" && echo "true" || echo "false")
+git config --global commit.gpgsign $REQUIRE_GPGSIGN
 
 # Push
 git config --global push.autoSetupRemote true
