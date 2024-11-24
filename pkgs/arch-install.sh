@@ -42,6 +42,12 @@ sudo pacman --noconfirm --needed -S terraform
 sudo pacman --noconfirm --needed -S openssh
 sudo pacman --noconfirm --needed -S pyright # Python Language Server
 
+# Install software using pacman when running on a native Linux host (not WSL2)
+if ! grep -qi microsoft /proc/version; then
+  sudo pacman --noconfirm --needed -S gnome
+  sudo pacman --noconfirm --needed -S wl-clipboard
+fi
+
 # Install yay
 if [[ ! -x "$(command -v yay)" ]]; then
   echo "*** Installing yay..."
