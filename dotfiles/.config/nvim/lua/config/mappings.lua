@@ -3,10 +3,6 @@ local This = {}
 local map = vim.keymap.set
 
 function This.setup()
-  -- Nvim-tree  
-  map('n', '<leader>fn', vim.cmd.NvimTreeFindFileToggle, { desc = 'open file tree' })
-  map('n', '<leader>e', vim.cmd.NvimTreeFocus, { desc = 'focus file tree' })
-
   -- Telescope
   local telescope = require('telescope.builtin')
   map('n', '<leader>ff', telescope.find_files, { desc = "TS: Find files" })
