@@ -42,6 +42,7 @@ sudo pacman --noconfirm --needed -S terraform
 sudo pacman --noconfirm --needed -S openssh
 sudo pacman --noconfirm --needed -S pyright # Python Language Server
 sudo pacman --noconfirm --needed -S helm
+sudo pacman --noconfirm --needed -S yq
 
 # Install software using pacman when running on a native Linux host (not WSL2)
 if ! grep -qi microsoft /proc/version; then
