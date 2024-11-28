@@ -66,6 +66,7 @@ yay --noconfirm --needed -S jdtls # Java Development Tools Language Server
 yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 yay --noconfirm --needed -S google-cloud-cli
 yay --noconfirm --needed -S google-cloud-cli-gke-gcloud-auth-plugin
+yay --noconfirm --needed -S terramate
 
 # Install wslu on WSL
 if [[ ! -x "$(command -v wslview)" ]] && grep -qi microsoft /proc/version; then
