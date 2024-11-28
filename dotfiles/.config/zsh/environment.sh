@@ -17,3 +17,7 @@ if grep -qi microsoft /proc/version; then
   # Use Windows browser (instead of WSL2 browser)
   export BROWSER=wslview
 fi
+
+# Add go bin to PATH
+export PATH=$PATH:~/go/bin
+

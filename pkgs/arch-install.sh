@@ -66,7 +66,11 @@ yay --noconfirm --needed -S jdtls # Java Development Tools Language Server
 yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 yay --noconfirm --needed -S google-cloud-cli
 yay --noconfirm --needed -S google-cloud-cli-gke-gcloud-auth-plugin
-yay --noconfirm --needed -S terramate
+
+echo "*** Installing go packages..."
+if [[ ! -x "$(command -v terramate)" ]]; then
+  go install github.com/terramate-io/terramate/cmd/terramate@latest
+fi
 
 # Install wslu on WSL
 if [[ ! -x "$(command -v wslview)" ]] && grep -qi microsoft /proc/version; then
