@@ -11,4 +11,5 @@ echo "*** Configuring gnome"
 
 # Rebind caps lock to ctrl
 gsettings set org.gnome.desktop.input-sources xkb-options "['ctrl:nocaps']"
+gsettings set org.gnome.desktop.interface show-battery-percentage false
 
