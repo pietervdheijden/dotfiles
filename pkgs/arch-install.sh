@@ -60,13 +60,19 @@ if [[ ! -x "$(command -v yay)" ]]; then
   cd -
   rm -rf $HOME/tmp/yay    
 fi
-  
+
+# Update yay
+echo "*** Updating yay..."
+yay --noconfirm -Syu
+
+# Install AUR packages with yay
 echo "*** Installing AUR packages with yay..."
 yay --noconfirm --needed -S jdtls # Java Development Tools Language Server  
 yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 yay --noconfirm --needed -S google-cloud-cli
 yay --noconfirm --needed -S google-cloud-cli-gke-gcloud-auth-plugin
 
+# Install Go packages
 echo "*** Installing go packages..."
 if [[ ! -x "$(command -v terramate)" ]]; then
   go install github.com/terramate-io/terramate/cmd/terramate@latest
@@ -86,5 +92,12 @@ if [[ ! -x "$(command -v wslview)" ]] && grep -qi microsoft /proc/version; then
   sudo pacman --noconfirm --needed -S wslu 
 fi
 
+# Download lombok jar
+LOMBOK_FILE=$HOME/.local/share/eclipse/lombok.jar
+if ! -f $LOMBOK_FILE; then
+  echo "*** Downloading lombok jar"
+  mkdir -p $(dirname $LOMBOK_FILE)
+  wget https://projectlombok.org/downloads/lombok.jar -O $LOMBOK_FILE
+fi
 
 echo "[SUCCESS] Installed all Arch Linux packages!"
