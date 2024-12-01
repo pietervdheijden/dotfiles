@@ -71,6 +71,7 @@ yay --noconfirm --needed -S jdtls # Java Development Tools Language Server
 yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 yay --noconfirm --needed -S google-cloud-cli
 yay --noconfirm --needed -S google-cloud-cli-gke-gcloud-auth-plugin
+yay --noconfirm --needed -S nvm
 
 # Install Go packages
 echo "*** Installing go packages..."
@@ -100,4 +101,8 @@ if ! -f $LOMBOK_FILE; then
   wget https://projectlombok.org/downloads/lombok.jar -O $LOMBOK_FILE
 fi
 
+# Install node
+if nvm list | grep -q 'No installed versions'; then
+  nvm install node
+fi
 echo "[SUCCESS] Installed all Arch Linux packages!"
