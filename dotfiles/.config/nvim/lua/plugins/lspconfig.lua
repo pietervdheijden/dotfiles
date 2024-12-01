@@ -8,9 +8,6 @@ return {
   config = function()
     require('mason').setup()
     require('mason-tool-installer').setup {
-
-      -- a list of all tools you want to ensure are installed upon
-      -- start
       ensure_installed = {
         -- LSP
         'jdtls',
@@ -26,6 +23,10 @@ return {
       handlers = {
         -- Default handler for all installed servers
         function(server_name)
+          if server_name == 'jdtls' then
+              -- These require specialized setup
+              return
+          end
           require('lspconfig')[server_name].setup({
             on_attach = function(client, bufnr)
               -- Enable completion triggered by <c-x><c-o>
