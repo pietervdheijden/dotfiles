@@ -68,16 +68,5 @@ echo "*** Installing global npm packages..."
 npm install -g @angular/cli
 npm install -g neovim
 npm install -g pyright
-elif [[ -x "$(command -v pacman)" ]]; then
-  $SCRIPT_DIR/arch-install.sh
-fi
-
-# Configure dynamic packages
-echo "*** Configure dynamic packages"
-$SCRIPT_DIR/configure-zsh.sh
-$SCRIPT_DIR/configure-git.sh
-$SCRIPT_DIR/configure-gnome.sh
-$SCRIPT_DIR/configure-fonts.sh
-$SCRIPT_DIR/configure-tmux.sh
 
 echo "[SUCCESS] Installed all Ubuntu packages!"
