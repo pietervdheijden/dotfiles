@@ -35,12 +35,11 @@ sudo pacman --noconfirm --needed -S lazygit
 sudo pacman --noconfirm --needed -S ttf-fira-code
 sudo pacman --noconfirm --needed -S man-db # manpath
 sudo pacman --noconfirm --needed -S git-delta
-sudo pacman --noconfirm --needed -S --needed git base-devel
+sudo pacman --noconfirm --needed -S git base-devel
 sudo pacman --noconfirm --needed -S azure-cli
 sudo pacman --noconfirm --needed -S azure-kubelogin
 sudo pacman --noconfirm --needed -S terraform
 sudo pacman --noconfirm --needed -S openssh
-sudo pacman --noconfirm --needed -S pyright # Python Language Server
 sudo pacman --noconfirm --needed -S helm
 sudo pacman --noconfirm --needed -S yq
 
@@ -67,8 +66,6 @@ yay --noconfirm -Syu
 
 # Install AUR packages with yay
 echo "*** Installing AUR packages with yay..."
-yay --noconfirm --needed -S jdtls # Java Development Tools Language Server  
-yay --noconfirm --needed -S terraform-ls # Terraform Language Server
 yay --noconfirm --needed -S google-cloud-cli
 yay --noconfirm --needed -S google-cloud-cli-gke-gcloud-auth-plugin
 yay --noconfirm --needed -S nvm
@@ -105,4 +102,5 @@ fi
 if nvm list | grep -q 'No installed versions'; then
   nvm install node
 fi
+
 echo "[SUCCESS] Installed all Arch Linux packages!"
