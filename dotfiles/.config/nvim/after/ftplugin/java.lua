@@ -63,13 +63,13 @@ local config = {
     java = {
       format = {
         enabled = true,
-        settings = {
-          -- Use Google Java style guidelines for formatting
-          -- To use, make sure to download the file from https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml
-          -- and place it in the ~/.local/share/eclipse directory
-          url = "/.local/share/eclipse/eclipse-java-google-style.xml",
-          profile = "GoogleStyle",
-        },
+        -- settings = {
+        --   -- Use Google Java style guidelines for formatting
+        --   -- To use, make sure to download the file from https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml
+        --   -- and place it in the ~/.local/share/eclipse directory
+        --   url = "/.local/share/eclipse/eclipse-java-google-style.xml",
+        --   profile = "GoogleStyle",
+        -- },
       },
       saveActions = {
         organizeImports = true,
@@ -119,6 +119,10 @@ local config = {
       unpack(vim.fn.glob(home .. '/.config/nvim/vscode-java-test/server/*.jar', 1, 1)),
     },
   },
+
+  on_attach = function(client, bufnr)
+    require('config.mappings').setup_lsp(bufnr)
+  end
 }
 
 -- Start or attach `nvim-jdtls`
