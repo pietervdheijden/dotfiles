@@ -32,7 +32,7 @@ local workspace_path = home .. "/.local/share/nvim/java_workspace/"
 -- Configure `nvim-jdtls`
 local config = {
   cmd = {
-    'java',
+    '/usr/lib/jvm/java-17-openjdk/bin/java',
     '-javaagent:' .. lombok_path,
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
@@ -40,6 +40,13 @@ local config = {
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
     '-Xms1g',
+    '-XX:+UseG1GC',  -- Add this for better GC
+    '-XX:+UseStringDeduplication',  -- Add this for better memory usage
+	  '--add-modules=ALL-SYSTEM',
+    '--add-opens',
+    'java.base/java.util=ALL-UNNAMED',
+    '--add-opens',
+    'java.base/java.lang=ALL-UNNAMED',
     '-jar', vim.fn.glob(mason_path .. '/plugins/org.eclipse.equinox.launcher_*.jar'),
     '-configuration', mason_path .. '/config_linux',
     '-data', workspace_path .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t"),
@@ -111,6 +118,44 @@ local config = {
         },
         useBlocks = true,
       },
+      configuration = {
+        updateBuildConfiguration = "automatic",
+        runtimes = {
+          -- {
+          --   name = "JavaSE-17",
+          --   path = "/usr/lib/jvm/java-17-openjdk",
+          -- },
+          {
+            name = "JavaSE-11",
+            path = "/usr/lib/jvm/java-11-openjdk/",
+            default = true,
+          },
+        }
+      },
+      maven = {
+        downloadSources = true,
+      },
+      implementationsCodeLens = {
+        enabled = true,
+      },
+      referencesCodeLens = {
+        enabled = true,
+      },
+      references = {
+        includeDecompiledSources = true,
+      },
+      -- import = {
+      --   gradle = {
+      --     enabled = true
+      --   },
+      --   maven = {
+      --     enabled = true
+      --   },
+      --   timeout = 180
+      -- }
+      project = {
+        referencedLibraries = {},
+      }
     },
   },
   init_options = {
@@ -118,12 +163,36 @@ local config = {
       vim.fn.glob(home .. '/.config/nvim/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar'),
       unpack(vim.fn.glob(home .. '/.config/nvim/vscode-java-test/server/*.jar', 1, 1)),
     },
+    extendedClientCapabilities = {
+        progressReportProvider = true
+    },
   },
-
+-- Add this to ensure proper project configuration
+    on_init = function(client, _)
+        client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
+    end,
   on_attach = function(client, bufnr)
     require('config.mappings').setup_lsp(bufnr)
-  end
+  end,
+
 }
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+config.capabilities = capabilities
+
+config.handlers = {
+    -- ["language/status"] = function(_, result)
+    --     print(result)
+    -- end,
+    -- ["$/progress"] = function(_, result, ctx)
+    --     local value = result.value
+    --     if not value then return end
+    --     print(value.message)
+    -- end
+}
+
+vim.lsp.set_log_level("debug")
 
 -- Start or attach `nvim-jdtls`
 jdtls.start_or_attach(config)

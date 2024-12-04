@@ -51,7 +51,10 @@ return {
         --   { noremap=true, silent=true, buffer=bufnr, desc = "Extract method" })
         --     }
     -- })
-
+-- " If using nvim-dap
+-- " This requires java-debug and vscode-java-test bundles, see install steps in this README further below.
+-- nnoremap <leader>df <Cmd>lua require'jdtls'.test_class()<CR>
+-- nnoremap <leader>dn <Cmd>lua require'jdtls'.test_nearest_method()<CR>
       }
     })
 
