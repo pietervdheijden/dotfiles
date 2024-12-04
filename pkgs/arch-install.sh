@@ -42,6 +42,9 @@ sudo pacman --noconfirm --needed -S terraform
 sudo pacman --noconfirm --needed -S openssh
 sudo pacman --noconfirm --needed -S helm
 sudo pacman --noconfirm --needed -S yq
+sudo pacman --noconfirm --needed -S maven
+sudo pacman --noconfirm --needed -S jdk11-openjdk
+sudo pacman --noconfirm --needed -S jdk17-openjdk
 
 # Install software using pacman when running on a native Linux host (not WSL2)
 if ! grep -qi microsoft /proc/version; then
