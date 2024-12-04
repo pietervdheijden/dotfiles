@@ -49,6 +49,10 @@ alias b64d='base64 -d'
 # Tmux
 alias t='tmux'
 
+# Maven
+alias mvn11='JAVA_HOME=/usr/lib/jvm/java-11-openjdk mvn'
+alias mvn17='JAVA_HOME=/usr/lib/jvm/java-17-openjdk mvn'
+
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
 alias cl='clear'
