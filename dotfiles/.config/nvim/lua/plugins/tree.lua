@@ -68,5 +68,6 @@ return {
     git = {
       ignore = false,
     },
+    auto_reload_on_write = true,
   },
 }
