@@ -25,7 +25,7 @@ function This.setup()
   vim.opt.relativenumber = false
 
   -- Configure winbar
-  vim.o.winbar = '%=%m %f'
+  vim.o.winbar = '%=%m %{v:lua.require("util.winbar").get_winbar()}'
 
   -- Configure bufferline
   vim.opt.termguicolors = true

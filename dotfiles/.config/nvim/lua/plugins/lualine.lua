@@ -45,9 +45,10 @@ return {
       },
       lualine_c = { 
         {
-          'filename',
-          path = 1,
-        },
+          function()
+            return require("util.winbar").get_winbar()
+          end
+        }
       },
       lualine_x = { 'encoding', 'fileformat', 'filetype' },
       lualine_y = { 'progress' },
