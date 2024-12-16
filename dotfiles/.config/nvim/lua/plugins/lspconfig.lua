@@ -10,9 +10,11 @@ return {
     require('mason-tool-installer').setup {
       ensure_installed = {
         -- LSP
+        'angular-language-server',
         'jdtls',
         'pyright',
         'terraformls',
+        'typescript-language-server',
 
         -- DAP
         'java-debug-adapter',
