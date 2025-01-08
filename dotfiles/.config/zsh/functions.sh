@@ -37,8 +37,9 @@ az_cosmos_delete_partitions() {
   $HOME/.scripts/az-cosmos-delete-partitions/run.sh
 }
 
-az_find_expired_sp_credentials() {
-  # Get current date and future date (30 days from now) in ISO 8601 format
+# Check if service principal credentials are expired or will expire in the next 60 days
+az_sp_check_credential_expiry() {
+  # Get current date and future date (60 days from now) in ISO 8601 format
   current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   future_date=$(date -u -d "+60 days" +"%Y-%m-%dT%H:%M:%SZ")
 
