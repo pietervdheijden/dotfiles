@@ -44,10 +44,11 @@ az_sp_check_credential_expiry() {
   future_date=$(date -u -d "+60 days" +"%Y-%m-%dT%H:%M:%SZ")
 
   # Fetch service principals and process with jq
-  result=$(az ad sp list --all --query "[?passwordCredentials].{displayName: displayName, passwordCredentials: passwordCredentials}" -o json | 
+  result=$(az ad sp list --all --query "[?passwordCredentials].{appId: appId, displayName: displayName, passwordCredentials: passwordCredentials}" -o json | 
     jq --arg current_date "$current_date" --arg future_date "$future_date" -c '
       .[] |
       {
+        appId: .appId,
         displayName: .displayName,
         expiredCredentials: [
           .passwordCredentials[] |
