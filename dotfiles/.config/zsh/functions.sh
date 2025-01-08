@@ -37,8 +37,45 @@ az_cosmos_delete_partitions() {
   $HOME/.scripts/az-cosmos-delete-partitions/run.sh
 }
 
+# Check if app credentials are expired or will expire in the next 60 days
+az_ad_app_check_credential_expiry() {
+  # Get current date and future date (60 days from now) in ISO 8601 format
+  current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  future_date=$(date -u -d "+60 days" +"%Y-%m-%dT%H:%M:%SZ")
+
+  # Fetch service principals and process with jq
+  result=$(az ad app list --all --query "[?passwordCredentials].{appId: appId, displayName: displayName, passwordCredentials: passwordCredentials}" -o json | 
+    jq --arg current_date "$current_date" --arg future_date "$future_date" -c '
+      .[] |
+      {
+        appId: .appId,
+        displayName: .displayName,
+        expiredCredentials: [
+          .passwordCredentials[] |
+          select(.endDateTime < $current_date) |
+          {keyId: .keyId, endDateTime: .endDateTime}
+        ],
+        expiringSoonCredentials: [
+          .passwordCredentials[] |
+          select(.endDateTime >= $current_date and .endDateTime <= $future_date) |
+          {keyId: .keyId, endDateTime: .endDateTime}
+        ]
+      } |
+      select((.expiredCredentials | length > 0) or (.expiringSoonCredentials | length > 0))
+    '
+  )
+
+  # Check if the result is non-empty
+  if [ -n "$result" ]; then
+    echo "There are apps with expired or soon-to-expire credentials."
+    echo "$result" | jq .
+  else
+    echo "No apps have expired or soon-to-expire credentials."
+  fi
+}
+
 # Check if service principal credentials are expired or will expire in the next 60 days
-az_sp_check_credential_expiry() {
+az_ad_sp_check_credential_expiry() {
   # Get current date and future date (60 days from now) in ISO 8601 format
   current_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   future_date=$(date -u -d "+60 days" +"%Y-%m-%dT%H:%M:%SZ")
