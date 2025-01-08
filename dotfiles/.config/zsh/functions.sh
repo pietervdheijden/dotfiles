@@ -44,23 +44,23 @@ az_sp_check_credential_expiry() {
   future_date=$(date -u -d "+60 days" +"%Y-%m-%dT%H:%M:%SZ")
 
   # Fetch service principals and process with jq
-  result=$(az ad sp list --all --query "[?passwordCredentials].{DisplayName: displayName, PasswordCredentials: passwordCredentials}" -o json | 
+  result=$(az ad sp list --all --query "[?passwordCredentials].{displayName: displayName, passwordCredentials: passwordCredentials}" -o json | 
     jq --arg current_date "$current_date" --arg future_date "$future_date" -c '
       .[] |
       {
-        DisplayName: .DisplayName,
-        ExpiredCredentials: [
-          .PasswordCredentials[] |
+        displayName: .displayName,
+        expiredCredentials: [
+          .passwordCredentials[] |
           select(.endDateTime < $current_date) |
-          {endDateTime: .endDateTime, keyId: .keyId}
+          {keyId: .keyId, endDateTime: .endDateTime}
         ],
-        ExpiringSoonCredentials: [
-          .PasswordCredentials[] |
+        expiringSoonCredentials: [
+          .passwordCredentials[] |
           select(.endDateTime >= $current_date and .endDateTime <= $future_date) |
-          {endDateTime: .endDateTime, keyId: .keyId}
+          {keyId: .keyId, endDateTime: .endDateTime}
         ]
       } |
-      select((.ExpiredCredentials | length > 0) or (.ExpiringSoonCredentials | length > 0))
+      select((.expiredCredentials | length > 0) or (.expiringSoonCredentials | length > 0))
     '
   )
 
