@@ -17,8 +17,19 @@ git config --global alias.cpick cherry-pick
 git config --global core.editor vim
 
 # Commit
-REQUIRE_GPGSIGN=$(gpg --list-keys --with-colons | grep -q "Git" && echo "true" || echo "false")
-git config --global commit.gpgsign $REQUIRE_GPGSIGN
+gpgKeyId=$(gpg --list-secret-keys --keyid-format=long "GitHub" | grep sec | awk '{print $2}' | cut -d'/' -f2)
+if [ -n "$gpgKeyId" ]
+then
+  echo "Enable GPG signing"
+  git config --global user.signingkey $gpgKeyId
+  git config --global commit.gpgsign true
+  git config --global tag.gpgsign true
+else
+  echo "Disable GPG signing"
+  git config --global user.sigingkey ""
+  git config --global commit.gpgsign false
+  git config --global tag.gpgsign false
+fi
 
 # Push
 git config --global push.autoSetupRemote true
