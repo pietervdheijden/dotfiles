@@ -23,7 +23,6 @@ plugins=(
     zsh-completions
     kubectl
     helm
-    docker
 )
 
 # Oh My ZSH
