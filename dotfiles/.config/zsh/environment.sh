@@ -16,6 +16,9 @@ export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 if grep -qi microsoft /proc/version; then
   # Use Windows browser (instead of WSL2 browser)
   export BROWSER=wslview
+
+  # Set Chrome bin for npm tests
+  export CHROME_BIN="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
 fi
 
 # Add go bin to PATH
