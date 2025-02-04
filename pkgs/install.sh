@@ -20,5 +20,6 @@ $SCRIPT_DIR/configure-git.sh
 $SCRIPT_DIR/configure-gnome.sh
 $SCRIPT_DIR/configure-fonts.sh
 $SCRIPT_DIR/configure-tmux.sh
+$SCRIPT_DIR/configure-wsl.sh
 
 echo "[SUCCESS] Installed all packages!"
