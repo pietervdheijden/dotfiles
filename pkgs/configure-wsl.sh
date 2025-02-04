@@ -28,6 +28,9 @@ fi
 echo "** Creating .wslconfig file"
 rm -f "$CONFIG_PATH"
 touch "$CONFIG_PATH"
+
+# Use mirrored networking mode, enabling access to Windows services via localhost
+# For more information, see: https://superuser.com/a/1732513
 echo "[wsl2]" >> "$CONFIG_PATH"
 echo "networkingMode=mirrored" >> "$CONFIG_PATH"
 
