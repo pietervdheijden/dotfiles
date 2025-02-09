@@ -1,5 +1,14 @@
 return {
   {
+		"zbirenbaum/copilot-cmp",
+		config = function()
+			require("copilot_cmp").setup()
+		end,
+	},
+  {
+    "onsails/lspkind.nvim",
+  },
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       'hrsh7th/cmp-buffer',
@@ -50,7 +59,25 @@ return {
           ['<C-U>'] = cmp.mapping.scroll_docs(-4),
           ['<C-space>'] = cmp.mapping.complete(),
         },
+        formatting = {
+          format = require("lspkind").cmp_format({
+            mode = "symbol",
+            max_width = 50,
+            symbol_map = { Copilot = "" },
+            before = function(entry, vim_item)
+              vim_item.menu = ({
+                nvim_lsp = "[LSP]",
+                luasnip = "[Snippet]",
+                buffer = "[Buffer]",
+                path = "[Path]",
+                copilot = "[Copilot]",
+              })[entry.source.name]
+              return vim_item
+            end,
+          })
+        },
         sources = {
+          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'path' },
           { name = 'buffer' },
