@@ -46,6 +46,7 @@ sudo pacman --noconfirm --needed -S maven
 sudo pacman --noconfirm --needed -S jdk11-openjdk
 sudo pacman --noconfirm --needed -S jdk17-openjdk
 sudo pacman --noconfirm --needed -S stern
+sudo pacman --noconfirm --needed -S docker
 
 # Install software using pacman when running on a native Linux host (not WSL2)
 if ! grep -qi microsoft /proc/version; then
