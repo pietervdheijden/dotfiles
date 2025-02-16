@@ -4,7 +4,6 @@ vim.opt_local.tabstop = 4
 vim.opt_local.softtabstop = 4
 vim.opt_local.shiftwidth = 4
 
-
 local jdtls = require('jdtls')
 
 local install_path = require("mason-registry").get_package("jdtls"):get_install_path()
@@ -27,7 +26,7 @@ local workspace_path = home .. "/.local/share/nvim/java_workspace/"
 -- Configure `nvim-jdtls`
 local config = {
   cmd = {
-    '/usr/lib/jvm/java-17-openjdk/bin/java',
+    '/usr/lib/jvm/java-23-openjdk/bin/java',
     '-javaagent:' .. lombok_path,
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
@@ -119,6 +118,10 @@ local config = {
             name = "JavaSE-17",
             path = "/usr/lib/jvm/java-17-openjdk",
           },
+          {
+            name = "JavaSE-23",
+            path = "/usr/lib/jvm/java-23-openjdk",
+          }
         }
       },
       maven = {
