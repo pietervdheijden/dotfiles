@@ -33,6 +33,7 @@ alias tm='terramate'
 alias tmg='terramate generate'
 
 # Vim
+alias vi='nvim'
 alias vim='nvim'
 alias nv='nvim'
 
