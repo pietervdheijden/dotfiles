@@ -4,6 +4,7 @@ return {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    'terramate-io/vim-terramate', -- terramate-ls cannot (yet) be installed with mason 
   },
   config = function()
     require('mason').setup()
