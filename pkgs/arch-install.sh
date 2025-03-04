@@ -75,6 +75,7 @@ echo "*** Installing AUR packages with yay..."
 yay --noconfirm --needed -S google-cloud-cli
 yay --noconfirm --needed -S google-cloud-cli-gke-gcloud-auth-plugin
 yay --noconfirm --needed -S nvm
+yay --noconfirm --needed -S powershell-bin
 
 # Install Go packages
 echo "*** Installing go packages..."
