@@ -60,7 +60,7 @@ def main():
 
     # Check if all required environment variables are set
     required_vars = ['COSMOS_ENDPOINT', 'COSMOS_DATABASE', 'COSMOS_CONTAINER', 'PARTITION_KEY_PREFIX']
-    missing_vars = [var for var in required_vars if os.environ.get(var) is None]
+    missing_vars = [var for var in required_vars if not os.environ.get(var)]
     if missing_vars:
         raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
