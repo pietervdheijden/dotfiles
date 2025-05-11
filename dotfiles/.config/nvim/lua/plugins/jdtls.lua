@@ -7,9 +7,9 @@ local bundles = {
   vim.fn.glob(debug_install_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar", 1),
 }
 
--- Comment out these lines if you have 'java-test' installed
--- local java_test_path = require("mason-registry").get_package("java-test"):get_install_path()
--- vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar", 1), "\n"))
+-- Configure java test
+local java_test_path = vim.fn.stdpath('data') .. '/mason/packages/java-test'
+vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar", 1), "\n"))
 
 local home = vim.fn.expand("~")
 local mason_path = install_path
