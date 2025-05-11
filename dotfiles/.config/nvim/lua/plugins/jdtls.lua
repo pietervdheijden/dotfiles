@@ -20,7 +20,7 @@ local workspace_path = home .. "/.local/share/nvim/java_workspace/"
 local function config()
   return {
     cmd = {
-      '/usr/lib/jvm/java-23-openjdk/bin/java',
+      '/usr/lib/jvm/java-24-openjdk/bin/java',
       '-javaagent:' .. lombok_path,
       '-Declipse.application=org.eclipse.jdt.ls.core.id1',
       '-Dosgi.bundles.defaultStartLevel=4',
@@ -113,8 +113,8 @@ local function config()
               path = "/usr/lib/jvm/java-17-openjdk",
             },
             {
-              name = "JavaSE-23",
-              path = "/usr/lib/jvm/java-23-openjdk",
+              name = "JavaSE-24",
+              path = "/usr/lib/jvm/java-24-openjdk",
             }
           }
         },
@@ -174,8 +174,4 @@ vim.api.nvim_create_autocmd("FileType", {
 return {
   "mfussenegger/nvim-jdtls",
   ft = "java",
-  -- config = function()
-  --   -- print('aa') 
-  -- end,
-  -- jdtls_config = config,
 }
