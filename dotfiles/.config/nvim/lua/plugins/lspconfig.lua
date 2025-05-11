@@ -39,25 +39,6 @@ return {
             }
           })
         end,
-        -- Add custom handlers if needed, e.g., for jdtls
-        -- ["jdtls"] = function()
-        --   require('lspconfig').jdtls.setup({
-        --     -- Add your jdtls-specific settings here
-        --   })
-        -- end,
-  
-        -- Java extensions provided by jdtls
-        -- nnoremap("<C-o>", jdtls.organize_imports, bufopts, "Organize imports")
-        -- nnoremap("<space>ev", jdtls.extract_variable, bufopts, "Extract variable")
-        -- nnoremap("<space>ec", jdtls.extract_constant, bufopts, "Extract constant")
-        -- vim.keymap.set('v', "<space>em", [[<ESC><CMD>lua require('jdtls').extract_method(true)<CR>]],
-        --   { noremap=true, silent=true, buffer=bufnr, desc = "Extract method" })
-        --     }
-    -- })
--- " If using nvim-dap
--- " This requires java-debug and vscode-java-test bundles, see install steps in this README further below.
--- nnoremap <leader>df <Cmd>lua require'jdtls'.test_class()<CR>
--- nnoremap <leader>dn <Cmd>lua require'jdtls'.test_nearest_method()<CR>
       }
     })
 
