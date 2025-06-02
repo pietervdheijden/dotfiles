@@ -100,17 +100,13 @@ if [[ ! -x "$(command -v wslview)" ]] && grep -qi microsoft /proc/version; then
   sudo pacman --noconfirm --needed -S wslu 
 fi
 
-# Download lombok jar
-LOMBOK_FILE=$HOME/.local/share/eclipse/lombok.jar
-if ! -f $LOMBOK_FILE; then
-  echo "*** Downloading lombok jar"
-  mkdir -p $(dirname $LOMBOK_FILE)
-  wget https://projectlombok.org/downloads/lombok.jar -O $LOMBOK_FILE
-fi
-
 # Install node
 if nvm list | grep -q 'No installed versions'; then
   nvm install node
 fi
 
+# Install npm packages
+npm install -g @anthropic-ai/claude-code
+
 echo "[SUCCESS] Installed all Arch Linux packages!"
+
