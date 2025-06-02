@@ -43,6 +43,7 @@ local function jdtls_config(capabilities)
     capabilities = capabilities,
     settings = {
       java = {
+        format = {
           enabled = true,
           -- settings = {
           --   -- Use Google Java style guidelines for formatting
