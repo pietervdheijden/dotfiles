@@ -5,6 +5,7 @@ local ensure_installed = {
   'pyright',
   'terraformls',
   'typescript-language-server',
+  'lua-language-server',
 
   -- DAP
   'java-debug-adapter',
@@ -16,15 +17,14 @@ local function lsp_java_config(capabilities)
     group = vim.api.nvim_create_augroup('lsp_define_java', { clear = true }),
     pattern = 'java',
     callback = function()
-        require('jdtls').start_or_attach(require('plugins.jdtls').jdtls_config(capabilities))
+      require('jdtls').start_or_attach(require('plugins.jdtls').jdtls_config(capabilities))
     end
   })
 end
 
-local function lsp_terraform_config()
+local function lsp_on_write()
   -- Auto format on save
-  vim.api.nvim_create_autocmd({"BufWritePre"}, {
-    pattern = {"*.tf", "*.tfvars"},
+  vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     callback = function()
       vim.lsp.buf.format()
     end,
@@ -46,7 +46,7 @@ return {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    'terramate-io/vim-terramate', -- terramate-ls cannot (yet) be installed with mason 
+    'terramate-io/vim-terramate', -- terramate-ls cannot (yet) be installed with mason
   },
   config = function()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -62,7 +62,7 @@ return {
     })
 
     lsp_java_config(capabilities)
-    lsp_terraform_config()
+    lsp_on_write()
     lsp_on_attach()
   end
 }
