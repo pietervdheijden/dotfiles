@@ -23,8 +23,8 @@ local function jdtls_config(capabilities)
       '-Dlog.protocol=true',
       '-Dlog.level=ALL',
       '-Xms1g',
-      '-XX:+UseG1GC',  -- Add this for better GC
-      '-XX:+UseStringDeduplication',  -- Add this for better memory usage
+      '-XX:+UseG1GC',                -- Add this for better GC
+      '-XX:+UseStringDeduplication', -- Add this for better memory usage
       '--add-modules=ALL-SYSTEM',
       '--add-opens',
       'java.base/java.util=ALL-UNNAMED',
@@ -57,7 +57,7 @@ local function jdtls_config(capabilities)
           organizeImports = true,
         },
         signatureHelp = { enabled = true },
-        contentProvider = { preferred = 'fernflower' },  -- Use fernflower to decompile library code
+        contentProvider = { preferred = 'fernflower' }, -- Use fernflower to decompile library code
         -- Specify any completion options
         completion = {
           favoriteStaticMembers = {
@@ -79,8 +79,8 @@ local function jdtls_config(capabilities)
         -- Specify any options for organizing imports
         sources = {
           organizeImports = {
-            starThreshold = 9999;
-            staticStarThreshold = 9999;
+            starThreshold = 9999,
+            staticStarThreshold = 9999,
           },
         },
         -- How code generation should act
@@ -151,4 +151,3 @@ return {
   ft = { 'java' },
   jdtls_config = jdtls_config
 }
-
