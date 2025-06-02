@@ -45,6 +45,7 @@ sudo pacman --noconfirm --needed -S yq
 sudo pacman --noconfirm --needed -S maven
 sudo pacman --noconfirm --needed -S jdk11-openjdk
 sudo pacman --noconfirm --needed -S jdk17-openjdk
+sudo pacman --noconfirm --needed -S jdk21-openjdk
 sudo pacman --noconfirm --needed -S jdk24-openjdk
 sudo pacman --noconfirm --needed -S stern
 sudo pacman --noconfirm --needed -S docker
