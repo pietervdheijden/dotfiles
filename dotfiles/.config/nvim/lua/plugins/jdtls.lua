@@ -163,80 +163,16 @@ local function config()
     init_options = {
       bundles = bundles
     },
-    -- on_init = function(client, _)
-    --     client.notify('workspace/didChangeConfiguration', { settings = client.config.settings })
-    -- end,
     on_attach = function(client, bufnr)
       require('config.mappings').setup_lsp(bufnr)
     end,
   }
 end
 
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "java",
---   callback = function()
---     local jdtls_config = config()
---     local capabilities = vim.lsp.protocol.make_client_capabilities()
---     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
---     jdtls_config.capabilities = capabilities
---     -- require("jdtls").setup_dap({})
---     -- print("start jdtls: " .. os.date())
---     require("jdtls").start_or_attach(jdtls_config)
---   end,
---   group = vim.api.nvim_create_augroup("jdtls_setup", { clear = true }),
--- })
 
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "java",
---   callback = function()
---     -- Only start if no JDTLS client exists for this root
---     local root_dir = require('jdtls.setup').find_root({ '.git' })
---     local clients = vim.lsp.get_active_clients({ name = "jdtls" })
---
---     for _, client in ipairs(clients) do
---       if client.config.root_dir == root_dir then
---         print("JDTLS already running for workspace:", root_dir)
---         return
---       end
---     end
---
---     print("Starting JDTLS for workspace:", root_dir)
---     local jdtls_config = config()
---     local capabilities = vim.lsp.protocol.make_client_capabilities()
---     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
---     jdtls_config.capabilities = capabilities
---     require("jdtls").start_or_attach(jdtls_config)
---   end,
---   group = vim.api.nvim_create_augroup("jdtls_setup", { clear = true }),
--- })
-
--- Simple autocmd that lets nvim-jdtls handle everything
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "java",
---   callback = function()
---     local jdtls_config = config()
---     local capabilities = vim.lsp.protocol.make_client_capabilities()
---     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
---     jdtls_config.capabilities = capabilities
---     require("jdtls").start_or_attach(jdtls_config)
---   end,
---   group = vim.api.nvim_create_augroup("jdtls_setup", { clear = true }),
--- })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "java",
   callback = function()
-    -- Only start if no JDTLS client exists for this root
-    local root_dir = require('jdtls.setup').find_root({ '.git' })
-    local clients = vim.lsp.get_active_clients({ name = "jdtls" })
-
-    for _, client in ipairs(clients) do
-      if client.config.root_dir == root_dir then
-        print("JDTLS already running for workspace:", root_dir)
-        return
-      end
-    end
-
-    print("Starting JDTLS for workspace:", root_dir)
     local jdtls_config = config()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -246,10 +182,8 @@ vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("jdtls_setup", { clear = true }),
 })
 
--- return {}
 return {
   "mfussenegger/nvim-jdtls",
   ft = { 'java' },
-  -- ft = "java",
   jdtls_config = config
 }
