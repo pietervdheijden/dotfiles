@@ -1,0 +1,14 @@
+{
+  "runtime.version": "LuaJIT",
+  "runtime.path": [
+    "?.lua",
+    "?/init.lua"
+  ],
+  "diagnostics.globals": ["vim"],
+  "workspace.library": [
+    "$VIMRUNTIME",
+    "~/.local/share/nvim/site/pack/*/start/*"
+  ],
+  "workspace.checkThirdParty": false,
+  "telemetry.enable": false
+}
