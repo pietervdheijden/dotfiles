@@ -16,4 +16,4 @@ map('n', '<leader>em', jdtls.extract_method, { desc = "JDTLS: extract method" })
 
 -- Test mapping
 map('n', '<leader>tc', jdtls.test_class, { desc = "JDTLS: test class" })
-map('n', '<leader>tnm', jdtls.test_nearest_method, { desc = "JDTLS: test nearest method" })
+map('n', '<leader>tm', jdtls.test_nearest_method, { desc = "JDTLS: test nearest method" })
