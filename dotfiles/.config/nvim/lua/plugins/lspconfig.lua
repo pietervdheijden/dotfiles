@@ -1,11 +1,12 @@
 local ensure_installed = {
   -- LSP
   'angular-language-server',
-  'jdtls',
+  'jdtls', -- java
   'pyright',
   'terraformls',
   'typescript-language-server',
   'lua-language-server',
+  'lemminx', -- xml
 
   -- DAP
   'java-debug-adapter',
