@@ -14,9 +14,6 @@ function This.setup()
   -- LazyVim
   map('n', '<leader>lv', ':Lazy<CR>', { desc = 'Open LazyVim' })
 
-  -- LSP
-  -- map('n', '<leader>gd', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'go to declaration' })
-
   -- Other
   map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
   map('n', '<leader>qf', ':copen<CR>', { desc = "Open Quickfix List" })
@@ -24,7 +21,7 @@ end
 
 function This.setup_lsp(bufnr)
   -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
   -- Define bufopts for buffer-local keymaps
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
