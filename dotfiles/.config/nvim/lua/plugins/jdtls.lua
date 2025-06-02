@@ -15,7 +15,6 @@ local workspace_path = home .. "/.local/share/nvim/java_workspace/"
 local function jdtls_config(capabilities)
   return {
     cmd = {
-      -- install_path .. '/bin/jdtls',  -- Use Mason's wrapper script
       '/usr/lib/jvm/java-21-openjdk/bin/java',
       '-javaagent:' .. lombok_path,
       '-Declipse.application=org.eclipse.jdt.ls.core.id1',
@@ -44,8 +43,6 @@ local function jdtls_config(capabilities)
     capabilities = capabilities,
     settings = {
       java = {
-        home = "/usr/lib/jvm/java-21-openjdk",
-        format = {
           enabled = true,
           -- settings = {
           --   -- Use Google Java style guidelines for formatting
@@ -109,7 +106,6 @@ local function jdtls_config(capabilities)
             {
               name = "JavaSE-21",
               path = "/usr/lib/jvm/java-21-openjdk",
-              default = true,
             },
             {
               name = "JavaSE-24",
