@@ -1,36 +1,18 @@
 local install_path = vim.fn.stdpath('data') .. '/mason/packages/jdtls'
--- local install_path = require("mason-registry").get_package("jdtls"):get_install_path()
--- get the debug adapter install path
 local debug_install_path = vim.fn.stdpath('data') .. '/mason/packages/java-debug-adapter'
--- local debug_install_path = require("mason-registry").get_package("java-debug-adapter"):get_install_path()
 local bundles = {
   vim.fn.glob(debug_install_path .. "/extension/server/com.microsoft.java.debug.plugin-*.jar", 1),
 }
 
 -- Configure java test
 local java_test_path = vim.fn.stdpath('data') .. '/mason/packages/java-test'
--- vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar", 1), "\n"))
--- Only include actual OSGi bundles, not fat JARs or agents
-local java_test_bundles = vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar", 1), "\n")
-for _, bundle in ipairs(java_test_bundles) do
-  if not vim.endswith(bundle, "com.microsoft.java.test.runner-jar-with-dependencies.jar") and
-     not vim.endswith(bundle, "jacocoagent.jar") then
-    -- print("Insert bundle: " .. bundle)
-    table.insert(bundles, bundle)
-  end
-end
+vim.list_extend(bundles, vim.split(vim.fn.glob(java_test_path .. "/extension/server/*.jar", 1), "\n"))
 
 local home = vim.fn.expand("~")
-local mason_path = install_path
-local lombok_path = mason_path .. "/lombok.jar"
+local lombok_path = install_path .. "/lombok.jar"
 local workspace_path = home .. "/.local/share/nvim/java_workspace/"
 
--- Configure `nvim-jdtls`
-local function config()
-  -- Set JAVA_HOME environment variable
-  vim.env.JAVA_HOME = '/usr/lib/jvm/java-21-openjdk'
-  vim.env.PATH = vim.env.JAVA_HOME .. '/bin:' .. vim.env.PATH
-  
+local function jdtls_config(capabilities)
   return {
     cmd = {
       -- install_path .. '/bin/jdtls',  -- Use Mason's wrapper script
@@ -54,11 +36,12 @@ local function config()
       '-Declipse.jdt.ls.vmargs=-Dfile.encoding=UTF-8',
       '-Djava.import.generatesMetadataFilesAtProjectRoot=false',
 
-      '-jar', vim.fn.glob(mason_path .. '/plugins/org.eclipse.equinox.launcher_*.jar'),
-      '-configuration', mason_path .. '/config_linux',
+      '-jar', vim.fn.glob(install_path .. '/plugins/org.eclipse.equinox.launcher_*.jar'),
+      '-configuration', install_path .. '/config_linux',
       '-data', workspace_path .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t"),
     },
     root_dir = require('jdtls.setup').find_root({ '.git' }),
+    capabilities = capabilities,
     settings = {
       java = {
         home = "/usr/lib/jvm/java-21-openjdk",
@@ -163,27 +146,12 @@ local function config()
     init_options = {
       bundles = bundles
     },
-    on_attach = function(client, bufnr)
-      require('config.mappings').setup_lsp(bufnr)
-    end,
   }
 end
-
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "java",
-  callback = function()
-    local jdtls_config = config()
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-    jdtls_config.capabilities = capabilities
-    require("jdtls").start_or_attach(jdtls_config)
-  end,
-  group = vim.api.nvim_create_augroup("jdtls_setup", { clear = true }),
-})
 
 return {
   "mfussenegger/nvim-jdtls",
   ft = { 'java' },
-  jdtls_config = config
+  jdtls_config = jdtls_config
 }
+
