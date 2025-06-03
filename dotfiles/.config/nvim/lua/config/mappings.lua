@@ -152,4 +152,77 @@ function This.setup_lsp(bufnr)
   nnoremap('<leader>dh', '<cmd>Telescope dap commands<cr>', "DAP: List commands")
 end
 
+function This.setup_nvimtree(bufnr)
+  local api = require('nvim-tree.api')
+
+  local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+  end
+
+  map('n', '<CR>', api.node.open.edit, opts('Open'))
+  map('n', 'J', api.node.open.horizontal, opts('Open in horitzontal split'))
+  map('n', 'L', api.node.open.vertical, opts('Open in vertical split'))
+  map('n', 'K', api.node.show_info_popup, opts('Info'))
+  map('n', 'R', api.tree.reload, opts('Refresh'))
+  map('n', 'a', api.fs.create, opts('Create'))
+  map('n', 'd', api.fs.remove, opts('Delete'))
+  map('n', 'g?', api.tree.toggle_help, opts('Help'))
+  map('n', 'p', api.fs.paste, opts('Paste'))
+  map('n', 'r', api.fs.rename, opts('Rename'))
+  map('n', 'x', api.fs.cut, opts('Cut'))
+  map('n', 'c', api.fs.copy.node, opts('Copy'))
+
+  -- Add mapping for mouse double-click to open files
+  map('n', '<2-LeftMouse>', api.node.open.edit, opts('Open with mouse double-click'))
+end
+
+function This.setup_gitsigns(bufnr)
+  local gitsigns = require('gitsigns')
+
+  local function localmap(mode, l, r, opts)
+    opts = opts or {}
+    opts.buffer = bufnr
+    vim.keymap.set(mode, l, r, opts)
+  end
+
+  -- Navigation
+  localmap('n', ']c', function()
+    if vim.wo.diff then
+      vim.cmd.normal({ ']c', bang = true })
+    else
+      gitsigns.nav_hunk('next')
+    end
+  end)
+
+  localmap('n', '[c', function()
+    if vim.wo.diff then
+      vim.cmd.normal({ '[c', bang = true })
+    else
+      gitsigns.nav_hunk('prev')
+    end
+  end)
+
+  -- Actions
+  localmap('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'git stage hunk' })
+  localmap('n', '<leader>hr', gitsigns.reset_hunk, { buffer = bufnr, desc = 'git reset hunk' })
+  localmap('v', '<leader>hs', function() gitsigns.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
+    { buffer = bufnr, desc = 'git stage hunk' })
+  localmap('v', '<leader>hr', function() gitsigns.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
+    { buffer = bufnr, desc = 'git reset hunk' })
+  localmap('n', '<leader>hS', gitsigns.stage_buffer, { buffer = bufnr, desc = 'git stage buffer' })
+  localmap('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'git undo stage hunk' })
+  localmap('n', '<leader>hR', gitsigns.reset_buffer, { buffer = bufnr, desc = 'git reset buffer' })
+  localmap('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'git preview hunk' })
+  localmap('n', '<leader>hb', function() gitsigns.blame_line { full = true } end,
+    { buffer = bufnr, desc = 'git blame line' })
+  localmap('n', '<leader>tb', gitsigns.toggle_current_line_blame,
+    { buffer = bufnr, desc = 'git toggle current line blame' })
+  localmap('n', '<leader>hd', gitsigns.diffthis, { desc = 'git diff' })
+  localmap('n', '<leader>hD', function() gitsigns.diffthis('~') end, { buffer = bufnr, desc = 'git diff ~' })
+  localmap('n', '<leader>td', gitsigns.toggle_deleted, { buffer = bufnr, desc = 'git toggle deleted' })
+
+  -- Text object
+  localmap({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+end
+
 return This
