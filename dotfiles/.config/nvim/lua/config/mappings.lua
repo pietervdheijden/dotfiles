@@ -2,68 +2,84 @@ local This = {}
 
 local map = vim.keymap.set
 
+-- Helper function for creating keymaps
+local function noremap(mode, rhs, lhs, desc, bufnr)
+  local opts = { noremap = true, silent = true, buffer = bufnr, desc = desc }
+  vim.keymap.set(mode, rhs, lhs, opts)
+end
+local function nnoremap(rhs, lhs, desc, bufnr)
+  noremap('n', rhs, lhs, desc, bufnr)
+end
+local function vnoremap(rhs, lhs, desc, bufnr)
+  noremap('v', rhs, lhs, desc, bufnr)
+end
+local function inoremap(rhs, lhs, desc, bufnr)
+  noremap('i', rhs, lhs, desc, bufnr)
+end
+
+
 function This.setup()
   -- telescope
   local telescope = require('telescope.builtin')
-  map('n', '<leader>ff', telescope.find_files, { desc = "TS: Find files" })
-  map('n', '<leader>fg', telescope.live_grep, { desc = "TS: Live grep" })
-  map('n', '<leader>fb', telescope.buffers, { desc = "TS: Buffers" })
-  map('n', '<leader>fh', telescope.help_tags, { desc = "TS: Help tags" })
-  map('n', '<leader>fr', telescope.resume, { desc = "TS: Resume" })
-  map('n', '<leader>fw', telescope.grep_string, { desc = "TS: Search word under cursor" })
-  map('n', '<leader>fc', telescope.current_buffer_fuzzy_find, { desc = "TS: Search in current buffer" })
-  map('n', '<leader>fo', telescope.oldfiles, { desc = "TS: Recently opened files" })
-  map('n', '<leader>fk', telescope.keymaps, { desc = "TS: Keymaps" })
-  map('n', '<leader>fs', telescope.lsp_document_symbols, { desc = "TS: LSP symbols" })
+  nnoremap('<leader>ff', telescope.find_files, "TS: Find files")
+  nnoremap('<leader>fg', telescope.live_grep, "TS: Live grep")
+  nnoremap('<leader>fb', telescope.buffers, "TS: Buffers")
+  nnoremap('<leader>fh', telescope.help_tags, "TS: Help tags")
+  nnoremap('<leader>fr', telescope.resume, "TS: Resume")
+  nnoremap('<leader>fw', telescope.grep_string, "TS: Search word under cursor")
+  nnoremap('<leader>fc', telescope.current_buffer_fuzzy_find, "TS: Search in current buffer")
+  nnoremap('<leader>fo', telescope.oldfiles, "TS: Recently opened files")
+  nnoremap('<leader>fk', telescope.keymaps, "TS: Keymaps")
+  nnoremap('<leader>fs', telescope.lsp_document_symbols, "TS: LSP symbols")
 
   -- bufferline
-  map('n', '<leader>bd', ':bdelete<CR>', { desc = 'Close buffer' })
-  map('n', '<leader>bD', ':bdelete!<CR>', { desc = 'Force close buffer' })
-  map('n', '<leader>bn', ':bnext<CR>', { desc = 'Next buffer' })
-  map('n', '<leader>bp', ':bprevious<CR>', { desc = 'Previous buffer' })
-  map('n', '<leader>bdc', function() _G.delete_current_buffer() end, { desc = 'Delete current buffer (smart)' })
-  map('n', '<leader>bdo', function() _G.delete_other_buffers() end, { desc = 'Delete other buffers' })
-  map('n', '<leader>bdl', function() _G.delete_left_buffers() end, { desc = 'Delete buffers to the left' })
-  map('n', '<leader>bdr', function() _G.delete_right_buffers() end, { desc = 'Delete buffers to the right' })
+  nnoremap('<leader>bd', ':bdelete<CR>', 'Close buffer')
+  nnoremap('<leader>bD', ':bdelete!<CR>', 'Force close buffer')
+  nnoremap('<leader>bn', ':bnext<CR>', 'Next buffer')
+  nnoremap('<leader>bp', ':bprevious<CR>', 'Previous buffer')
+  nnoremap('<leader>bdc', function() _G.delete_current_buffer() end, 'Delete current buffer (smart)')
+  nnoremap('<leader>bdo', function() _G.delete_other_buffers() end, 'Delete other buffers')
+  nnoremap('<leader>bdl', function() _G.delete_left_buffers() end, 'Delete buffers to the left')
+  nnoremap('<leader>bdr', function() _G.delete_right_buffers() end, 'Delete buffers to the right')
 
   -- vim-tmux-navigator
-  map('n', '<C-h>', '<cmd>TmuxNavigateLeft<cr>', { desc = 'Navigate left (tmux aware)' })
-  map('n', '<C-j>', '<cmd>TmuxNavigateDown<cr>', { desc = 'Navigate down (tmux aware)' })
-  map('n', '<C-k>', '<cmd>TmuxNavigateUp<cr>', { desc = 'Navigate up (tmux aware)' })
-  map('n', '<C-l>', '<cmd>TmuxNavigateRight<cr>', { desc = 'Navigate right (tmux aware)' })
-  map('n', '<C-\\>', '<cmd>TmuxNavigatePrevious<cr>', { desc = 'Navigate to previous (tmux aware)' })
+  nnoremap('<C-h>', '<cmd>TmuxNavigateLeft<cr>', 'Navigate left (tmux aware)')
+  nnoremap('<C-j>', '<cmd>TmuxNavigateDown<cr>', 'Navigate down (tmux aware)')
+  nnoremap('<C-k>', '<cmd>TmuxNavigateUp<cr>', 'Navigate up (tmux aware)')
+  nnoremap('<C-l>', '<cmd>TmuxNavigateRight<cr>', 'Navigate right (tmux aware)')
+  nnoremap('<C-\\>', '<cmd>TmuxNavigatePrevious<cr>', 'Navigate to previous (tmux aware)')
 
   -- nvim-tree
-  map('n', '<leader>fn', function()
+  nnoremap('<leader>fn', function()
     require('nvim-tree.api').tree.toggle({ find_file = true })
-  end, { desc = 'Toggle file tree and find file' })
-  map('n', '<leader>e', function()
+  end, 'Toggle file tree and find file')
+  nnoremap('<leader>e', function()
     local nvim_tree_focused = vim.api.nvim_get_current_win() == require('nvim-tree.view').get_winnr()
     if nvim_tree_focused then
       vim.cmd.wincmd('p')
     else
       require('nvim-tree.api').tree.focus()
     end
-  end, { desc = 'Toggle focus between editor and file tree' })
+  end, 'Toggle focus between editor and file tree')
 
   -- git
-  map('n', '<leader>gs', telescope.git_status, { desc = 'Git status' })
-  map('n', '<leader>gc', telescope.git_commits, { desc = 'Git commits' })
-  map('n', '<leader>gb', telescope.git_branches, { desc = 'Git branches' })
-  map('n', '<leader>gd', function() require('gitsigns').diffthis() end, { desc = 'Git diff' })
-  map('n', '<leader>lg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+  nnoremap('<leader>gs', telescope.git_status, 'Git status')
+  nnoremap('<leader>gc', telescope.git_commits, 'Git commits')
+  nnoremap('<leader>gb', telescope.git_branches, 'Git branches')
+  nnoremap('<leader>gd', function() require('gitsigns').diffthis() end, 'Git diff')
+  nnoremap('<leader>lg', '<cmd>LazyGit<cr>', 'Open LazyGit')
 
   -- quick actions
-  map('n', '<leader>w', ':w<CR>', { desc = 'Save file' })
-  map('n', '<leader>x', ':x<CR>', { desc = 'Save and close' })
-  map('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file (insert mode)' })
-  map('n', '<Esc><Esc>', ':nohlsearch<CR>', { desc = 'Clear search highlight' })
-  map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
-  map('n', '<leader>qf', ':copen<CR>', { desc = "Open Quickfix List" })
+  nnoremap('<leader>w', ':w<CR>', 'Save file')
+  nnoremap('<leader>x', ':x<CR>', 'Save and close')
+  inoremap('<C-s>', '<Esc>:w<CR>a', 'Save file (insert mode)')
+  nnoremap('<Esc><Esc>', ':nohlsearch<CR>', 'Clear search highlight')
+  nnoremap('<leader>qa', ':qa<CR>', 'Quit all')
+  nnoremap('<leader>qf', ':copen<CR>', "Open Quickfix List")
 
   -- terminal
-  map('n', '<leader>tt', ':terminal<CR>', { desc = 'Open terminal' })
-  map('n', '<leader>tf', function()
+  nnoremap('<leader>tt', ':terminal<CR>', 'Open terminal')
+  nnoremap('<leader>tf', function()
     local buf = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_open_win(buf, true, {
       relative = 'editor',
@@ -74,155 +90,130 @@ function This.setup()
       border = 'rounded'
     })
     vim.cmd('terminal')
-  end, { desc = 'Floating terminal' })
+  end, 'Floating terminal')
 
   -- which-key
-  map('n', '<leader>?', function()
+  nnoremap('<leader>?', function()
     require("which-key").show({ global = false })
-  end, { desc = "Buffer Local Keymaps (which-key)" })
+  end, "Buffer Local Keymaps (which-key)")
 
   -- LazyVim
-  map('n', '<leader>lv', ':Lazy<CR>', { desc = 'Open LazyVim' })
+  nnoremap('<leader>lv', ':Lazy<CR>', 'Open LazyVim')
 end
 
 function This.setup_lsp(bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-  -- Define bufopts for buffer-local keymaps
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-
-  -- Helper function for creating keymaps
-  local function nnoremap(rhs, lhs, desc)
-    -- bufopts = bufopts or {}
-    -- bufopts.desc = desc
-    local opts = vim.tbl_extend('force', bufopts, { desc = desc })
-    vim.keymap.set("n", rhs, lhs, opts)
-  end
-
   -- LSP
-  nnoremap('gD', vim.lsp.buf.declaration, 'LSP: Go to declaration')
-  nnoremap('gd', vim.lsp.buf.definition, 'LSP: Go to definition')
-  nnoremap('gi', vim.lsp.buf.implementation, 'LSP: Go to implementation')
-  nnoremap('K', vim.lsp.buf.hover, 'LSP: Hover text')
-  nnoremap('<C-k>', vim.lsp.buf.signature_help, 'LSP: Show signature')
-  nnoremap('<leader>wa', vim.lsp.buf.add_workspace_folder, 'LSP: Add workspace folder')
-  nnoremap('<leader>wr', vim.lsp.buf.remove_workspace_folder, 'LSP: Remove workspace folder')
+  nnoremap('gD', vim.lsp.buf.declaration, 'LSP: Go to declaration', bufnr)
+  nnoremap('gd', vim.lsp.buf.definition, 'LSP: Go to definition', bufnr)
+  nnoremap('gi', vim.lsp.buf.implementation, 'LSP: Go to implementation', bufnr)
+  nnoremap('K', vim.lsp.buf.hover, 'LSP: Hover text', bufnr)
+  nnoremap('<C-k>', vim.lsp.buf.signature_help, 'LSP: Show signature', bufnr)
+  nnoremap('<leader>wa', vim.lsp.buf.add_workspace_folder, 'LSP: Add workspace folder', bufnr)
+  nnoremap('<leader>wr', vim.lsp.buf.remove_workspace_folder, 'LSP: Remove workspace folder', bufnr)
   nnoremap('<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end,
-    'LSP: List workspace folders')
-  nnoremap('<leader>D', vim.lsp.buf.type_definition, 'LSP: Go to type definition')
-  nnoremap('<leader>rn', vim.lsp.buf.rename, 'LSP: Rename')
-  nnoremap('gr', vim.lsp.buf.references, 'LSP: Find references')
-  nnoremap('<leader>ca', vim.lsp.buf.code_action, "LSP: Code actions")
-  vim.keymap.set('v', "<leader>ca", function() vim.lsp.buf.range_code_action() end,
-    { noremap = true, silent = true, buffer = bufnr, desc = "LSP: Code actions" })
+    'LSP: List workspace folders', bufnr)
+  nnoremap('<leader>D', vim.lsp.buf.type_definition, 'LSP: Go to type definition', bufnr)
+  nnoremap('<leader>rn', vim.lsp.buf.rename, 'LSP: Rename', bufnr)
+  nnoremap('gr', vim.lsp.buf.references, 'LSP: Find references', bufnr)
+  nnoremap('<leader>ca', vim.lsp.buf.code_action, "LSP: Code actions", bufnr)
+  vnoremap('<leader>ca', function() vim.lsp.buf.range_code_action() end, "LSP code actions", bufnr)
   nnoremap('<leader>e', function() vim.diagnostic.open_float(nil, { focusable = false }) end,
-    'LSP: Open diagnostic float')
-  nnoremap('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'LSP: Go to previous diagnostic')
-  nnoremap(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'LSP: Go to next diagnostic')
-  nnoremap('<leader>q', function() vim.diagnostic.setqflist() end, 'LSP: Set quickfix for diagnostic')
-  nnoremap('<leader>f', function() vim.lsp.buf.format({ async = true }) end, 'LSP: Format file')
-  nnoremap('<leader>lr', ':LspRestart<CR>', 'LSP: Restart')
-  nnoremap('<leader>li', ':LspInfo<CR>', 'LSP: Info')
-  nnoremap('gl', function() vim.diagnostic.open_float(nil, { focusable = false }) end, 'LSP: Show line diagnostics')
+    'LSP: Open diagnostic float', bufnr)
+  nnoremap('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'LSP: Go to previous diagnostic', bufnr)
+  nnoremap(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'LSP: Go to next diagnostic', bufnr)
+  nnoremap('<leader>q', function() vim.diagnostic.setqflist() end, 'LSP: Set quickfix for diagnostic', bufnr)
+  nnoremap('<leader>f', function() vim.lsp.buf.format({ async = true }) end, 'LSP: Format file', bufnr)
+  nnoremap('<leader>lr', ':LspRestart<CR>', 'LSP: Restart', bufnr)
+  nnoremap('<leader>li', ':LspInfo<CR>', 'LSP: Info', bufnr)
+  nnoremap('gl', function() vim.diagnostic.open_float(nil, { focusable = false }) end, 'LSP: Show line diagnostics',
+    bufnr)
 
   -- DAP
   local dap = require('dap')
-  nnoremap("<leader>bb", dap.toggle_breakpoint, "DAP: Set breakpoint")
+  nnoremap("<leader>bb", dap.toggle_breakpoint, "DAP: Set breakpoint", bufnr)
   nnoremap("<leader>bc", function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end,
-    "DAP: Set conditional breakpoint")
+    "DAP: Set conditional breakpoint", bufnr)
   nnoremap("<leader>bl", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end,
-    "DAP: Set log point")
-  nnoremap('<leader>br', dap.clear_breakpoints, "DAP: Clear breakpoints")
-  nnoremap('<leader>ba', '<cmd>Telescope dap list_breakpoints<cr>', "DAP: List breakpoints")
+    "DAP: Set log point", bufnr)
+  nnoremap('<leader>br', dap.clear_breakpoints, "DAP: Clear breakpoints", bufnr)
+  nnoremap('<leader>ba', '<cmd>Telescope dap list_breakpoints<cr>', "DAP: List breakpoints", bufnr)
 
-  nnoremap("<leader>dc", dap.continue, "DAP: Continue")
-  nnoremap("<leader>dj", dap.step_over, "DAP: Step over")
-  nnoremap("<leader>dk", dap.step_into, "DAP: Step into")
-  nnoremap("<leader>do", dap.step_out, "DAP: Step out")
-  nnoremap('<leader>dd', dap.disconnect, "DAP: Disconnect")
-  nnoremap('<leader>dt', dap.terminate, "DAP: Terminate")
-  nnoremap("<leader>dr", dap.repl.toggle, "DAP: Open REPL")
-  nnoremap("<leader>dl", dap.run_last, "DAP: Run last")
-  nnoremap('<leader>di', function() require "dap.ui.widgets".hover() end, "DAP: Variables")
+  nnoremap("<leader>dc", dap.continue, "DAP: Continue", bufnr)
+  nnoremap("<leader>dj", dap.step_over, "DAP: Step over", bufnr)
+  nnoremap("<leader>dk", dap.step_into, "DAP: Step into", bufnr)
+  nnoremap("<leader>do", dap.step_out, "DAP: Step out", bufnr)
+  nnoremap('<leader>dd', dap.disconnect, "DAP: Disconnect", bufnr)
+  nnoremap('<leader>dt', dap.terminate, "DAP: Terminate", bufnr)
+  nnoremap("<leader>dr", dap.repl.toggle, "DAP: Open REPL", bufnr)
+  nnoremap("<leader>dl", dap.run_last, "DAP: Run last", bufnr)
+  nnoremap('<leader>di', function() require "dap.ui.widgets".hover() end, "DAP: Variables", bufnr)
   nnoremap('<leader>d?', function()
     local widgets = require "dap.ui.widgets"; widgets.centered_float(widgets.scopes)
-  end, "DAP: Scopes")
-  nnoremap('<leader>df', '<cmd>Telescope dap frames<cr>', "DAP: List frames")
-  nnoremap('<leader>dh', '<cmd>Telescope dap commands<cr>', "DAP: List commands")
+  end, "DAP: Scopes", bufnr)
+  nnoremap('<leader>df', '<cmd>Telescope dap frames<cr>', "DAP: List frames", bufnr)
+  nnoremap('<leader>dh', '<cmd>Telescope dap commands<cr>', "DAP: List commands", bufnr)
 end
 
 function This.setup_nvimtree(bufnr)
   local api = require('nvim-tree.api')
 
-  local function opts(desc)
-    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  end
-
-  map('n', '<CR>', api.node.open.edit, opts('Open'))
-  map('n', 'J', api.node.open.horizontal, opts('Open in horitzontal split'))
-  map('n', 'L', api.node.open.vertical, opts('Open in vertical split'))
-  map('n', 'K', api.node.show_info_popup, opts('Info'))
-  map('n', 'R', api.tree.reload, opts('Refresh'))
-  map('n', 'a', api.fs.create, opts('Create'))
-  map('n', 'd', api.fs.remove, opts('Delete'))
-  map('n', 'g?', api.tree.toggle_help, opts('Help'))
-  map('n', 'p', api.fs.paste, opts('Paste'))
-  map('n', 'r', api.fs.rename, opts('Rename'))
-  map('n', 'x', api.fs.cut, opts('Cut'))
-  map('n', 'c', api.fs.copy.node, opts('Copy'))
-
-  -- Add mapping for mouse double-click to open files
-  map('n', '<2-LeftMouse>', api.node.open.edit, opts('Open with mouse double-click'))
+  nnoremap('<CR>', api.node.open.edit, 'nvim-tree: Open', bufnr)
+  nnoremap('J', api.node.open.horizontal, 'nvim-tree: Open in horizontal split', bufnr)
+  nnoremap('L', api.node.open.vertical, 'nvim-tree: Open in vertical split', bufnr)
+  nnoremap('K', api.node.show_info_popup, 'nvim-tree: Info', bufnr)
+  nnoremap('R', api.tree.reload, 'nvim-tree: Refresh', bufnr)
+  nnoremap('a', api.fs.create, 'nvim-tree: Create', bufnr)
+  nnoremap('d', api.fs.remove, 'nvim-tree: Delete', bufnr)
+  nnoremap('g?', api.tree.toggle_help, 'nvim-tree: Help', bufnr)
+  nnoremap('p', api.fs.paste, 'nvim-tree: Paste', bufnr)
+  nnoremap('r', api.fs.rename, 'nvim-tree: Rename', bufnr)
+  nnoremap('x', api.fs.cut, 'nvim-tree: Cut', bufnr)
+  nnoremap('c', api.fs.copy.node, 'nvim-tree: Copy', bufnr)
+  nnoremap('<2-LeftMouse>', api.node.open.edit, 'nvim-tree: Open with mouse double-click', bufnr)
 end
 
 function This.setup_gitsigns(bufnr)
   local gitsigns = require('gitsigns')
 
-  local function localmap(mode, l, r, opts)
-    opts = opts or {}
-    opts.buffer = bufnr
-    vim.keymap.set(mode, l, r, opts)
-  end
-
   -- Navigation
-  localmap('n', ']c', function()
+  nnoremap(']c', function()
     if vim.wo.diff then
       vim.cmd.normal({ ']c', bang = true })
     else
       gitsigns.nav_hunk('next')
     end
-  end)
+  end, 'Next git hunk', bufnr)
 
-  localmap('n', '[c', function()
+  nnoremap('[c', function()
     if vim.wo.diff then
       vim.cmd.normal({ '[c', bang = true })
     else
       gitsigns.nav_hunk('prev')
     end
-  end)
+  end, 'Previous git hunk', bufnr)
 
   -- Actions
-  localmap('n', '<leader>hs', gitsigns.stage_hunk, { buffer = bufnr, desc = 'git stage hunk' })
-  localmap('n', '<leader>hr', gitsigns.reset_hunk, { buffer = bufnr, desc = 'git reset hunk' })
-  localmap('v', '<leader>hs', function() gitsigns.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
-    { buffer = bufnr, desc = 'git stage hunk' })
-  localmap('v', '<leader>hr', function() gitsigns.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end,
-    { buffer = bufnr, desc = 'git reset hunk' })
-  localmap('n', '<leader>hS', gitsigns.stage_buffer, { buffer = bufnr, desc = 'git stage buffer' })
-  localmap('n', '<leader>hu', gitsigns.undo_stage_hunk, { buffer = bufnr, desc = 'git undo stage hunk' })
-  localmap('n', '<leader>hR', gitsigns.reset_buffer, { buffer = bufnr, desc = 'git reset buffer' })
-  localmap('n', '<leader>hp', gitsigns.preview_hunk, { buffer = bufnr, desc = 'git preview hunk' })
-  localmap('n', '<leader>hb', function() gitsigns.blame_line { full = true } end,
-    { buffer = bufnr, desc = 'git blame line' })
-  localmap('n', '<leader>tb', gitsigns.toggle_current_line_blame,
-    { buffer = bufnr, desc = 'git toggle current line blame' })
-  localmap('n', '<leader>hd', gitsigns.diffthis, { desc = 'git diff' })
-  localmap('n', '<leader>hD', function() gitsigns.diffthis('~') end, { buffer = bufnr, desc = 'git diff ~' })
-  localmap('n', '<leader>td', gitsigns.toggle_deleted, { buffer = bufnr, desc = 'git toggle deleted' })
+  nnoremap('<leader>hs', gitsigns.stage_hunk, 'Git stage hunk', bufnr)
+  nnoremap('<leader>hr', gitsigns.reset_hunk, 'Git reset hunk', bufnr)
+  vnoremap('<leader>hs', function() gitsigns.stage_hunk { vim.fn.line('.'), vim.fn.line('v') } end, 'Git stage hunk',
+    bufnr)
+  vnoremap('<leader>hr', function() gitsigns.reset_hunk { vim.fn.line('.'), vim.fn.line('v') } end, 'Git reset hunk',
+    bufnr)
+  nnoremap('<leader>hS', gitsigns.stage_buffer, 'Git stage buffer', bufnr)
+  nnoremap('<leader>hu', gitsigns.undo_stage_hunk, 'Git undo stage hunk', bufnr)
+  nnoremap('<leader>hR', gitsigns.reset_buffer, 'Git reset buffer', bufnr)
+  nnoremap('<leader>hp', gitsigns.preview_hunk, 'Git preview hunk', bufnr)
+  nnoremap('<leader>hb', function() gitsigns.blame_line { full = true } end, 'Git blame line', bufnr)
+  nnoremap('<leader>tb', gitsigns.toggle_current_line_blame, 'Git toggle current line blame', bufnr)
+  nnoremap('<leader>hd', gitsigns.diffthis, 'Git diff', bufnr)
+  nnoremap('<leader>hD', function() gitsigns.diffthis('~') end, 'Git diff ~', bufnr)
+  nnoremap('<leader>td', gitsigns.toggle_deleted, 'Git toggle deleted', bufnr)
 
   -- Text object
-  localmap({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  noremap({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', 'Select git hunk', bufnr)
 end
 
 return This
