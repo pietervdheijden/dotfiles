@@ -1,7 +1,7 @@
 return {
-  'nvim-telescope/telescope.nvim', 
+  'nvim-telescope/telescope.nvim',
   tag = '0.1.8',
-  dependencies = { 
+  dependencies = {
     'nvim-lua/plenary.nvim'
   },
   config = function()
@@ -9,15 +9,15 @@ return {
     telescope.setup({
       defaults = {
         vimgrep_arguments = {
-          'rg', 
+          'rg',
           '--color=never',
           '--no-heading',
           '--with-filename',
-          '--line-number', 
+          '--line-number',
           '--column',
           '--smart-case',
           '--hidden',
-          "-g", 
+          "-g",
           "!.git",
         },
         path_display = function(opts, path)
@@ -28,7 +28,7 @@ return {
       pickers = {
         find_files = {
           find_command = {
-            'rg', 
+            'rg',
             '--files',
             '--hidden',
             '-g',
@@ -41,6 +41,6 @@ return {
           theme = 'ivy',
         }
       }
-    }) 
+    })
   end
 }

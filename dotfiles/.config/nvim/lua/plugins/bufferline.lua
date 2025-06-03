@@ -92,12 +92,5 @@ return {
       end
     end
 
-    -- Key mappings
-    vim.keymap.set('n', '<leader>bn', ':bnext<CR>', { desc = "Switch to the next buffer" })
-    vim.keymap.set('n', '<leader>bp', ':bprevious<CR>', { desc = "Switch to the previous buffer" })
-    vim.keymap.set('n', '<leader>bdc', ':lua delete_current_buffer()<CR>', { noremap = true, silent = true, desc = "Delete current buffer" })
-    vim.keymap.set('n', '<leader>bdo', ':lua delete_other_buffers()<CR>', { noremap = true, silent = true, desc = "Delete other buffers" })
-    vim.keymap.set('n', '<leader>bdl', ':lua delete_left_buffers()<CR>', { desc = "Delete all buffers to the left of the current one" })
-    vim.keymap.set('n', '<leader>bdr', ':lua delete_right_buffers()<CR>', { desc = "Delete all buffers to the right of the current one" })
   end,
 }

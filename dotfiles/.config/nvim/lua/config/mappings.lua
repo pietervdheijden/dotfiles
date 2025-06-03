@@ -3,20 +3,86 @@ local This = {}
 local map = vim.keymap.set
 
 function This.setup()
-  -- Telescope
+  -- telescope
   local telescope = require('telescope.builtin')
   map('n', '<leader>ff', telescope.find_files, { desc = "TS: Find files" })
   map('n', '<leader>fg', telescope.live_grep, { desc = "TS: Live grep" })
   map('n', '<leader>fb', telescope.buffers, { desc = "TS: Buffers" })
   map('n', '<leader>fh', telescope.help_tags, { desc = "TS: Help tags" })
   map('n', '<leader>fr', telescope.resume, { desc = "TS: Resume" })
+  map('n', '<leader>fw', telescope.grep_string, { desc = "TS: Search word under cursor" })
+  map('n', '<leader>fc', telescope.current_buffer_fuzzy_find, { desc = "TS: Search in current buffer" })
+  map('n', '<leader>fo', telescope.oldfiles, { desc = "TS: Recently opened files" })
+  map('n', '<leader>fk', telescope.keymaps, { desc = "TS: Keymaps" })
+  map('n', '<leader>fs', telescope.lsp_document_symbols, { desc = "TS: LSP symbols" })
+
+  -- bufferline
+  map('n', '<leader>bd', ':bdelete<CR>', { desc = 'Close buffer' })
+  map('n', '<leader>bD', ':bdelete!<CR>', { desc = 'Force close buffer' })
+  map('n', '<leader>bn', ':bnext<CR>', { desc = 'Next buffer' })
+  map('n', '<leader>bp', ':bprevious<CR>', { desc = 'Previous buffer' })
+  map('n', '<leader>bdc', function() _G.delete_current_buffer() end, { desc = 'Delete current buffer (smart)' })
+  map('n', '<leader>bdo', function() _G.delete_other_buffers() end, { desc = 'Delete other buffers' })
+  map('n', '<leader>bdl', function() _G.delete_left_buffers() end, { desc = 'Delete buffers to the left' })
+  map('n', '<leader>bdr', function() _G.delete_right_buffers() end, { desc = 'Delete buffers to the right' })
+
+  -- vim-tmux-navigator
+  map('n', '<C-h>', '<cmd>TmuxNavigateLeft<cr>', { desc = 'Navigate left (tmux aware)' })
+  map('n', '<C-j>', '<cmd>TmuxNavigateDown<cr>', { desc = 'Navigate down (tmux aware)' })
+  map('n', '<C-k>', '<cmd>TmuxNavigateUp<cr>', { desc = 'Navigate up (tmux aware)' })
+  map('n', '<C-l>', '<cmd>TmuxNavigateRight<cr>', { desc = 'Navigate right (tmux aware)' })
+  map('n', '<C-\\>', '<cmd>TmuxNavigatePrevious<cr>', { desc = 'Navigate to previous (tmux aware)' })
+
+  -- nvim-tree
+  map('n', '<leader>fn', function()
+    require('nvim-tree.api').tree.toggle({ find_file = true })
+  end, { desc = 'Toggle file tree and find file' })
+  map('n', '<leader>e', function()
+    local nvim_tree_focused = vim.api.nvim_get_current_win() == require('nvim-tree.view').get_winnr()
+    if nvim_tree_focused then
+      vim.cmd.wincmd('p')
+    else
+      require('nvim-tree.api').tree.focus()
+    end
+  end, { desc = 'Toggle focus between editor and file tree' })
+
+  -- git
+  map('n', '<leader>gs', telescope.git_status, { desc = 'Git status' })
+  map('n', '<leader>gc', telescope.git_commits, { desc = 'Git commits' })
+  map('n', '<leader>gb', telescope.git_branches, { desc = 'Git branches' })
+  map('n', '<leader>gd', function() require('gitsigns').diffthis() end, { desc = 'Git diff' })
+  map('n', '<leader>lg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+
+  -- quick actions
+  map('n', '<leader>w', ':w<CR>', { desc = 'Save file' })
+  map('n', '<leader>x', ':x<CR>', { desc = 'Save and close' })
+  map('i', '<C-s>', '<Esc>:w<CR>a', { desc = 'Save file (insert mode)' })
+  map('n', '<Esc><Esc>', ':nohlsearch<CR>', { desc = 'Clear search highlight' })
+  map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
+  map('n', '<leader>qf', ':copen<CR>', { desc = "Open Quickfix List" })
+
+  -- terminal
+  map('n', '<leader>tt', ':terminal<CR>', { desc = 'Open terminal' })
+  map('n', '<leader>tf', function()
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_open_win(buf, true, {
+      relative = 'editor',
+      width = math.floor(vim.o.columns * 0.8),
+      height = math.floor(vim.o.lines * 0.8),
+      row = math.floor(vim.o.lines * 0.1),
+      col = math.floor(vim.o.columns * 0.1),
+      border = 'rounded'
+    })
+    vim.cmd('terminal')
+  end, { desc = 'Floating terminal' })
+
+  -- which-key
+  map('n', '<leader>?', function()
+    require("which-key").show({ global = false })
+  end, { desc = "Buffer Local Keymaps (which-key)" })
 
   -- LazyVim
   map('n', '<leader>lv', ':Lazy<CR>', { desc = 'Open LazyVim' })
-
-  -- Other
-  map('n', '<leader>qa', ':qa<CR>', { desc = 'Quit all' })
-  map('n', '<leader>qf', ':copen<CR>', { desc = "Open Quickfix List" })
 end
 
 function This.setup_lsp(bufnr)
@@ -56,9 +122,9 @@ function This.setup_lsp(bufnr)
   nnoremap(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'LSP: Go to next diagnostic')
   nnoremap('<leader>q', function() vim.diagnostic.setqflist() end, 'LSP: Set quickfix for diagnostic')
   nnoremap('<leader>f', function() vim.lsp.buf.format({ async = true }) end, 'LSP: Format file')
-
-  -- Reload diagnostics
-  -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rd', '<cmd>lua vim.diagnostic.reset() vim.diagnostic.show()<CR>', opts)
+  nnoremap('<leader>lr', ':LspRestart<CR>', 'LSP: Restart')
+  nnoremap('<leader>li', ':LspInfo<CR>', 'LSP: Info')
+  nnoremap('gl', function() vim.diagnostic.open_float(nil, { focusable = false }) end, 'LSP: Show line diagnostics')
 
   -- DAP
   local dap = require('dap')
