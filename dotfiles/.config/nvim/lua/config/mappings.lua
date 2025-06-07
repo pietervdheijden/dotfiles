@@ -1,7 +1,5 @@
 local This = {}
 
-local map = vim.keymap.set
-
 -- Helper function for creating keymaps
 local function noremap(mode, rhs, lhs, desc, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr, desc = desc }
