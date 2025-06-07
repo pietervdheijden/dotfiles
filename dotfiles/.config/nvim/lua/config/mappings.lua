@@ -35,10 +35,6 @@ function This.setup()
   nnoremap('<leader>bD', ':bdelete!<CR>', 'Force close buffer')
   nnoremap('<leader>bn', ':bnext<CR>', 'Next buffer')
   nnoremap('<leader>bp', ':bprevious<CR>', 'Previous buffer')
-  nnoremap('<leader>bdc', function() _G.delete_current_buffer() end, 'Delete current buffer (smart)')
-  nnoremap('<leader>bdo', function() _G.delete_other_buffers() end, 'Delete other buffers')
-  nnoremap('<leader>bdl', function() _G.delete_left_buffers() end, 'Delete buffers to the left')
-  nnoremap('<leader>bdr', function() _G.delete_right_buffers() end, 'Delete buffers to the right')
 
   -- vim-tmux-navigator
   nnoremap('<C-h>', '<cmd>TmuxNavigateLeft<cr>', 'Navigate left (tmux aware)')
@@ -117,16 +113,16 @@ function This.setup_lsp(bufnr)
   nnoremap('<leader>rn', vim.lsp.buf.rename, 'LSP: Rename', bufnr)
   nnoremap('gr', vim.lsp.buf.references, 'LSP: Find references', bufnr)
   nnoremap('<leader>ca', vim.lsp.buf.code_action, "LSP: Code actions", bufnr)
-  vnoremap('<leader>ca', function() vim.lsp.buf.range_code_action() end, "LSP code actions", bufnr)
-  -- nnoremap('<leader>e', function() vim.diagnostic.open_float(nil, { focusable = false }) end,
-  --   'LSP: Open diagnostic float', bufnr)
-  nnoremap('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'LSP: Go to previous diagnostic', bufnr)
-  nnoremap(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'LSP: Go to next diagnostic', bufnr)
-  nnoremap('<leader>q', function() vim.diagnostic.setqflist() end, 'LSP: Set quickfix for diagnostic', bufnr)
-  nnoremap('<leader>f', function() vim.lsp.buf.format({ async = true }) end, 'LSP: Format file', bufnr)
+  nnoremap('<leader>lf', function() vim.lsp.buf.format({ async = true }) end, 'LSP: Format file', bufnr)
   nnoremap('<leader>lr', ':LspRestart<CR>', 'LSP: Restart', bufnr)
   nnoremap('<leader>li', ':LspInfo<CR>', 'LSP: Info', bufnr)
-  nnoremap('gl', function() vim.diagnostic.open_float(nil, { focusable = false }) end, 'LSP: Show line diagnostics',
+
+  -- Diagnostic
+  nnoremap('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'Diagnostic: Go to previous', bufnr)
+  nnoremap(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'Diagnostic: Go to next', bufnr)
+  nnoremap('<leader>q', vim.diagnostic.setqflist, 'Diagnostic: Set quickfix', bufnr)
+  nnoremap('gl', function() vim.diagnostic.open_float(nil, { focusable = false }) end,
+    'Diagnostic: Show line diagnostics',
     bufnr)
 
   -- DAP
