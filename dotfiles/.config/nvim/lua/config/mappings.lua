@@ -135,7 +135,7 @@ function This.setup_lsp(bufnr)
   nnoremap('<leader>br', dap.clear_breakpoints, "DAP: Clear breakpoints", bufnr)
   nnoremap('<leader>ba', '<cmd>Telescope dap list_breakpoints<cr>', "DAP: List breakpoints", bufnr)
 
-  nnoremap("<leader>dc", dap.continue, "DAP: Continue", bufnr)
+  nnoremap("<leader>dc", dap.continue, "DAP: Start/Continue", bufnr)
   nnoremap("<leader>dj", dap.step_over, "DAP: Step over", bufnr)
   nnoremap("<leader>dk", dap.step_into, "DAP: Step into", bufnr)
   nnoremap("<leader>do", dap.step_out, "DAP: Step out", bufnr)
@@ -149,6 +149,18 @@ function This.setup_lsp(bufnr)
   end, "DAP: Scopes", bufnr)
   nnoremap('<leader>df', '<cmd>Telescope dap frames<cr>', "DAP: List frames", bufnr)
   nnoremap('<leader>dh', '<cmd>Telescope dap commands<cr>', "DAP: List commands", bufnr)
+
+  -- DAP: traditional IDE keybindings
+  nnoremap('<F5>', dap.continue, 'DAP: Start/Continue', bufnr)
+  nnoremap('<F10>', dap.step_over, 'DAP: Step over', bufnr)
+  nnoremap('<F11>', dap.step_into, 'DAP: Step into', bufnr)
+  nnoremap('<F12>', dap.step_out, 'DAP: Step out', bufnr)
+
+  -- DAP ui
+  local dapui = require('dapui')
+  vim.keymap.set('n', '<Leader>du', dapui.toggle, { desc = 'DAP: Toggle UI' })
+  vim.keymap.set('n', '<Leader>de', dapui.eval, { desc = 'DAP: Evaluate Expression' })
+  vim.keymap.set('v', '<Leader>de', dapui.eval, { desc = 'DAP: Evaluate Selection' })
 end
 
 function This.setup_nvimtree(bufnr)

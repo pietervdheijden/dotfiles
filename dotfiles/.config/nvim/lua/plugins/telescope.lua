@@ -44,7 +44,6 @@ return {
       }
     })
 
-    -- telescope.load_extension('lsp')
     telescope.load_extension('ui-select')
   end
 }
