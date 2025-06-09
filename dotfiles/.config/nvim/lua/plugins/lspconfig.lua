@@ -18,6 +18,7 @@ local function lsp_java_config(capabilities)
     group = vim.api.nvim_create_augroup('lsp_define_java', { clear = true }),
     pattern = 'java',
     callback = function()
+      ---@diagnostic disable-next-line: different-requires
       require('jdtls').start_or_attach(require('plugins.jdtls').jdtls_config(capabilities))
     end
   })
