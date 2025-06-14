@@ -21,7 +21,7 @@ az_sb_receive_and_delete_messages() {
   local queue_name=$2
   local dlq=$3
 
-  FQN=$fqn QUEUE_NAME=$queue_name DLQ=$dlq $HOME/.scripts/az-sb-receive-and-delete-messages/run.sh
+  FQN=$fqn QUEUE_NAME=$queue_name DLQ=$dlq $HOME/bin/az-sb-receive-and-delete-messages/run.sh
 }
 
 az_cosmos_delete_partitions() {
@@ -34,7 +34,7 @@ az_cosmos_delete_partitions() {
   COSMOS_DATABASE=$database_name \
   COSMOS_CONTAINER=$container_name \
   PARTITION_KEY_PREFIX=$partition_key_prefix \
-  $HOME/.scripts/az-cosmos-delete-partitions/run.sh
+  $HOME/bin/az-cosmos-delete-partitions/run.sh
 }
 
 # Check if app credentials are expired or will expire in the next 60 days

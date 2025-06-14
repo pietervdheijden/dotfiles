@@ -13,6 +13,6 @@ dir=$(
 
 # if a selection was made, open/switch in tmux
 if [ -n "$dir" ]; then
-  ~/.scripts/tmux-open-dir.sh "$dir"
+  ~/bin/tmux-open-dir "$dir"
 fi
 
