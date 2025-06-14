@@ -38,6 +38,22 @@ function This.setup()
 
   -- Configure colorcolumn
   vim.opt.colorcolumn = "120"
+
+  -- Set filetype to 'sh' based on shebang for shell scripts without .sh extension
+  vim.filetype.add({
+    pattern = {
+      ['.*'] = function(_, bufnr)
+        local first_line = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ""
+        if first_line:match("^#!.*/bin/bash")
+            or first_line:match("^#!.*/usr/bin/env%s+bash")
+            or first_line:match("^#!.*/bin/sh")
+            or first_line:match("^#!.*/usr/bin/env%s+sh")
+        then
+          return "sh"
+        end
+      end,
+    },
+  })
 end
 
 return This
