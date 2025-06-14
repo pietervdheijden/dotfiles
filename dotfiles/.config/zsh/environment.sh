@@ -24,3 +24,6 @@ fi
 # Add go bin to PATH
 export PATH=$PATH:~/go/bin
 
+# Add home bin to PATH
+export PATH=$PATH:~/bin
+
