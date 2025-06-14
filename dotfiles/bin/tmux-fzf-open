@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Collect Git repos under ~/GitHub
+repos=$(fd --type d               \
+           --hidden               \
+           --glob ".git"          \
+           --exclude .git/objects \
+           ~/GitHub               \
+        | sed "s:/\.git/\$::")
+
+# Add special "Main Terminal" entry manually
+entries=$(printf "[Main Terminal]\n%s" "$repos")
+
+# Let user pick one
+selection=$(printf "%s" "$entries" | fzf-tmux -p 80%,50%)
+
+# Handle selection
+if [[ "$selection" == "[Main Terminal]" ]]; then
+  ~/bin/tmux-open-dir "$HOME"
+elif [ -n "$selection" ]; then
+  ~/bin/tmux-open-dir "$selection"
+fi
+
