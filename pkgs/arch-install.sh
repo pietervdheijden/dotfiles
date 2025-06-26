@@ -41,7 +41,8 @@ sudo pacman --noconfirm --needed -S azure-kubelogin
 sudo pacman --noconfirm --needed -S terraform
 sudo pacman --noconfirm --needed -S openssh
 sudo pacman --noconfirm --needed -S helm
-sudo pacman --noconfirm --needed -S yq
+sudo pacman -Q yq &>/dev/null && sudo pacman --noconfirm -R yq # use go-yq (v4) instead of yq (v3)
+sudo pacman --noconfirm --needed -S go-yq
 sudo pacman --noconfirm --needed -S maven
 sudo pacman --noconfirm --needed -S jdk11-openjdk
 sudo pacman --noconfirm --needed -S jdk17-openjdk
