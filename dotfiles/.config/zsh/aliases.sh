@@ -5,12 +5,13 @@ alias k="kubectl"
 alias kx='kubectl_context'
 alias kn='kubectl_namespace'
 alias kgi='kubectl get ingress'
+alias kgio='kubectl get ingress -o yaml'
 alias kgn='kubectl get namespace'
 alias kgnp='kubectl get netpol'
 alias kgp='kubectl get pod'
 alias kgs='kubectl get service'
 alias kge="kubectl get events --sort-by='.lastTimestamp'"
-alias kgpo='kubectl get po -o yaml'
+alias kgpo='kubectl get pod -o yaml'
 
 # Helm
 alias h="helm"
