@@ -12,6 +12,9 @@ alias kgp='kubectl get pod'
 alias kgs='kubectl get service'
 alias kge="kubectl get events --sort-by='.lastTimestamp'"
 alias kgpo='kubectl get pod -o yaml'
+alias ksd0='kubectl scale deployment --replicas=0'
+alias ksd1='kubectl scale deployment --replicas=1'
+alias ksd2='kubectl scale deployment --replicas=2'
 
 # Helm
 alias h="helm"
