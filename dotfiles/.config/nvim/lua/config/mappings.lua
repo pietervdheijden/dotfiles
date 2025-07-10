@@ -31,8 +31,14 @@ function This.setup()
   nnoremap('<leader>fs', telescope.lsp_document_symbols, "TS: LSP symbols")
 
   -- bufferline
-  nnoremap('<leader>bd', ':bdelete<CR>', 'Close buffer')
-  nnoremap('<leader>bD', ':bdelete!<CR>', 'Force close buffer')
+  -- Buffer delete operations
+  nnoremap('<leader>bdc', ':bdelete<CR>', 'Delete current buffer')
+  nnoremap('<leader>bdC', ':bdelete!<CR>', 'Force delete current buffer')
+  nnoremap('<leader>bdo', ':%bd|e#|bd#<CR>', 'Delete other buffers')
+  nnoremap('<leader>bdO', ':%bd!|e#|bd#<CR>', 'Force delete other buffers')
+  nnoremap('<leader>bda', ':%bd<CR>', 'Delete all buffers')
+  nnoremap('<leader>bdA', ':%bd!<CR>', 'Force delete all buffers')
+  -- Buffer navigation
   nnoremap('<leader>bn', ':bnext<CR>', 'Next buffer')
   nnoremap('<leader>bp', ':bprevious<CR>', 'Previous buffer')
 
