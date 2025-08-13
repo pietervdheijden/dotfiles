@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
 user="$1"
+email="$2"
 [ -n "$user" ] || { echo "Usage: switch-git-user johndoe"; exit 1; }
 
-# Configure GH
+# Configure GH auth
 gh auth switch -u $user
+
+# Configure email
 
 # Configure GPG signing
 gpgKeyId=$(
