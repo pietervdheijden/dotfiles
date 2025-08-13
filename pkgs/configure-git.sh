@@ -40,5 +40,16 @@ else
   git config --global core.autocrlf false
 fi
 
+# Personal config
+PERSONAL_CONFIG_FILE=~/.gitconfig-pietervdheijden
+git config --global 'includeIf.gitdir:~/git/pietervdheijden/.path' $PERSONAL_CONFIG_FILE
+git config --file $PERSONAL_CONFIG_FILE user.email "pietervdheijden@gmail.com"
+# Note, when using GPG signing, the following properties should be manually configured in the personal config file:
+# git config --file $PERSONAL_CONFIG_FILE user.signingKey TODO
+# git config --file $PERSONAL_CONFIG_FILE commit.gpgsign true
+# git config --file $PERSONAL_CONFIG_FILE tag.gpgsign true
+
+# Work config can be configured similarly to the personal config
+
 # Let gh manage git credentials
 gh auth setup-git
