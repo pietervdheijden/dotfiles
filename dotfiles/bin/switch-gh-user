@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+user="$1"
+[ -n "$user" ] || { echo "Usage: switch-git-user johndoe"; exit 1; }
+
+# Configure GH
+gh auth switch -u $user
+
+# Configure GPG signing
+gpgKeyId=$(
+  gpg --list-secret-keys --keyid-format=long "GitHub_$user" | \
+  grep sec | \
+  awk '{print $2}' | \
+  cut -d'/' -f2
+)
+if [ -n "$gpgKeyId" ]
+then
+  echo "Enable GPG signing"
+  git config --global user.signingkey $gpgKeyId
+  git config --global commit.gpgsign true
+  git config --global tag.gpgsign true
+else
+  echo "Disable GPG signing"
+  git config --global user.sigingkey ""
+  git config --global commit.gpgsign false
+  git config --global tag.gpgsign false
+fi
+
