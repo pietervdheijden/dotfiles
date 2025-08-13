@@ -2,12 +2,13 @@
 
 user="$1"
 email="$2"
-[ -n "$user" ] || { echo "Usage: switch-git-user johndoe"; exit 1; }
+[[ -n "$user" || -n "$email" ]] || { echo "Usage: switch-git-user johndoe john.doe@gmail.com"; exit 1; }
 
 # Configure GH auth
 gh auth switch -u $user
 
 # Configure email
+git config --global user.email $email
 
 # Configure GPG signing
 gpgKeyId=$(
