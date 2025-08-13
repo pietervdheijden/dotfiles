@@ -15,12 +15,41 @@ map('n', '<leader>ec', jdtls.extract_constant, { desc = "JDTLS: extract constant
 map('n', '<leader>em', jdtls.extract_method, { desc = "JDTLS: extract method" })
 
 -- Test mapping
+local function get_current_method_name()
+  local ts_ok, ts_utils = pcall(require, 'nvim-treesitter.ts_utils')
+  if not ts_ok then
+    -- Fallback to word under cursor if treesitter not available
+    return vim.fn.expand('<cword>')
+  end
+
+  local node = ts_utils.get_node_at_cursor()
+  if not node then return nil end
+
+  -- Walk up the tree to find method declaration
+  while node do
+    if node:type() == 'method_declaration' then
+      for child in node:iter_children() do
+        if child:type() == 'identifier' then
+          return vim.treesitter.get_node_text(child, 0)
+        end
+      end
+    end
+    node = node:parent()
+  end
+
+  -- Fallback to word under cursor
+  return vim.fn.expand('<cword>')
+end
+
+-- Updated test mappings
 vim.keymap.set('n', '<leader>tm', function()
+  local method_name = get_current_method_name()
   vim.g.jdtls_last_test = {
     file = vim.fn.expand('%:p'),
     line = vim.fn.line('.'),
     col = vim.fn.col('.'),
-    type = 'method'
+    type = 'method',
+    method_name = method_name
   }
   require('jdtls').test_nearest_method()
 end, { desc = "JDTLS: test nearest method" })
@@ -31,6 +60,7 @@ vim.keymap.set('n', '<leader>tc', function()
     line = vim.fn.line('.'),
     col = vim.fn.col('.'),
     type = 'class'
+    -- No method_name for class tests
   }
   require('jdtls').test_class()
 end, { desc = "JDTLS: test class" })
