@@ -27,3 +27,7 @@ export PATH=$PATH:~/go/bin
 # Add home bin to PATH
 export PATH=$PATH:~/bin
 
+# Add pyenv bin to PATH
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"

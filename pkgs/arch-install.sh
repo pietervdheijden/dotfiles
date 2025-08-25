@@ -109,5 +109,8 @@ fi
 # Install npm packages
 npm install -g @anthropic-ai/claude-code
 
+# Install pyenv
+command -v pyenv >/dev/null 2>&1 || curl https://pyenv.run | bash
+
 echo "[SUCCESS] Installed all Arch Linux packages!"
 
