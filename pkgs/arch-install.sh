@@ -52,6 +52,7 @@ sudo pacman --noconfirm --needed -S stern
 sudo pacman --noconfirm --needed -S docker
 sudo pacman --noconfirm --needed -S docker-buildx
 sudo pacman --noconfirm --needed -S bind
+sudo pacman --noconfirm --needed -S lsof
 
 # Install software using pacman when running on a native Linux host (not WSL2)
 if ! grep -qi microsoft /proc/version; then
