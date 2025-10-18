@@ -49,3 +49,5 @@ source /usr/share/nvm/init-nvm.sh
 # Zoxide
 eval "$(zoxide init --cmd cd zsh)"
 
+# Load cargo
+source "$HOME/.cargo/env"

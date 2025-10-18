@@ -147,3 +147,5 @@ export NVM_DIR="$HOME/.nvm"
 # Add go bin to PATH
 export PATH=$PATH:~/go/bin
 
+# Load cargo
+source "$HOME/.cargo/env"
