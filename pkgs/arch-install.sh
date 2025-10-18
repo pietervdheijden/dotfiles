@@ -53,6 +53,7 @@ sudo pacman --noconfirm --needed -S docker
 sudo pacman --noconfirm --needed -S docker-buildx
 sudo pacman --noconfirm --needed -S bind
 sudo pacman --noconfirm --needed -S lsof
+sudo pacman --noconfirm --needed -S rust
 
 # Install software using pacman when running on a native Linux host (not WSL2)
 if ! grep -qi microsoft /proc/version; then
