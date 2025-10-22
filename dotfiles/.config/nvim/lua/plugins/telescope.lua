@@ -18,8 +18,8 @@ return {
           '--column',
           '--smart-case',
           '--hidden',
-          "-g",
-          "!.git",
+          '--no-ignore',
+          '--glob', '!.git',
         },
         path_display = function(opts, path)
           local tail = require("telescope.utils").path_tail(path)
@@ -32,8 +32,8 @@ return {
             'rg',
             '--files',
             '--hidden',
-            '-g',
-            '!.git'
+            '--no-ignore',
+            '--glob', '!.git',
           },
           theme = 'ivy',
           previewer = false,
