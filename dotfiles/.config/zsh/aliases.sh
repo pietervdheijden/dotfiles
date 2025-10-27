@@ -15,6 +15,8 @@ alias kgpo='kubectl get pod -o yaml'
 alias ksd0='kubectl scale deployment --replicas=0'
 alias ksd1='kubectl scale deployment --replicas=1'
 alias ksd2='kubectl scale deployment --replicas=2'
+alias kdelpe='kubectl_delete_error_pods_in_current_namespace'
+alias kdelpea='kubectl_delete_error_pods_in_all_namespaces'
 
 # Helm
 alias h="helm"

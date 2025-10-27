@@ -16,6 +16,16 @@ kubectl_namespace() {
   fi
 }
 
+kubectl_delete_error_pods_in_current_namespace() {
+  echo "Deleting all error pods in current namespace..."
+  kubectl get pods | grep Error | awk '{print $1, $2}' | xargs -r -n2 sh -c 'kubectl delete pod "$1" -n "$0"'
+}
+
+kubectl_delete_error_pods_in_all_namespaces() {
+  echo "Deleting all error pods in all namespaces..."
+  kubectl get pods -A | grep Error | awk '{print $1, $2}' | xargs -r -n2 sh -c 'kubectl delete pod "$1" -n "$0"'
+}
+
 az_sb_receive_and_delete_messages() {
   local fqn=$1
   local queue_name=$2
