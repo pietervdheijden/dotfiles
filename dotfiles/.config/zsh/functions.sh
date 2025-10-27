@@ -18,7 +18,7 @@ kubectl_namespace() {
 
 kubectl_delete_error_pods_in_current_namespace() {
   echo "Deleting all error pods in current namespace..."
-  kubectl get pods | grep Error | awk '{print $1, $2}' | xargs -r -n2 sh -c 'kubectl delete pod "$1" -n "$0"'
+  kubectl get pods | grep Error | awk '{print $1}' | xargs -r -n1 sh -c 'kubectl delete pod "$0"'
 }
 
 kubectl_delete_error_pods_in_all_namespaces() {
