@@ -17,6 +17,9 @@ alias ksd1='kubectl scale deployment --replicas=1'
 alias ksd2='kubectl scale deployment --replicas=2'
 alias kdelpe='kubectl_delete_error_pods_in_current_namespace'
 alias kdelpea='kubectl_delete_error_pods_in_all_namespaces'
+alias ktp='kubectl top pods'
+alias ktpa='kubectl top pods -A'
+alias ktn='kubectl top nodes'
 
 # Helm
 alias h="helm"
