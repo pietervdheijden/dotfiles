@@ -20,6 +20,9 @@ alias kdelpea='kubectl_delete_error_pods_in_all_namespaces'
 alias ktp='kubectl top pods'
 alias ktpa='kubectl top pods -A'
 alias ktn='kubectl top nodes'
+alias kgd='kubectl get deployment'
+alias kgdo='kubectl get deployment -o yaml'
+alias kgda='kubectl get deployment -A'
 
 # Helm
 alias h="helm"
