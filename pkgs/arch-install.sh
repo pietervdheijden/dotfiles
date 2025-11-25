@@ -51,6 +51,7 @@ sudo pacman --noconfirm --needed -S jdk24-openjdk
 sudo pacman --noconfirm --needed -S stern
 sudo pacman --noconfirm --needed -S docker
 sudo pacman --noconfirm --needed -S docker-buildx
+sudo pacman --noconfirm --needed -S docker-compose
 sudo pacman --noconfirm --needed -S bind
 sudo pacman --noconfirm --needed -S lsof
 sudo pacman --noconfirm --needed -S rust
