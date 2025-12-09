@@ -13,7 +13,7 @@ export PATH="$PATH:$NPM_PACKAGES/bin"
 export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 
 # WSL2 specific variables
-if grep -qi microsoft /proc/version; then
+if [[ "$(uname -s)" == "Linux" ]] && grep -qi microsoft /proc/version 2>/dev/null; then
   # Use Windows browser (instead of WSL2 browser)
   export BROWSER=wslview
 
