@@ -7,10 +7,15 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 if [[ $(uname -s) == MINGW* ]]; then
   # Windows
   echo "Package installation on Windows is not supported yet."
+elif [[ $(uname -s) == Darwin ]]; then
+  # macOS
+  "$SCRIPT_DIR/macos-install.sh"
 elif [[ -x "$(command -v apt-get)" ]]; then
-  $SCRIPT_DIR/ubuntu-install.sh
+  # Ubuntu/Debian
+  "$SCRIPT_DIR/ubuntu-install.sh"
 elif [[ -x "$(command -v pacman)" ]]; then
-  $SCRIPT_DIR/arch-install.sh
+  # Arch
+  "$SCRIPT_DIR/arch-install.sh"
 fi
 
 # Configure dynamic packages
