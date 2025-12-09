@@ -31,3 +31,6 @@ export PATH=$PATH:~/bin
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+# Load cargo
+. "$HOME/.cargo/env"
