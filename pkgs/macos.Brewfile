@@ -1,3 +1,5 @@
+brew "fd"
+brew "fzf"
 brew "gh"
 brew "git"
 brew "gpg"
