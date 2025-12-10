@@ -34,3 +34,9 @@ eval "$(pyenv virtualenv-init -)"
 
 # Load cargo
 . "$HOME/.cargo/env"
+
+# libpq
+if command -v brew >/dev/null 2>&1; then
+  export PATH="$(brew --prefix libpq)/bin:$PATH"
+  export PKG_CONFIG_PATH="$(brew --prefix libpq)/lib/pkgconfig:$PKG_CONFIG_PATH"
+fi
