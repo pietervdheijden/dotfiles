@@ -23,6 +23,7 @@ brew "terramate"
 brew "wget"
 brew "zoxide"
 
+cask "claude-code"
 cask "chatgpt"
 cask "google-chrome"
 cask "kitty"
