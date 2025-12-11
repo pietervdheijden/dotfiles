@@ -13,6 +13,8 @@ brew "pyenv"
 brew "pyenv-virtualenv"
 brew "ripgrep"
 brew "rustup"
+brew "terraform"
+brew "terramate"
 brew "wget"
 brew "zoxide"
 
