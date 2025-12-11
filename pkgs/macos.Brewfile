@@ -1,3 +1,7 @@
+tap "azure/kubelogin"
+
+brew "azure-cli"
+brew "azure/kubelogin/kubelogin"
 brew "fd"
 brew "fzf"
 brew "gh"
