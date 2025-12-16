@@ -33,6 +33,7 @@ brew "zoxide"
 
 cask "claude-code"
 cask "chatgpt"
+cask "dbeaver-community"
 cask "gcloud-cli"
 cask "google-chrome"
 cask "kitty"
