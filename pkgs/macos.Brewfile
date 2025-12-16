@@ -1,4 +1,5 @@
 tap "azure/kubelogin"
+tap "hashicorp/tap"
 
 brew "azure-cli"
 brew "azure/kubelogin/kubelogin"
@@ -10,6 +11,7 @@ brew "fzf"
 brew "gh"
 brew "git"
 brew "gpg"
+brew "hashicorp/tap/terraform"
 brew "kubernetes-cli"
 brew "lazygit"
 brew "libpq"
