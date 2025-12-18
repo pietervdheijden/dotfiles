@@ -57,6 +57,7 @@ alias nv='nvim'
 alias py='python3'
 alias python='python3'
 alias pip='pip3'
+alias pir='pip install -r requirements.txt'
 
 # LazyGit
 alias lg='lazygit'
