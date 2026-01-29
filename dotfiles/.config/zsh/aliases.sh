@@ -5,6 +5,7 @@ alias k="kubectl"
 alias kx='kubectl_context'
 alias kxc='kubectl config current-context'
 alias kn='kubectl_namespace'
+alias knc='kubectl config view --minify --output "jsonpath={..namespace}"'
 alias kgi='kubectl get ingress'
 alias kgio='kubectl get ingress -o yaml'
 alias kgn='kubectl get namespace'

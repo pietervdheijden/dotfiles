@@ -16,10 +16,16 @@ kubectl_context() {
 
 kubectl_namespace() {
   local namespace=$1
-  if [ "$namespace" ]; then
-    kubectl config set-context --current --namespace $namespace
-  else
-    kubectl config view --minify | grep namespace | cut -d" " -f6
+
+  if [[ -n "$namespace" ]]; then
+    kubectl config set-context --current --namespace "$namespace"
+    return
+  fi
+
+  namespace=$(kubectl get namespaces -o name | sed 's|namespace/||' | fzf --prompt="Select Kubernetes namespace: ")
+
+  if [[ -n "$namespace" ]]; then
+    kubectl config set-context --current --namespace "$namespace"
   fi
 }
 
