@@ -3,6 +3,7 @@
 # Kubectl
 alias k="kubectl"
 alias kx='kubectl_context'
+alias kxc='kubectl config current-context'
 alias kn='kubectl_namespace'
 alias kgi='kubectl get ingress'
 alias kgio='kubectl get ingress -o yaml'

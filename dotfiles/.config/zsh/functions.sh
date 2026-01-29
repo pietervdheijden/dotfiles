@@ -1,11 +1,18 @@
 kubectl_context() {
   local context=$1
-  if [ "$context" ]; then
-    kubectl config use-context $context
-  else
-    kubectl config current-context
+
+  if [[ -n "$context" ]]; then
+    kubectl config use-context "$context"
+    return
+  fi
+
+  context=$(kubectl config get-contexts -o name | fzf --prompt="Select Kubernetes context: ")
+
+  if [[ -n "$context" ]]; then
+    kubectl config use-context "$context"
   fi
 }
+
 
 kubectl_namespace() {
   local namespace=$1
