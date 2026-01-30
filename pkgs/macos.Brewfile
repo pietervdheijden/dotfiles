@@ -3,6 +3,7 @@ tap "hashicorp/tap"
 
 brew "azure-cli"
 brew "azure/kubelogin/kubelogin"
+brew "cmake"
 brew "colima"
 brew "docker"
 brew "docker-compose"
