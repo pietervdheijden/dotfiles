@@ -97,6 +97,43 @@ az_ad_app_check_credential_expiry() {
   fi
 }
 
+kubectl_debug_node() {
+  local node=$1
+
+  if [[ -z "$node" ]]; then
+    node=$(kubectl get nodes -o name | sed 's|node/||' | fzf --prompt="Select node: ")
+  fi
+
+  if [[ -z "$node" ]]; then
+    return 1
+  fi
+
+  kubectl debug "node/$node" -it --image=docker.io/alpine:3.13 --profile=sysadmin -- nsenter -t 1 -m -u -i -n /bin/sh
+}
+
+kubectl_debug_node_by_pod() {
+  local pod=$1
+
+  if [[ -z "$pod" ]]; then
+    pod=$(kubectl get pods -o name | sed 's|pod/||' | fzf --prompt="Select pod: ")
+  fi
+
+  if [[ -z "$pod" ]]; then
+    return 1
+  fi
+
+  local node
+  node=$(kubectl get pod "$pod" -o jsonpath='{.spec.nodeName}')
+
+  if [[ -z "$node" ]]; then
+    echo "Error: Could not find node for pod '$pod'"
+    return 1
+  fi
+
+  echo "Pod '$pod' is running on node '$node'"
+  kubectl debug "node/$node" -it --image=docker.io/alpine:3.13 --profile=sysadmin -- nsenter -t 1 -m -u -i -n /bin/sh
+}
+
 # Check if service principal credentials are expired or will expire in the next 60 days
 az_ad_sp_check_credential_expiry() {
   # Get current date and future date (60 days from now) in ISO 8601 format
