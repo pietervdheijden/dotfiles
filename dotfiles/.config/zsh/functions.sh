@@ -171,3 +171,15 @@ az_ad_sp_check_credential_expiry() {
     echo "No service principals have expired or soon-to-expire credentials."
   fi
 }
+
+tolower() {
+  tr '[:upper:]' '[:lower:]'
+}
+
+toupper() {
+  tr '[:lower:]' '[:upper:]'
+}
+
+uuidlc() {
+  uuidgen | tolower
+}
