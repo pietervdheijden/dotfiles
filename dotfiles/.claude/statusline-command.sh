@@ -116,7 +116,7 @@ if [ -n "$used_pct" ]; then
     else
         color="\033[32m" # green
     fi
-    parts+=("$(printf "${color}ctx:%s%%\033[0m" "$used_int")")
+    parts+=("$(printf "${color}🧠%s%%\033[0m" "$used_int")")
 fi
 
 # Add output style if not default
