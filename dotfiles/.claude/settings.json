@@ -1,7 +1,5 @@
 {
-  "model": "claude-opus-4-6",
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
+  "model": "haiku",
   "hooks": {
     "Notification": [
       {
@@ -14,5 +12,11 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium"
 }
