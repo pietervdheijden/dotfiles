@@ -87,7 +87,7 @@ if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
         fi
     fi
 
-    git_info=$(printf "\033[33m(%s%s%s)\033[0m" "$branch" "$status" "$ahead_behind")
+    git_info=$(printf "\033[33m🌿%s%s%s\033[0m" "$branch" "$status" "$ahead_behind")
 fi
 
 # Build status line parts
@@ -126,7 +126,7 @@ fi
 
 # Add session duration
 if [ -n "$duration" ]; then
-    parts+=("$(printf "\033[95m%s\033[0m" "$duration")")
+    parts+=("$(printf "\033[95m⏱️%s\033[0m" "$duration")")
 fi
 
 # Add turn count
