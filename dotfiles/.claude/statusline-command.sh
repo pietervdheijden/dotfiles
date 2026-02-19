@@ -153,7 +153,7 @@ if [ "$total_input" -gt 0 ] || [ "$total_output" -gt 0 ]; then
         output_display="$total_output"
     fi
 
-    parts+=("$(printf "\033[96m↓%s ↑%s\033[0m" "$input_display" "$output_display")")
+    parts+=("$(printf "\033[96m🪙↓%s ↑%s\033[0m" "$input_display" "$output_display")")
 fi
 
 # Add cost
