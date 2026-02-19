@@ -1,12 +1,22 @@
 {
   "model": "claude-opus-4-6",
   "hooks": {
-    "Notification": [
+    "PermissionRequest": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "TMUX_TARGET=$(/opt/homebrew/bin/tmux display-message -p '#{session_name}:#{window_index}') ; PANE_TTY=$(/opt/homebrew/bin/tmux display-message -p '#{pane_tty}') ; DIR_NAME=$(basename \"$PWD\") ; SCRIPT=$(mktemp /tmp/claude-notify.XXXXXX.sh) ; echo '#!/bin/bash' > $SCRIPT ; echo \"/usr/bin/osascript -e 'activate application \\\"kitty\\\"'\" >> $SCRIPT ; echo \"/opt/homebrew/bin/tmux select-window -t $TMUX_TARGET\" >> $SCRIPT ; echo \"/opt/homebrew/bin/tmux select-pane -t $TMUX_PANE\" >> $SCRIPT ; echo \"rm $SCRIPT\" >> $SCRIPT ; chmod +x $SCRIPT ; /opt/homebrew/bin/terminal-notifier -title \"Claude Code ($DIR_NAME)\" -message 'Needs your input' -execute $SCRIPT ; printf '\\a' > $PANE_TTY"
+            "command": "TMUX_TARGET=$(/opt/homebrew/bin/tmux display-message -t $TMUX_PANE -p '#{session_name}:#{window_index}') ; PANE_TTY=$(/opt/homebrew/bin/tmux display-message -t $TMUX_PANE -p '#{pane_tty}') ; DIR_NAME=$(basename \"$PWD\") ; SCRIPT=$(mktemp /tmp/claude-notify.XXXXXX.sh) ; echo '#!/bin/bash' > $SCRIPT ; echo \"/usr/bin/osascript -e 'activate application \\\"kitty\\\"'\" >> $SCRIPT ; echo \"/opt/homebrew/bin/tmux select-window -t $TMUX_TARGET\" >> $SCRIPT ; echo \"/opt/homebrew/bin/tmux select-pane -t $TMUX_PANE\" >> $SCRIPT ; echo \"rm $SCRIPT\" >> $SCRIPT ; chmod +x $SCRIPT ; /opt/homebrew/bin/terminal-notifier -title \"Claude Code ($DIR_NAME)\" -message 'Needs your input' -execute $SCRIPT ; printf '\\a' > $PANE_TTY"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "TMUX_TARGET=$(/opt/homebrew/bin/tmux display-message -t $TMUX_PANE -p '#{session_name}:#{window_index}') ; PANE_TTY=$(/opt/homebrew/bin/tmux display-message -t $TMUX_PANE -p '#{pane_tty}') ; DIR_NAME=$(basename \"$PWD\") ; SCRIPT=$(mktemp /tmp/claude-notify.XXXXXX.sh) ; echo '#!/bin/bash' > $SCRIPT ; echo \"/usr/bin/osascript -e 'activate application \\\"kitty\\\"'\" >> $SCRIPT ; echo \"/opt/homebrew/bin/tmux select-window -t $TMUX_TARGET\" >> $SCRIPT ; echo \"/opt/homebrew/bin/tmux select-pane -t $TMUX_PANE\" >> $SCRIPT ; echo \"rm $SCRIPT\" >> $SCRIPT ; chmod +x $SCRIPT ; /opt/homebrew/bin/terminal-notifier -title \"Claude Code ($DIR_NAME)\" -message 'Needs your input' -execute $SCRIPT ; printf '\\a' > $PANE_TTY"
           }
         ]
       }
