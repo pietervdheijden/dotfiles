@@ -6,13 +6,19 @@ input=$(cat)
 # Extract values
 cwd=$(echo "$input" | jq -r '.workspace.current_dir')
 model=$(echo "$input" | jq -r '.model.display_name')
-model_id=$(echo "$input" | jq -r '.model.id')
 session_name=$(echo "$input" | jq -r '.session_name // empty')
 remaining=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
 output_style=$(echo "$input" | jq -r '.output_style.name // empty')
 total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
 total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
+total_cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
 transcript_path=$(echo "$input" | jq -r '.transcript_path // empty')
+
+# Calculate turn count from transcript
+turn_count=0
+if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
+    turn_count=$(grep -c '"type":"user"' "$transcript_path" 2>/dev/null || echo "0")
+fi
 
 # Get directory name
 dir=$(basename "$cwd")
@@ -59,7 +65,29 @@ if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
         status=""
     fi
 
-    git_info=$(printf "\033[33m(%s%s)\033[0m" "$branch" "$status")
+    # Get ahead/behind count relative to tracking branch
+    ahead_behind=""
+    if [ "$branch" != "detached" ]; then
+        # Get the tracking branch
+        tracking_branch=$(git -C "$cwd" for-each-ref --format='%(upstream:short)' "refs/heads/$branch" 2>/dev/null)
+
+        if [ -n "$tracking_branch" ]; then
+            # Count commits ahead and behind
+            ahead=$(git -C "$cwd" rev-list --count "$tracking_branch..HEAD" 2>/dev/null || echo "0")
+            behind=$(git -C "$cwd" rev-list --count "HEAD..$tracking_branch" 2>/dev/null || echo "0")
+
+            # Build ahead/behind string
+            if [ "$ahead" -gt 0 ] && [ "$behind" -gt 0 ]; then
+                ahead_behind=" ahead:$ahead behind:$behind"
+            elif [ "$ahead" -gt 0 ]; then
+                ahead_behind=" ahead:$ahead"
+            elif [ "$behind" -gt 0 ]; then
+                ahead_behind=" behind:$behind"
+            fi
+        fi
+    fi
+
+    git_info=$(printf "\033[33m(%s%s%s)\033[0m" "$branch" "$status" "$ahead_behind")
 fi
 
 # Build status line parts
@@ -100,42 +128,13 @@ if [ -n "$duration" ]; then
     parts+=("$(printf "\033[95m%s\033[0m" "$duration")")
 fi
 
-# Add token usage and cost
+# Add turn count
+if [ "$turn_count" -gt 0 ]; then
+    parts+=("$(printf "\033[94mturns:%d\033[0m" "$turn_count")")
+fi
+
+# Add token usage
 if [ "$total_input" -gt 0 ] || [ "$total_output" -gt 0 ]; then
-    # Calculate cost based on model
-    # Prices per million tokens (as of January 2025)
-    case "$model_id" in
-        claude-opus-4*)
-            input_price=15.00
-            output_price=75.00
-            ;;
-        claude-sonnet-4*)
-            input_price=3.00
-            output_price=15.00
-            ;;
-        claude-3-5-sonnet*)
-            input_price=3.00
-            output_price=15.00
-            ;;
-        claude-3-5-haiku*)
-            input_price=0.80
-            output_price=4.00
-            ;;
-        claude-3-haiku*)
-            input_price=0.25
-            output_price=1.25
-            ;;
-        *)
-            input_price=3.00
-            output_price=15.00
-            ;;
-    esac
-
-    # Calculate cost in dollars
-    input_cost=$(awk "BEGIN {printf \"%.4f\", $total_input / 1000000 * $input_price}")
-    output_cost=$(awk "BEGIN {printf \"%.4f\", $total_output / 1000000 * $output_price}")
-    total_cost=$(awk "BEGIN {printf \"%.2f\", $input_cost + $output_cost}")
-
     # Format tokens (K for thousands, M for millions)
     if [ "$total_input" -ge 1000000 ]; then
         input_display=$(awk "BEGIN {printf \"%.1fM\", $total_input / 1000000}")
@@ -154,7 +153,12 @@ if [ "$total_input" -gt 0 ] || [ "$total_output" -gt 0 ]; then
     fi
 
     parts+=("$(printf "\033[96m↓%s ↑%s\033[0m" "$input_display" "$output_display")")
-    parts+=("$(printf "\033[92m\$%s\033[0m" "$total_cost")")
+fi
+
+# Add cost
+cost_display=$(awk "BEGIN {printf \"%.2f\", $total_cost}")
+if [ "$cost_display" != "0.00" ]; then
+    parts+=("$(printf "\033[92m\$%s\033[0m" "$cost_display")")
 fi
 
 # Add model (shortened)
