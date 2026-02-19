@@ -99,7 +99,7 @@ if [ -n "$session_name" ]; then
 fi
 
 # Add directory
-parts+=("$(printf "\033[34m%s\033[0m" "$dir")")
+parts+=("$(printf "\033[34m📁%s\033[0m" "$dir")")
 
 # Add git info
 if [ -n "$git_info" ]; then
@@ -159,12 +159,12 @@ fi
 # Add cost
 cost_display=$(awk "BEGIN {printf \"%.2f\", $total_cost}")
 if [ "$cost_display" != "0.00" ]; then
-    parts+=("$(printf "\033[92m\$%s\033[0m" "$cost_display")")
+    parts+=("$(printf "\033[92m💰\$%s\033[0m" "$cost_display")")
 fi
 
 # Add model (shortened)
 model_short=$(echo "$model" | sed 's/Claude //')
-parts+=("$(printf "\033[90m%s\033[0m" "$model_short")")
+parts+=("$(printf "\033[90m🤖%s\033[0m" "$model_short")")
 
 # Join parts with separator
 result=""
