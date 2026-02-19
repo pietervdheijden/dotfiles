@@ -7,7 +7,7 @@ input=$(cat)
 cwd=$(echo "$input" | jq -r '.workspace.current_dir')
 model=$(echo "$input" | jq -r '.model.display_name')
 session_name=$(echo "$input" | jq -r '.session_name // empty')
-remaining=$(echo "$input" | jq -r '.context_window.remaining_percentage // empty')
+used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 output_style=$(echo "$input" | jq -r '.output_style.name // empty')
 total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
 total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
@@ -106,16 +106,17 @@ if [ -n "$git_info" ]; then
     parts+=("$git_info")
 fi
 
-# Add context remaining
-if [ -n "$remaining" ]; then
-    if awk "BEGIN {exit !($remaining < 20)}"; then
+# Add context usage
+if [ -n "$used_pct" ]; then
+    used_int=$(printf "%.0f" "$used_pct" 2>/dev/null || echo "0")
+    if [ "$used_int" -ge 80 ]; then
         color="\033[31m" # red
-    elif awk "BEGIN {exit !($remaining < 50)}"; then
+    elif [ "$used_int" -ge 50 ]; then
         color="\033[33m" # yellow
     else
         color="\033[32m" # green
     fi
-    parts+=("$(printf "${color}ctx:%s%%\033[0m" "$remaining")")
+    parts+=("$(printf "${color}ctx:%s%%\033[0m" "$used_int")")
 fi
 
 # Add output style if not default
