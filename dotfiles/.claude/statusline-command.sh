@@ -78,11 +78,11 @@ if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
 
             # Build ahead/behind string
             if [ "$ahead" -gt 0 ] && [ "$behind" -gt 0 ]; then
-                ahead_behind=" ahead:$ahead behind:$behind"
+                ahead_behind=" ▲$ahead▼$behind"
             elif [ "$ahead" -gt 0 ]; then
-                ahead_behind=" ahead:$ahead"
+                ahead_behind=" ▲$ahead"
             elif [ "$behind" -gt 0 ]; then
-                ahead_behind=" behind:$behind"
+                ahead_behind=" ▼$behind"
             fi
         fi
     fi
@@ -130,7 +130,7 @@ fi
 
 # Add turn count
 if [ "$turn_count" -gt 0 ]; then
-    parts+=("$(printf "\033[94mturns:%d\033[0m" "$turn_count")")
+    parts+=("$(printf "\033[94m💬%d\033[0m" "$turn_count")")
 fi
 
 # Add token usage
