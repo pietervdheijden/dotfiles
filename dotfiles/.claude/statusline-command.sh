@@ -78,11 +78,11 @@ if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
 
             # Build ahead/behind string
             if [ "$ahead" -gt 0 ] && [ "$behind" -gt 0 ]; then
-                ahead_behind=" ▲$ahead▼$behind"
+                ahead_behind=" ↑$ahead↓$behind"
             elif [ "$ahead" -gt 0 ]; then
-                ahead_behind=" ▲$ahead"
+                ahead_behind=" ↑$ahead"
             elif [ "$behind" -gt 0 ]; then
-                ahead_behind=" ▼$behind"
+                ahead_behind=" ↓$behind"
             fi
         fi
     fi
