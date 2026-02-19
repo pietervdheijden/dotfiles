@@ -19,4 +19,5 @@ echo "*** Stowing dotfiles..."
 # Now only a symlink will be created on the folders in the dotfiles repository
 # Otherwise, potentially sensitive configurations (like the gh folder) will be added to the Git repo
 mkdir -p $HOME/.config
+mkdir -p $HOME/.claude
 stow -d $SCRIPT_DIR -t $HOME dotfiles
