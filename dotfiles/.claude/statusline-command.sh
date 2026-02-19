@@ -87,7 +87,7 @@ if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
         fi
     fi
 
-    git_info=$(printf "\033[33m🌿%s%s%s\033[0m" "$branch" "$status" "$ahead_behind")
+    git_info=$(printf "\033[33m%s%s%s\033[0m" "$branch" "$status" "$ahead_behind")
 fi
 
 # Build status line parts
@@ -99,7 +99,7 @@ if [ -n "$session_name" ]; then
 fi
 
 # Add directory
-parts+=("$(printf "\033[34m📁%s\033[0m" "$dir")")
+parts+=("$(printf "\033[34m%s\033[0m" "$dir")")
 
 # Add git info
 if [ -n "$git_info" ]; then
@@ -164,7 +164,7 @@ fi
 
 # Add model (shortened)
 model_short=$(echo "$model" | sed 's/Claude //')
-parts+=("$(printf "\033[90m🤖%s\033[0m" "$model_short")")
+parts+=("$(printf "\033[90m%s\033[0m" "$model_short")")
 
 # Join parts with separator
 result=""
