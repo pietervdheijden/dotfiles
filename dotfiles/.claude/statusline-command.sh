@@ -3,16 +3,43 @@
 # Read JSON input
 input=$(cat)
 
-# Extract values
-cwd=$(echo "$input" | jq -r '.workspace.current_dir')
-model=$(echo "$input" | jq -r '.model.display_name')
-session_name=$(echo "$input" | jq -r '.session_name // empty')
-used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-output_style=$(echo "$input" | jq -r '.output_style.name // empty')
-total_input=$(echo "$input" | jq -r '.context_window.total_input_tokens // 0')
-total_output=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
-total_cost=$(echo "$input" | jq -r '.cost.total_cost_usd // 0')
-transcript_path=$(echo "$input" | jq -r '.transcript_path // empty')
+# Extract all values in a single jq call
+eval "$(echo "$input" | jq -r '
+  @sh "cwd=\(.workspace.current_dir)",
+  @sh "model=\(.model.display_name)",
+  @sh "session_name=\(.session_name // empty)",
+  @sh "used_pct=\(.context_window.used_percentage // empty)",
+  @sh "output_style=\(.output_style.name // empty)",
+  @sh "total_input=\(.context_window.total_input_tokens // 0)",
+  @sh "total_output=\(.context_window.total_output_tokens // 0)",
+  @sh "total_cost=\(.cost.total_cost_usd // 0)",
+  @sh "session_id=\(.session_id // empty)",
+  @sh "transcript_path=\(.transcript_path // empty)"
+')"
+
+# Track daily costs per session
+daily_cost=""
+if [ -n "$session_id" ]; then
+    today=$(date +%Y-%m-%d)
+    today_dir="$HOME/.claude/costs/$today"
+    created_today_dir=false
+
+    if [ ! -d "$today_dir" ]; then
+        mkdir -p "$today_dir"
+        created_today_dir=true
+    fi
+
+    # Write this session's cost to its own file (no locking needed)
+    echo "$total_cost" > "$today_dir/$session_id"
+
+    # Sum all session costs for today
+    daily_cost=$(cat "$today_dir"/* 2>/dev/null | awk '{s+=$1} END {printf "%.10g", s}')
+
+    # Clean up old cost directories (only when today's was just created)
+    if [ "$created_today_dir" = true ]; then
+        find "$HOME/.claude/costs" -mindepth 1 -maxdepth 1 -type d -mtime +90 -exec rm -rf {} + 2>/dev/null
+    fi
+fi
 
 # Calculate turn count from transcript
 turn_count=0
@@ -156,9 +183,12 @@ if [ "$total_input" -gt 0 ] || [ "$total_output" -gt 0 ]; then
     parts+=("$(printf "\033[96m🪙↓%s ↑%s\033[0m" "$input_display" "$output_display")")
 fi
 
-# Add cost
+# Add cost (session / daily)
 cost_display=$(awk "BEGIN {printf \"%.2f\", $total_cost}")
-if [ "$cost_display" != "0.00" ]; then
+daily_cost_display=$(awk "BEGIN {printf \"%.2f\", ${daily_cost:-0}}")
+if [ "$daily_cost_display" != "0.00" ]; then
+    parts+=("$(printf "\033[92m💰\$%s / \$%s\033[0m" "$cost_display" "$daily_cost_display")")
+elif [ "$cost_display" != "0.00" ]; then
     parts+=("$(printf "\033[92m💰\$%s\033[0m" "$cost_display")")
 fi
 
