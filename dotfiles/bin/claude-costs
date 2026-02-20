@@ -1,0 +1,36 @@
+#!/bin/bash
+
+costs_dir="$HOME/.claude/costs"
+
+if [ ! -d "$costs_dir" ]; then
+    echo "No cost data found."
+    exit 0
+fi
+
+total=0
+output=""
+
+for day_dir in "$costs_dir"/*/; do
+    [ -d "$day_dir" ] || continue
+    day=$(basename "$day_dir")
+    sessions=0
+    day_total=0
+
+    for session_file in "$day_dir"/*; do
+        [ -f "$session_file" ] || continue
+        cost=$(cat "$session_file")
+        day_total=$(awk "BEGIN {printf \"%.10g\", $day_total + $cost}")
+        sessions=$((sessions + 1))
+    done
+
+    day_display=$(awk "BEGIN {printf \"%.2f\", $day_total}")
+    output+=$(printf "%s  \$%-8s (%d sessions)\n" "$day" "$day_display" "$sessions")
+    output+=$'\n'
+    total=$(awk "BEGIN {printf \"%.10g\", $total + $day_total}")
+done
+
+printf "%s" "$output" | sort
+
+echo "---"
+total_display=$(awk "BEGIN {printf \"%.2f\", $total}")
+printf "Total     \$%s\n" "$total_display"
