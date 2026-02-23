@@ -17,34 +17,61 @@ eval "$(echo "$input" | jq -r '
   @sh "transcript_path=\(.transcript_path // empty)"
 ')"
 
-# Track daily costs per session
-daily_cost=""
-if [ -n "$session_id" ]; then
-    today=$(date +%Y-%m-%d)
-    today_dir="$HOME/.claude/costs/$today"
-    created_today_dir=false
-
-    if [ ! -d "$today_dir" ]; then
-        mkdir -p "$today_dir"
-        created_today_dir=true
-    fi
-
-    # Write this session's cost to its own file (no locking needed)
-    echo "$total_cost" > "$today_dir/$session_id"
-
-    # Sum all session costs for today
-    daily_cost=$(cat "$today_dir"/* 2>/dev/null | awk '{s+=$1} END {printf "%.10g", s}')
-
-    # Clean up old cost directories (only when today's was just created)
-    if [ "$created_today_dir" = true ]; then
-        find "$HOME/.claude/costs" -mindepth 1 -maxdepth 1 -type d -mtime +90 -exec rm -rf {} + 2>/dev/null
-    fi
-fi
-
 # Calculate turn count from transcript
 turn_count=0
 if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
     turn_count=$(grep -c '"type":"user"' "$transcript_path" 2>/dev/null || echo "0")
+fi
+
+# Per-interaction stat logging
+daily_cost=""
+if [ -n "$session_id" ]; then
+    log_dir="$HOME/.claude/stats/logs"
+    mkdir -p "$log_dir"
+    log_file="$log_dir/$session_id.jsonl"
+
+    # Get previous cumulative values from last line
+    if [ -f "$log_file" ]; then
+        eval "$(tail -1 "$log_file" | jq -r '
+            @sh "prev_cost=\(.total_cost)",
+            @sh "prev_input=\(.total_input_tokens)",
+            @sh "prev_output=\(.total_output_tokens)"
+        ')"
+    else
+        prev_cost=0 prev_input=0 prev_output=0
+    fi
+
+    # Compute deltas
+    cost_delta=$(awk "BEGIN {printf \"%.10g\", $total_cost - ${prev_cost:-0}}")
+    input_delta=$(( total_input - ${prev_input:-0} ))
+    output_delta=$(( total_output - ${prev_output:-0} ))
+
+    # Append to log if there's new activity
+    if [ "$input_delta" -gt 0 ] || [ "$output_delta" -gt 0 ]; then
+        jq -n -c \
+            --arg ts "$(date +%Y-%m-%dT%H:%M:%S)" \
+            --arg sid "$session_id" \
+            --arg model "$model" \
+            --argjson turn "$turn_count" \
+            --argjson cost_delta "$cost_delta" \
+            --argjson input_delta "$input_delta" \
+            --argjson output_delta "$output_delta" \
+            --argjson context_pct "${used_pct:-0}" \
+            --argjson total_cost "$total_cost" \
+            --argjson total_input "$total_input" \
+            --argjson total_output "$total_output" \
+            '{timestamp:$ts, session_id:$sid, model:$model, turn:$turn,
+              cost_delta:$cost_delta, input_tokens_delta:$input_delta, output_tokens_delta:$output_delta,
+              context_used_pct:$context_pct, total_cost:$total_cost,
+              total_input_tokens:$total_input, total_output_tokens:$total_output}' \
+            >> "$log_file"
+    fi
+
+    # Calculate daily cost by summing cost_delta for today across all log files
+    today=$(date +%Y-%m-%d)
+    daily_cost=$(cat "$log_dir"/*.jsonl 2>/dev/null | jq -s --arg today "$today" '
+        [.[] | select(.timestamp | startswith($today))] | map(.cost_delta) | add // 0
+    ')
 fi
 
 # Get directory name
