@@ -14,4 +14,4 @@ printf '\a' > "$PANE_TTY"
 
 # Save pane ID for focus-on-click via tmux hook
 echo "$TMUX_PANE" > /tmp/claude-notify-pane
-(sleep 300 && rm -f /tmp/claude-notify-pane) &
+(sleep 300 && rm -f /tmp/claude-notify-pane) &>/dev/null &
