@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "DIR_NAME=$(basename \"$PWD\") ; bash ~/.claude/notify.sh \"Claude Code ($DIR_NAME)\" \"Waiting for approval\""
+            "command": "DIR_NAME=$(basename \"$PWD\") ; tmux-notify \"Claude Code ($DIR_NAME)\" \"Waiting for approval\""
           }
         ]
       }
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "DIR_NAME=$(basename \"$PWD\") ; bash ~/.claude/notify.sh \"Claude Code ($DIR_NAME)\" \"Response ready\""
+            "command": "DIR_NAME=$(basename \"$PWD\") ; tmux-notify \"Claude Code ($DIR_NAME)\" \"Response ready\""
           }
         ]
       }

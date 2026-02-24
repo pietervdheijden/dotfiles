@@ -1,5 +1,5 @@
 #!/bin/bash
-f=/tmp/claude-notify-pane
+f=/tmp/tmux-notify-pane
 [ -f "$f" ] || exit 0
 p=$(cat "$f")
 rm -f "$f"
