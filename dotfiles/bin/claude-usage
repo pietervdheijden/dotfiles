@@ -9,18 +9,47 @@ fi
 
 # Aggregate costs per day across all JSONL files
 cat "$log_dir"/*.jsonl 2>/dev/null | jq -rs '
-    group_by(.timestamp[:10])
-    | map({
-        date: .[0].timestamp[:10],
-        cost: (map(.cost_delta) | add),
+    def fmt_tokens:
+        if . >= 1000000 then "\(. / 1000000 * 10 | round / 10)M"
+        elif . >= 1000 then "\(. / 1000 | round)K"
+        else "\(.)"
+        end;
+    # Compute per-session per-day turn deltas to avoid double-counting across days
+    [group_by(.session_id) | .[] |
+      sort_by(.timestamp) |
+      group_by(.timestamp[:10]) |
+      . as $groups |
+      [range(length)] | map(
+        $groups[.] as $g |
+        {
+          date: $g[0].timestamp[:10],
+          session_id: $g[0].session_id,
+          turns: (($g | map(.turn) | max) - (if . == 0 then 0 else ($groups[. - 1] | map(.turn) | max) end)),
+          cost: ($g | map(.cost_delta) | add),
+          input_tokens: ($g | map(.input_tokens_delta) | add),
+          output_tokens: ($g | map(.output_tokens_delta) | add),
+          models: ($g | map(.model))
+        }
+      )[]
+    ] |
+    group_by(.date) |
+    map({
+        date: .[0].date,
+        cost: (map(.cost) | add),
         sessions: (map(.session_id) | unique | length),
-        input_tokens: (map(.input_tokens_delta) | add),
-        output_tokens: (map(.output_tokens_delta) | add)
+        turns: (map(.turns) | add),
+        input_tokens: (map(.input_tokens) | add),
+        output_tokens: (map(.output_tokens) | add),
+        model: ([map(.models) | add | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown")
     })
     | sort_by(.date)
     | . as $days
     | ($days | map(.cost) | add) as $total
-    | ($days[] | "\(.date)  $\(.cost | . * 100 | round / 100 | tostring )  (\(.sessions) sessions, \(.input_tokens) in, \(.output_tokens) out)")
+    | ($days | map(.turns) | add) as $total_turns
+    | ($days | map(.input_tokens) | add) as $total_input
+    | ($days | map(.output_tokens) | add) as $total_output
+    | ([$days | map(.model) | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown") as $total_model
+    | ($days[] | "\(.date)  $\(.cost | . * 100 | round / 100)  \(.sessions) sessions, \(.turns) turns, \(.input_tokens | fmt_tokens) in, \(.output_tokens | fmt_tokens) out, \(.model)")
     , "---"
-    , "Total     $\($total | . * 100 | round / 100)"
+    , "Total     $\($total | . * 100 | round / 100)  \($total_turns) turns, \($total_input | fmt_tokens) in, \($total_output | fmt_tokens) out, \($total_model)"
 '
