@@ -1,7 +1,16 @@
 #!/bin/bash
+# Mark kitty as focused
+touch /tmp/tmux-kitty-focused
+
+# Clear bell on current window
+tmux set-option -w @bell_pending 0
+
+# Handle click-to-focus (switch to notification pane)
 f=/tmp/tmux-notify-pane
 [ -f "$f" ] || exit 0
 p=$(cat "$f")
 rm -f "$f"
 tmux select-window -t "$p"
 tmux select-pane -t "$p"
+# Clear bell on the newly selected window too
+tmux set-option -w @bell_pending 0

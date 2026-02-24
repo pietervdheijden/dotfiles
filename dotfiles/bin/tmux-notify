@@ -20,6 +20,15 @@ kitten notify "${NOTIFY_ARGS[@]}" "$TITLE" "$BODY" > "$CLIENT_TTY"
 # Bell for audio notification
 printf '\a' > "$PANE_TTY"
 
+# Set custom bell flag (persists until kitty has focus on this window)
+tmux set-option -w -t "$TMUX_PANE" @bell_pending 1
+
+# Auto-clear bell if kitty is focused and this is the active pane
+ACTIVE_PANE=$(tmux display-message -p '#{pane_id}')
+if [ -f /tmp/tmux-kitty-focused ] && [ "$TMUX_PANE" = "$ACTIVE_PANE" ]; then
+    (sleep 2 && tmux set-option -w -t "$TMUX_PANE" @bell_pending 0) &>/dev/null &
+fi
+
 # Save pane ID for focus-on-click via tmux hook
 echo "$TMUX_PANE" > /tmp/tmux-notify-pane
 (sleep 300 && rm -f /tmp/tmux-notify-pane) &>/dev/null &
