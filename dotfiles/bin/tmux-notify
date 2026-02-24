@@ -1,4 +1,11 @@
 #!/bin/bash
+ICON=""
+while [[ "$1" == --* ]]; do
+  case "$1" in
+    --icon) ICON="$2"; shift 2 ;;
+    *) shift ;;
+  esac
+done
 TITLE="$1"
 BODY="$2"
 
@@ -6,7 +13,9 @@ CLIENT_TTY=$(tmux display-message -p '#{client_tty}')
 PANE_TTY=$(tmux display-message -t "$TMUX_PANE" -p '#{pane_tty}')
 
 # Send notification directly to Kitty via client TTY
-kitten notify --only-print-escape-code "$TITLE" "$BODY" > "$CLIENT_TTY"
+NOTIFY_ARGS=(--only-print-escape-code)
+[ -n "$ICON" ] && NOTIFY_ARGS+=(--icon-path "$ICON")
+kitten notify "${NOTIFY_ARGS[@]}" "$TITLE" "$BODY" > "$CLIENT_TTY"
 
 # Bell for audio notification
 printf '\a' > "$PANE_TTY"
