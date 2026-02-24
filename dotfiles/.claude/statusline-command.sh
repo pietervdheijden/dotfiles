@@ -38,7 +38,23 @@ if [ -n "$session_id" ]; then
             @sh "prev_output=\(.total_output_tokens)"
         ')"
     else
+        # New session: seed baseline so future deltas are computed correctly.
+        # Use current cumulative totals to avoid inflated first delta when
+        # plan mode creates a new session mid-conversation.
         prev_cost=$total_cost prev_input=$total_input prev_output=$total_output
+        jq -n -c \
+            --arg ts "$(date +%Y-%m-%dT%H:%M:%S)" \
+            --arg sid "$session_id" \
+            --arg model "$model" \
+            --argjson turn "$turn_count" \
+            --argjson total_cost "$total_cost" \
+            --argjson total_input "$total_input" \
+            --argjson total_output "$total_output" \
+            '{timestamp:$ts, session_id:$sid, model:$model, turn:$turn,
+              cost_delta:0, input_tokens_delta:0, output_tokens_delta:0,
+              context_used_pct:0, total_cost:$total_cost,
+              total_input_tokens:$total_input, total_output_tokens:$total_output}' \
+            >> "$log_file"
     fi
 
     # Compute deltas
