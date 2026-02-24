@@ -20,7 +20,7 @@ cat "$log_dir"/*.jsonl 2>/dev/null | jq -rs '
     | sort_by(.date)
     | . as $days
     | ($days | map(.cost) | add) as $total
-    | $days[] | "\(.date)  $\(.cost | . * 100 | round / 100 | tostring | ltrimstr("0") )  (\(.sessions) sessions, \(.input_tokens) in, \(.output_tokens) out)"
+    | ($days[] | "\(.date)  $\(.cost | . * 100 | round / 100 | tostring )  (\(.sessions) sessions, \(.input_tokens) in, \(.output_tokens) out)")
     , "---"
     , "Total     $\($total | . * 100 | round / 100)"
 '
