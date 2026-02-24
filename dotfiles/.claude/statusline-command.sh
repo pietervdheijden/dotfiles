@@ -38,7 +38,7 @@ if [ -n "$session_id" ]; then
             @sh "prev_output=\(.total_output_tokens)"
         ')"
     else
-        prev_cost=0 prev_input=0 prev_output=0
+        prev_cost=$total_cost prev_input=$total_input prev_output=$total_output
     fi
 
     # Compute deltas
