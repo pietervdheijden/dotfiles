@@ -1,6 +1,6 @@
 #!/bin/bash
 
-log_dir="$HOME/.claude/stats/sessions"
+log_dir="$HOME/.claude/usage"
 
 if [ ! -d "$log_dir" ] || [ -z "$(ls "$log_dir"/*.jsonl 2>/dev/null)" ]; then
     echo "No stat data found."

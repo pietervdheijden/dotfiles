@@ -26,7 +26,7 @@ fi
 # Per-interaction stat logging
 daily_cost=""
 if [ -n "$session_id" ]; then
-    log_dir="$HOME/.claude/stats/sessions"
+    log_dir="$HOME/.claude/usage"
     mkdir -p "$log_dir"
     log_file="$log_dir/$session_id.jsonl"
 
