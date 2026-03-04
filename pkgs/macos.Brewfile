@@ -32,6 +32,7 @@ brew "rustup"
 brew "terraform"
 brew "terramate"
 brew "wget"
+brew "yq"
 brew "zoxide"
 
 cask "claude-code"
