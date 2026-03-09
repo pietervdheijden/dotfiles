@@ -34,5 +34,33 @@
   },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(which:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(file:*)",
+      "Bash(type:*)",
+      "Bash(command:*)",
+      "Bash(where:*)",
+      "Bash(wc:*)",
+      "Bash(du:*)",
+      "Bash(df:*)",
+      "Bash(stat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(cat:*)",
+      "Bash(less:*)",
+      "Bash(echo:*)",
+      "Bash(uname:*)",
+      "Bash(whoami:*)",
+      "Bash(hostname:*)",
+      "Bash(pwd:*)",
+      "Bash(date:*)",
+      "Bash(sw_vers:*)",
+      "Bash(man:*)",
+      "Bash(defaults read*)"
+    ]
   }
 }
