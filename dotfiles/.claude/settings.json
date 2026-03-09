@@ -60,7 +60,8 @@
       "Bash(date:*)",
       "Bash(sw_vers:*)",
       "Bash(man:*)",
-      "Bash(defaults read*)"
+      "Bash(defaults read*)",
+      "Bash(az * list*)"
     ]
   }
 }
