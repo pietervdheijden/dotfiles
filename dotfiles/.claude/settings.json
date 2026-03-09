@@ -61,7 +61,8 @@
       "Bash(sw_vers:*)",
       "Bash(man:*)",
       "Bash(defaults read*)",
-      "Bash(az * list*)"
+      "Bash(az * list*)",
+      "Bash(az * query*)"
     ]
   }
 }
