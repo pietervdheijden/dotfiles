@@ -65,7 +65,20 @@
       "Bash(az * show*)",
       "Bash(az * query*)",
       "Bash(az rest --method post --url *CostManagement/query*)",
-      "Bash(az rest --method POST --url *CostManagement/query*)"
+      "Bash(az rest --method POST --url *CostManagement/query*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git remote*)",
+      "Bash(git tag*)",
+      "Bash(git stash list*)",
+      "Bash(git rev-parse*)",
+      "Bash(git add*)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(git switch*)"
     ]
   }
 }
