@@ -62,7 +62,8 @@
       "Bash(man:*)",
       "Bash(defaults read*)",
       "Bash(az * list*)",
-      "Bash(az * query*)"
+      "Bash(az * query*)",
+      "Bash(az rest --method post --url *CostManagement/query*)"
     ]
   }
 }
