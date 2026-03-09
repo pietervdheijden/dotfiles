@@ -33,7 +33,21 @@ az rest --method POST \
   --body '{"type":"ActualCost","timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"name":"Cost","function":"Sum"}},"grouping":[{"type":"Dimension","name":"ServiceName"}]}}'
 ```
 
-Also get costs by resource group and by individual resource ID to find top spenders.
+Also get costs by resource group:
+
+```
+az rest --method POST \
+  --url "https://management.azure.com/subscriptions/$SUB_ID/providers/Microsoft.CostManagement/query?api-version=2023-11-01" \
+  --body '{"type":"ActualCost","timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"name":"Cost","function":"Sum"}},"grouping":[{"type":"Dimension","name":"ResourceGroupName"}]}}'
+```
+
+And by individual resource ID to find top spenders:
+
+```
+az rest --method POST \
+  --url "https://management.azure.com/subscriptions/$SUB_ID/providers/Microsoft.CostManagement/query?api-version=2023-11-01" \
+  --body '{"type":"ActualCost","timeframe":"MonthToDate","dataset":{"aggregation":{"totalCost":{"name":"Cost","function":"Sum"}},"grouping":[{"type":"Dimension","name":"ResourceId"}]}}'
+```
 
 ## Step 3: Infrastructure inventory
 
@@ -43,7 +57,7 @@ Run these in parallel using subagents where possible:
 - **App Service Plans**: `az appservice plan list --subscription $SUB_ID` — SKUs and worker counts
 - **AKS clusters**: `az aks list --subscription $SUB_ID` — node pools, VM sizes, counts
 - **Redis Cache**: `az redis list --subscription $SUB_ID` — SKUs and capacity
-- **SQL servers/databases**: `az sql server list` then `az sql db list` per server — editions and tiers
+- **SQL servers/databases**: `az sql server list --subscription $SUB_ID` then `az sql db list --server <server> --resource-group <rg> --subscription $SUB_ID` per server — editions and tiers
 - **Storage accounts**: `az storage account list --subscription $SUB_ID` — SKUs and access tiers
 - **Cosmos DB**: `az cosmosdb list --subscription $SUB_ID`
 - **Grafana**: `az grafana list --subscription $SUB_ID`
@@ -52,14 +66,14 @@ Run these in parallel using subagents where possible:
 
 Check ALL of the following:
 
-- **Unattached disks**: `az disk list` — look for `diskState != 'Attached'`
-- **Unassociated public IPs**: `az network public-ip list` — look for null `ipConfiguration` AND null `natGateway`
-- **Orphaned NICs**: `az network nic list` — look for null `virtualMachine` AND null `privateEndpoint`. IMPORTANT: NICs used by private endpoints are NOT orphaned
-- **Snapshots**: `az snapshot list` — often forgotten leftovers from deleted VMs
-- **Stopped web apps**: `az webapp list --query "[?state=='Stopped']"` — still incur App Service Plan costs
-- **Empty SQL servers**: SQL servers with only the system `master` database and no user databases
-- **Leftover resource groups**: Look for RG names containing 'migrated', 'old', 'backup', 'test', 'temp' — inspect if they contain resources from decommissioned services
-- **Orphaned networking**: Resource groups that only contain networking resources (NIC, NSG, VNet, Public IP) but no VMs — likely leftovers from deleted VMs
+- **Unattached disks**: `az disk list --subscription $SUB_ID` — look for `diskState != 'Attached'`
+- **Unassociated public IPs**: `az network public-ip list --subscription $SUB_ID` — look for null `ipConfiguration` AND null `natGateway`
+- **Orphaned NICs**: `az network nic list --subscription $SUB_ID` — look for null `virtualMachine` AND null `privateEndpoint`. IMPORTANT: NICs used by private endpoints are NOT orphaned
+- **Snapshots**: `az snapshot list --subscription $SUB_ID` — often forgotten leftovers from deleted VMs
+- **Stopped web apps**: `az webapp list --subscription $SUB_ID --query "[?state=='Stopped']"` — still incur App Service Plan costs
+- **Empty SQL servers**: SQL servers with only the system `master` database and no user databases (from Step 3 data)
+- **Leftover resource groups**: `az group list --subscription $SUB_ID --query "[?contains(name, 'migrated') || contains(name, 'old') || contains(name, 'backup') || contains(name, 'test') || contains(name, 'temp')]"` — inspect if they contain resources from decommissioned services
+- **Orphaned networking**: `az resource list --subscription $SUB_ID -g <rg>` for resource groups that only contain networking resources (NIC, NSG, VNet, Public IP) but no VMs — likely leftovers from deleted VMs
 
 ## Step 5: Azure Advisor cost recommendations
 
