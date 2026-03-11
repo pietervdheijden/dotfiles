@@ -32,6 +32,9 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+# Add dotnet to PATH
+export PATH=$PATH:~/.dotnet
+
 # Load cargo
 . "$HOME/.cargo/env"
 
