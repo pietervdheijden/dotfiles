@@ -1,39 +1,10 @@
 {
-  "model": "claude-opus-4-6",
-  "hooks": {
-    "PermissionRequest": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "DIR_NAME=$(basename \"$PWD\") ; tmux-notify --icon ~/.claude/claude-icon.png \"Claude Code ($DIR_NAME)\" \"Waiting for approval\""
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "DIR_NAME=$(basename \"$PWD\") ; tmux-notify --icon ~/.claude/claude-icon.png \"Claude Code ($DIR_NAME)\" \"Response ready\""
-          }
-        ]
-      }
-    ]
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
   "attribution": {
     "commit": "",
     "pr": ""
-  },
-  "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
     "allow": [
@@ -80,5 +51,34 @@
       "Bash(git pull*)",
       "Bash(git switch*)"
     ]
-  }
+  },
+  "model": "claude-opus-4-6",
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "DIR_NAME=$(basename \"$PWD\") ; tmux-notify --icon ~/.claude/claude-icon.png \"Claude Code ($DIR_NAME)\" \"Waiting for approval\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "DIR_NAME=$(basename \"$PWD\") ; tmux-notify --icon ~/.claude/claude-icon.png \"Claude Code ($DIR_NAME)\" \"Response ready\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high"
 }
