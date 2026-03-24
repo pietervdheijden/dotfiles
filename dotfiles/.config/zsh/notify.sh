@@ -31,6 +31,9 @@ precmd() {
         [[ "$base" == "$exc" ]] && return
     done
 
+    # Only notify inside tmux
+    [[ -z "$TMUX" ]] && return
+
     # Skip if this pane is focused and kitty has focus
     if [[ -n "$TMUX_PANE" ]] && [[ -f /tmp/tmux-kitty-focused ]]; then
         local active_pane
