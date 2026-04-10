@@ -104,6 +104,7 @@
       "Bash(which:*)",
       "Bash(whoami:*)",
 
+      "WebFetch",
       "WebSearch"
     ]
   },
