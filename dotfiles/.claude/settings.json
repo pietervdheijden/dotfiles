@@ -85,6 +85,7 @@
       "Bash(echo:*)",
       "Bash(file:*)",
       "Bash(find:*)",
+      "Bash(grep:*)",
       "Bash(head:*)",
       "Bash(hostname:*)",
       "Bash(jq:*)",
