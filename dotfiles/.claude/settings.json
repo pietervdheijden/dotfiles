@@ -17,22 +17,17 @@
       "Bash(az rest --method get*)",
       "Bash(az account set*)",
       "Bash(az account get-access-token*)",
-
       "Bash(brew info*)",
       "Bash(brew list*)",
       "Bash(brew search*)",
-
       "Bash(cargo build*)",
       "Bash(cargo check*)",
       "Bash(cargo clippy*)",
       "Bash(cargo fmt*)",
       "Bash(cargo test*)",
-
       "Bash(defaults read*)",
-
       "Bash(dotnet build*)",
       "Bash(dotnet test*)",
-
       "Bash(gh api*)",
       "Bash(gh issue list*)",
       "Bash(gh pr checks*)",
@@ -40,7 +35,6 @@
       "Bash(gh pr view*)",
       "Bash(gh run list*)",
       "Bash(gh run view*)",
-
       "Bash(git add*)",
       "Bash(git branch*)",
       "Bash(git config*)",
@@ -61,22 +55,17 @@
       "Bash(git switch*)",
       "Bash(git tag*)",
       "Bash(git version*)",
-
       "Bash(kubectl config*)",
       "Bash(kubectl describe*)",
       "Bash(kubectl get*)",
       "Bash(kubectl logs*)",
-
       "Bash(npm run*)",
       "Bash(npx jest*)",
-
       "Bash(pip list*)",
       "Bash(pip show*)",
       "Bash(python -m pytest*)",
-
       "Bash(terraform state list*)",
       "Bash(terraform state show*)",
-
       "Bash(cat:*)",
       "Bash(command:*)",
       "Bash(date:*)",
@@ -104,7 +93,6 @@
       "Bash(where:*)",
       "Bash(which:*)",
       "Bash(whoami:*)",
-
       "WebFetch",
       "WebSearch"
     ]
@@ -137,5 +125,6 @@
     "command": "bash ~/.claude/statusline-command.sh"
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  "effortLevel": "high",
+  "editorMode": "vim"
 }
