@@ -27,6 +27,9 @@ export PATH=$PATH:~/go/bin
 # Add home bin to PATH
 export PATH=$PATH:~/bin
 
+# Add local bin to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
 # Add pyenv bin to PATH
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
