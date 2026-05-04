@@ -38,7 +38,6 @@ brew "wget"
 brew "yq"
 brew "zoxide"
 
-cask "claude-code"
 cask "chatgpt"
 cask "dbeaver-community"
 cask "gcloud-cli"
