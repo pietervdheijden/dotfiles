@@ -3,6 +3,7 @@ local ensure_installed = {
   'angular-language-server',
   'jdtls', -- java
   'pyright',
+  'rust-analyzer',
   'terraformls',
   'typescript-language-server',
   'lua-language-server',
