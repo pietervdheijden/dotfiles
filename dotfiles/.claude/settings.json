@@ -97,7 +97,6 @@
       "WebSearch"
     ]
   },
-  "model": "claude-opus-4-6",
   "hooks": {
     "PermissionRequest": [
       {
@@ -126,5 +125,6 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "editorMode": "vim"
+  "editorMode": "vim",
+  "model": "opus[1m]"
 }
