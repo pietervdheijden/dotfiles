@@ -28,6 +28,9 @@ function This.setup()
   vim.opt.cursorline = true
   vim.opt.cursorlineopt = "both"
 
+  -- Keep 8 lines of context above/below the cursor when scrolling
+  vim.opt.scrolloff = 8
+
   -- Configure winbar
   vim.o.winbar = '%=%m %{v:lua.require("util.winbar").get_winbar()}'
 
