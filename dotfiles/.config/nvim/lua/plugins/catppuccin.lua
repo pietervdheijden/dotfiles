@@ -6,6 +6,7 @@ return {
       custom_highlights = function(colors)
         return {
           CursorLineNr = { fg = colors.yellow, bold = true },
+          FindCursorFlash = { bg = colors.yellow, fg = colors.base, bold = true },
         }
       end,
       integrations = {
