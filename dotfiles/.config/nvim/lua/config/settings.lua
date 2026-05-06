@@ -24,8 +24,9 @@ function This.setup()
   vim.opt.number = true
   vim.opt.relativenumber = false
 
-  -- Highlight the line under the cursor
+  -- Highlight the line under the cursor (line + line number)
   vim.opt.cursorline = true
+  vim.opt.cursorlineopt = "both"
 
   -- Configure winbar
   vim.o.winbar = '%=%m %{v:lua.require("util.winbar").get_winbar()}'

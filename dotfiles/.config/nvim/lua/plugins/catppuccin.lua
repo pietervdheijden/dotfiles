@@ -3,6 +3,11 @@ return {
     name = "catppuccin", 
     priority = 1000,
     opts = {
+      custom_highlights = function(colors)
+        return {
+          CursorLineNr = { fg = colors.yellow, bold = true },
+        }
+      end,
       integrations = {
         gitsigns = true,
         nvimtree = true,
@@ -14,7 +19,8 @@ return {
         noice = true,
       }
     },
-    config = function () 
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
       vim.cmd.colorscheme "catppuccin"
     end
 }

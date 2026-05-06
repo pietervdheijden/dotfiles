@@ -70,6 +70,7 @@ function This.setup()
   nnoremap('<leader>lg', '<cmd>LazyGit<cr>', 'Open LazyGit')
 
   -- quick actions
+  nnoremap('<leader>m', '<cmd>Beacon<CR>', 'Beacon flash (find cursor)')
   nnoremap('<leader>w', ':w<CR>', 'Save file')
   nnoremap('<leader>x', ':x<CR>', 'Save and close')
   inoremap('<C-s>', '<Esc>:w<CR>a', 'Save file (insert mode)')
