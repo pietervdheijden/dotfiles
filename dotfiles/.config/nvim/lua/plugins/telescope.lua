@@ -18,7 +18,6 @@ return {
           '--column',
           '--smart-case',
           '--hidden',
-          '--no-ignore',
           '--glob', '!.git',
         },
         path_display = function(opts, path)
@@ -49,7 +48,6 @@ return {
             'rg',
             '--files',
             '--hidden',
-            '--no-ignore',
             '--glob', '!.git',
           },
         },
