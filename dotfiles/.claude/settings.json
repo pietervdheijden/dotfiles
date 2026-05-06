@@ -59,7 +59,7 @@
       "Bash(kubectl describe*)",
       "Bash(kubectl get*)",
       "Bash(kubectl logs*)",
-      "Bash(npm run*)",
+      "Bash(npm *)",
       "Bash(npx jest*)",
       "Bash(pip list*)",
       "Bash(pip show*)",
