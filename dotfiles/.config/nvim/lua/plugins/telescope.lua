@@ -25,6 +25,23 @@ return {
           local tail = require("telescope.utils").path_tail(path)
           return string.format("%s - %s", tail, path)
         end,
+        layout_strategy = 'horizontal',
+        layout_config = {
+          horizontal = {
+            width = 0.85,
+            height = 0.85,
+            preview_width = 0.55,
+            prompt_position = 'top',
+          },
+          vertical = {
+            width = 0.85,
+            height = 0.85,
+            preview_height = 0.5,
+            prompt_position = 'top',
+          },
+        },
+        sorting_strategy = 'ascending',
+        borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
       },
       pickers = {
         find_files = {
@@ -35,12 +52,7 @@ return {
             '--no-ignore',
             '--glob', '!.git',
           },
-          theme = 'ivy',
-          previewer = false,
         },
-        live_grep = {
-          theme = 'ivy',
-        }
       }
     })
 
