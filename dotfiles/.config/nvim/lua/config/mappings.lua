@@ -28,7 +28,8 @@ function This.setup()
   nnoremap('<leader>fc', telescope.current_buffer_fuzzy_find, "TS: Search in current buffer")
   nnoremap('<leader>fo', telescope.oldfiles, "TS: Recently opened files")
   nnoremap('<leader>fk', telescope.keymaps, "TS: Keymaps")
-  nnoremap('<leader>fs', telescope.lsp_document_symbols, "TS: LSP symbols")
+  nnoremap('<leader>fs', telescope.lsp_document_symbols, "TS: LSP document symbols")
+  nnoremap('<leader>fS', telescope.lsp_dynamic_workspace_symbols, "TS: LSP workspace symbols")
 
   -- bufferline
   -- Buffer delete operations
@@ -107,27 +108,32 @@ function This.setup_lsp(bufnr)
   vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
   -- LSP
+  local telescope = require('telescope.builtin')
   nnoremap('gD', vim.lsp.buf.declaration, 'LSP: Go to declaration', bufnr)
-  nnoremap('gd', vim.lsp.buf.definition, 'LSP: Go to definition', bufnr)
-  nnoremap('gi', vim.lsp.buf.implementation, 'LSP: Go to implementation', bufnr)
+  nnoremap('gd', telescope.lsp_definitions, 'LSP: Go to definition', bufnr)
+  nnoremap('gi', telescope.lsp_implementations, 'LSP: Go to implementation', bufnr)
   nnoremap('K', vim.lsp.buf.hover, 'LSP: Hover text', bufnr)
-  nnoremap('<C-k>', vim.lsp.buf.signature_help, 'LSP: Show signature', bufnr)
+  nnoremap('gK', vim.lsp.buf.signature_help, 'LSP: Show signature', bufnr)
   nnoremap('<leader>wa', vim.lsp.buf.add_workspace_folder, 'LSP: Add workspace folder', bufnr)
   nnoremap('<leader>wr', vim.lsp.buf.remove_workspace_folder, 'LSP: Remove workspace folder', bufnr)
   nnoremap('<leader>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end,
     'LSP: List workspace folders', bufnr)
-  nnoremap('<leader>D', vim.lsp.buf.type_definition, 'LSP: Go to type definition', bufnr)
+  nnoremap('<leader>D', telescope.lsp_type_definitions, 'LSP: Go to type definition', bufnr)
   nnoremap('<leader>rn', vim.lsp.buf.rename, 'LSP: Rename', bufnr)
-  nnoremap('gr', require('telescope.builtin').lsp_references, 'LSP: Find references', bufnr)
+  nnoremap('gr', telescope.lsp_references, 'LSP: Find references', bufnr)
   nnoremap('<leader>ca', vim.lsp.buf.code_action, "LSP: Code actions", bufnr)
+  vnoremap('<leader>ca', vim.lsp.buf.code_action, "LSP: Code actions (range)", bufnr)
   nnoremap('<leader>lf', function() vim.lsp.buf.format({ async = true }) end, 'LSP: Format file', bufnr)
+  nnoremap('<leader>lh', function()
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+  end, 'LSP: Toggle inlay hints', bufnr)
   nnoremap('<leader>lr', ':LspRestart<CR>', 'LSP: Restart', bufnr)
   nnoremap('<leader>li', ':LspInfo<CR>', 'LSP: Info', bufnr)
 
   -- Diagnostic
   nnoremap('[d', function() vim.diagnostic.jump({ count = -1 }) end, 'Diagnostic: Go to previous', bufnr)
   nnoremap(']d', function() vim.diagnostic.jump({ count = 1 }) end, 'Diagnostic: Go to next', bufnr)
-  nnoremap('<leader>q', vim.diagnostic.setqflist, 'Diagnostic: Set quickfix', bufnr)
+  nnoremap('<leader>qd', vim.diagnostic.setqflist, 'Diagnostic: Set quickfix', bufnr)
   nnoremap('gl', function() vim.diagnostic.open_float(nil, { focusable = false }) end,
     'Diagnostic: Show line diagnostics',
     bufnr)
