@@ -32,8 +32,11 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Add pyenv bin to PATH
 export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+eval "$(pyenv init - --no-rehash)"
+# `pyenv virtualenv-init` adds a chpwd hook that auto-activates a virtualenv
+# when you cd into a directory with a `.python-version`. It costs ~70ms per
+# shell start — uncomment if you rely on the auto-activate behavior.
+# eval "$(pyenv virtualenv-init -)"
 
 # Add dotnet to PATH
 export PATH=$PATH:~/.dotnet
@@ -41,8 +44,9 @@ export PATH=$PATH:~/.dotnet
 # Load cargo
 . "$HOME/.cargo/env"
 
-# libpq
-if command -v brew >/dev/null 2>&1; then
-  export PATH="$(brew --prefix libpq)/bin:$PATH"
-  export PKG_CONFIG_PATH="$(brew --prefix libpq)/lib/pkgconfig:$PKG_CONFIG_PATH"
+# libpq — hardcode the brew prefix so we don't spawn `brew --prefix` twice
+# per shell (~60ms). Falls back to nothing if the path no longer exists.
+if [[ -d /opt/homebrew/opt/libpq ]]; then
+  export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/libpq/lib/pkgconfig:$PKG_CONFIG_PATH"
 fi

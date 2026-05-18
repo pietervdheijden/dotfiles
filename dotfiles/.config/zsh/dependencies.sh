@@ -30,24 +30,35 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 source $ZSH/oh-my-zsh.sh
 
-# command for zsh-completions
-autoload -U compinit && compinit
+# compinit is already run by oh-my-zsh.sh above — calling it again rebuilds
+# .zcompdump and costs ~287ms per shell, so it stays commented out.
+# autoload -U compinit && compinit
 
 # Load Terraform CLI autocompletion.
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-# Load Kubectl CLI autocompletion
-source <(kubectl completion zsh)
+# Kubectl completion is already provided by the oh-my-zsh `kubectl` plugin
+# (cached at ~/.oh-my-zsh/cache/completions/_kubectl). Sourcing
+# `kubectl completion zsh` here regenerates it each shell start (~280ms).
+# source <(kubectl completion zsh)
 
 # Load p10k configuration
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-# Load NVM configuration
-# source /usr/share/nvm/init-nvm.sh
+# Lazy-load NVM — sourcing nvm.sh costs ~400ms per shell, so defer it until
+# the first call to nvm/node/npm/npx/corepack.
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+_load_nvm() {
+  unset -f nvm node npm npx corepack
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+}
+nvm()      { _load_nvm; nvm "$@"; }
+node()     { _load_nvm; node "$@"; }
+npm()      { _load_nvm; npm "$@"; }
+npx()      { _load_nvm; npx "$@"; }
+corepack() { _load_nvm; corepack "$@"; }
 
 # Zoxide
 eval "$(zoxide init --cmd cd zsh)"
