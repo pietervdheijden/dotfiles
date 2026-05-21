@@ -27,6 +27,10 @@ brew update
 echo "==> Installing / upgrading from Brewfile..."
 brew bundle install --file "$BREWFILE" --upgrade
 
+echo "==> Configuring keyboard..."
+defaults write -g KeyRepeat -int 1 
+defaults write -g InitialKeyRepeat -int 10
+
 echo "==> Cleaning up..."
 brew cleanup
 
