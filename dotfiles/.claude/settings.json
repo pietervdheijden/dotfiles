@@ -126,5 +126,5 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "editorMode": "vim",
-  "model": "opus[1m]"
+  "model": "opus"
 }
