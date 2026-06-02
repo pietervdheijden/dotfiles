@@ -97,6 +97,7 @@
       "WebSearch"
     ]
   },
+  "model": "opus",
   "hooks": {
     "PermissionRequest": [
       {
@@ -126,5 +127,5 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "editorMode": "vim",
-  "model": "opus"
+  "tui": "fullscreen"
 }
