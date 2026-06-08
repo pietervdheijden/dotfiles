@@ -1,0 +1,33 @@
+shell-integration = zsh
+#font-family = FiraCode
+font-size = 14
+
+# theme = Catppuccin Mocha
+theme = Dracula
+
+# macOS: hide the title bar; traffic-light buttons remain as floating controls
+# macos-titlebar-style = hidden
+
+# Bell settings (for Claude Code notifications via tmux)
+#   attention -> bounce the dock icon once while unfocused
+#   title     -> prepend a 🔔 to the window title until re-focused
+#   border    -> draw a border around the surface until re-focused (persistent
+#                visual indicator so a waiting task isn't missed)
+# no-system / no-audio keep the bell silent, matching the old kitty setup.
+bell-features = no-system,no-audio,attention,title,border
+
+mouse-hide-while-typing = true
+scrollback-limit = 1000000
+keybind = ctrl+n=new_window
+keybind = ctrl+h=goto_split:left
+keybind = ctrl+j=goto_split:bottom
+keybind = ctrl+k=goto_split:top
+keybind = ctrl+l=goto_split:right
+keybind = ctrl+b>h=new_split:left
+keybind = ctrl+b>j=new_split:down
+keybind = ctrl+b>k=new_split:up
+keybind = ctrl+b>l=new_split:right
+keybind = ctrl+b>f=toggle_split_zoom
+keybind = ctrl+b>n=next_tab
+keybind = ctrl+b>p=previous_tab
+keybind = super+r=reload_config
