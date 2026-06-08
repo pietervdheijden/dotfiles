@@ -2,6 +2,19 @@
 export EDITOR=nvim
 export MANPAGER="nvim +Man!"
 
+# Vi mode at the shell prompt (like Claude Code's editorMode=vim). Esc -> normal
+# mode (hjkl, w/b, ciw, etc.), i/a -> insert. Sourced after oh-my-zsh so this
+# wins over its default emacs bindings.
+bindkey -v
+# Make Esc register almost instantly instead of the default 0.4s delay.
+export KEYTIMEOUT=1
+# Keep a few emacs keys that are useful even in vi mode.
+bindkey '^A' beginning-of-line          # Ctrl+A -> start of line
+bindkey '^E' end-of-line                # Ctrl+E -> end of line
+bindkey '^R' history-incremental-search-backward  # Ctrl+R -> history search
+bindkey '^?' backward-delete-char       # Backspace deletes past insert point
+bindkey -M vicmd '^R' history-incremental-search-backward
+
 # Use UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
