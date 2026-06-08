@@ -18,7 +18,9 @@ bell-features = no-system,no-audio,attention,title,border
 
 mouse-hide-while-typing = true
 scrollback-limit = 1000000
-keybind = ctrl+n=new_window
+
+# Tmux key bindings
+# keybind = ctrl+n=new_window
 keybind = ctrl+h=goto_split:left
 keybind = ctrl+j=goto_split:bottom
 keybind = ctrl+k=goto_split:top
@@ -27,7 +29,14 @@ keybind = ctrl+b>h=new_split:left
 keybind = ctrl+b>j=new_split:down
 keybind = ctrl+b>k=new_split:up
 keybind = ctrl+b>l=new_split:right
+keybind = ctrl+b>shift+5=new_split:right
+keybind = ctrl+b>shift+'=new_split:down
+keybind = ctrl+b>c=new_tab
 keybind = ctrl+b>f=toggle_split_zoom
 keybind = ctrl+b>n=next_tab
 keybind = ctrl+b>p=previous_tab
+keybind = shift+right=next_tab
+keybind = shift+left=previous_tab
+
+# Reload config
 keybind = super+r=reload_config
