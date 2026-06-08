@@ -20,7 +20,7 @@ mouse-hide-while-typing = true
 scrollback-limit = 1000000
 
 # Tmux key bindings
-# keybind = ctrl+n=new_window
+keybind = ctrl+n=new_window
 keybind = ctrl+h=goto_split:left
 keybind = ctrl+j=goto_split:bottom
 keybind = ctrl+k=goto_split:top
