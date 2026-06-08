@@ -49,7 +49,21 @@ cat "$log_dir"/*.jsonl 2>/dev/null | jq -rs '
     | ($days | map(.input_tokens) | add) as $total_input
     | ($days | map(.output_tokens) | add) as $total_output
     | ([$days | map(.model) | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown") as $total_model
-    | ($days[] | "\(.date)  $\(.cost | . * 100 | round / 100)  \(.sessions) sessions, \(.turns) turns, \(.input_tokens | fmt_tokens) in, \(.output_tokens | fmt_tokens) out, \(.model)")
-    , "---"
-    , "Total     $\($total | . * 100 | round / 100)  \($total_turns) turns, \($total_input | fmt_tokens) in, \($total_output | fmt_tokens) out, \($total_model)"
+    | (
+        $days | group_by(.date[:7]) | map({
+            month: .[0].date[:7],
+            cost: (map(.cost) | add),
+            sessions: (map(.sessions) | add),
+            turns: (map(.turns) | add),
+            input_tokens: (map(.input_tokens) | add),
+            output_tokens: (map(.output_tokens) | add),
+            model: ([map(.model) | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown"),
+            days: .
+        })
+        | .[]
+        | (.days[] | "  \(.date)  $\(.cost | . * 100 | round / 100)  \(.sessions) sessions, \(.turns) turns, \(.input_tokens | fmt_tokens) in, \(.output_tokens | fmt_tokens) out, \(.model)")
+        , "  \(.month)    $\(.cost | . * 100 | round / 100)  \(.sessions) sessions, \(.turns) turns, \(.input_tokens | fmt_tokens) in, \(.output_tokens | fmt_tokens) out, \(.model)"
+        , ""
+      )
+    , "Total      $\($total | . * 100 | round / 100)  \($total_turns) turns, \($total_input | fmt_tokens) in, \($total_output | fmt_tokens) out, \($total_model)"
 '
