@@ -93,36 +93,6 @@ fi
 # Get directory name
 dir=$(basename "$cwd")
 
-# Calculate session duration
-duration=""
-if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
-    # Get file creation/modification time in seconds since epoch
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
-        file_time=$(stat -f %B "$transcript_path" 2>/dev/null)
-    else
-        # Linux
-        file_time=$(stat -c %Y "$transcript_path" 2>/dev/null)
-    fi
-
-    if [ -n "$file_time" ]; then
-        current_time=$(date +%s)
-        duration_seconds=$((current_time - file_time))
-
-        # Convert to human-readable format
-        hours=$((duration_seconds / 3600))
-        minutes=$(((duration_seconds % 3600) / 60))
-
-        if [ $hours -gt 0 ]; then
-            duration="${hours}h ${minutes}m"
-        elif [ $minutes -gt 0 ]; then
-            duration="${minutes}m"
-        else
-            duration="<1m"
-        fi
-    fi
-fi
-
 # Get git info
 git_info=""
 if git -C "$cwd" rev-parse --git-dir > /dev/null 2>&1; then
@@ -192,38 +162,6 @@ fi
 # Add output style if not default
 if [ -n "$output_style" ] && [ "$output_style" != "default" ]; then
     parts+=("$(printf "\033[36m%s\033[0m" "$output_style")")
-fi
-
-# Add session duration
-if [ -n "$duration" ]; then
-    parts+=("$(printf "\033[95m⏱️%s\033[0m" "$duration")")
-fi
-
-# Add turn count
-if [ "$turn_count" -gt 0 ]; then
-    parts+=("$(printf "\033[94m💬%d\033[0m" "$turn_count")")
-fi
-
-# Add token usage
-if [ "$total_input" -gt 0 ] || [ "$total_output" -gt 0 ]; then
-    # Format tokens (K for thousands, M for millions)
-    if [ "$total_input" -ge 1000000 ]; then
-        input_display=$(awk "BEGIN {printf \"%.1fM\", $total_input / 1000000}")
-    elif [ "$total_input" -ge 1000 ]; then
-        input_display=$(awk "BEGIN {printf \"%.0fK\", $total_input / 1000}")
-    else
-        input_display="$total_input"
-    fi
-
-    if [ "$total_output" -ge 1000000 ]; then
-        output_display=$(awk "BEGIN {printf \"%.1fM\", $total_output / 1000000}")
-    elif [ "$total_output" -ge 1000 ]; then
-        output_display=$(awk "BEGIN {printf \"%.0fK\", $total_output / 1000}")
-    else
-        output_display="$total_output"
-    fi
-
-    parts+=("$(printf "\033[96m🪙↓%s ↑%s\033[0m" "$input_display" "$output_display")")
 fi
 
 # Add cost (session / daily)
