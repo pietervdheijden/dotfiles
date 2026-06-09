@@ -104,7 +104,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "DIR_NAME=$(basename \"$PWD\") ; ghostty-notify --icon ~/.claude/claude-icon.png \"Claude Code ($DIR_NAME)\" \"Waiting for approval\""
+            "command": "DIR_NAME=$(basename \"$PWD\") ; ghostty-notify \"Claude Code ($DIR_NAME)\" \"Waiting for approval\""
           }
         ]
       }
@@ -114,7 +114,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "DIR_NAME=$(basename \"$PWD\") ; ghostty-notify --icon ~/.claude/claude-icon.png \"Claude Code ($DIR_NAME)\" \"Response ready\""
+            "command": "DIR_NAME=$(basename \"$PWD\") ; ghostty-notify \"Claude Code ($DIR_NAME)\" \"Response ready\""
           }
         ]
       }
