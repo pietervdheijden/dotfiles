@@ -1,0 +1,43 @@
+#!/bin/bash
+# Desktop notification for Claude Code running in Ghostty (no tmux required).
+#
+# Usage: ghostty-notify [--icon PATH] TITLE BODY
+#
+# --icon is accepted for compatibility with tmux-notify but ignored: Ghostty
+# renders notifications with its own app icon.
+#
+# Hooks run without a controlling terminal (/dev/tty is unavailable), so we
+# walk up the process tree to find the pty that Claude Code is attached to and
+# write the escape sequences directly to that device.
+
+while [[ "$1" == --* ]]; do
+  case "$1" in
+    --icon) shift 2 ;;
+    *) shift ;;
+  esac
+done
+TITLE="$1"
+BODY="$2"
+
+find_tty() {
+  local pid=$PPID tty
+  while [ -n "$pid" ] && [ "$pid" != 0 ] && [ "$pid" != 1 ]; do
+    tty=$(ps -o tty= -p "$pid" 2>/dev/null | tr -d ' ')
+    if [ -n "$tty" ] && [ "$tty" != "??" ]; then
+      echo "/dev/$tty"
+      return 0
+    fi
+    pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+  done
+  return 1
+}
+
+TTY=$(find_tty) || exit 0
+[ -w "$TTY" ] || exit 0
+
+{
+  # OSC 777: desktop notification with title + body (Ghostty native)
+  printf '\033]777;notify;%s;%s\033\\' "$TITLE" "$BODY"
+  # Bell -> triggers Ghostty bell-features (attention, title, border)
+  printf '\a'
+} > "$TTY"

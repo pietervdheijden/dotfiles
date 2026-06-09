@@ -31,16 +31,15 @@ precmd() {
         [[ "$base" == "$exc" ]] && return
     done
 
-    # Only notify inside tmux
-    [[ -z "$TMUX" ]] && return
+    local dir="${PWD##*/}"
+    local title="Command finished ($dir)"
+    local body="$cmd — ${elapsed}s"
 
-    # Skip if this pane is focused and kitty has focus
-    if [[ -n "$TMUX_PANE" ]] && [[ -f /tmp/tmux-kitty-focused ]]; then
-        local active_pane
-        active_pane=$(tmux display-message -p '#{pane_id}')
-        [[ "$TMUX_PANE" == "$active_pane" ]] && return
+    if [[ -n "$TMUX" ]]; then
+        # tmux + kitty path (handles its own bell / focus detection)
+        tmux-notify "$title" "$body"
+    else
+        # Ghostty (no tmux); Ghostty suppresses the alert while focused
+        ghostty-notify "$title" "$body"
     fi
-
-    # Send notification
-    tmux-notify "Command finished" "$cmd completed in ${elapsed}s"
 }
