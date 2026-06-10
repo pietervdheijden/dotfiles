@@ -82,6 +82,10 @@ alias cc='claude'
 alias ccc='claude --continue'
 alias ccr='claude --resume'
 
+# JSON
+alias jp='jpp'
+alias jv='jview'
+
 # Other
 alias pp="sed 's/\\\\n/\'$'\\n''/g'" # pretty print
 alias cl='clear'
