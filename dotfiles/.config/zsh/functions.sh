@@ -189,3 +189,38 @@ venv() {
   chmod +x .venv/bin/activate
   source .venv/bin/activate
 }
+
+# Print clipboard contents (macOS pbpaste, Linux wl-paste/xclip).
+_clip_paste() {
+  if command -v pbpaste >/dev/null 2>&1; then
+    pbpaste
+  elif command -v wl-paste >/dev/null 2>&1; then
+    wl-paste
+  elif command -v xclip >/dev/null 2>&1; then
+    xclip -selection clipboard -o
+  else
+    echo "No clipboard tool found (pbpaste/wl-paste/xclip)" >&2
+    return 1
+  fi
+}
+
+# Strip any junk before the first { or [ and after the last } or ]. Useful when
+# copying JSON from a browser that grabs stray characters around the payload.
+_json_trim() {
+  perl -0777 -pe 's/^[^\[{]*//; s/[^\]}]*\z//'
+}
+
+# Pretty-print JSON with jq. Reads from a pipe if given one, else the clipboard.
+#   jpp                # format clipboard JSON
+#   curl -s url | jpp  # format piped JSON
+jpp() {
+  if [ -t 0 ]; then _clip_paste; else cat; fi | _json_trim | jq .
+}
+
+# View JSON in the jless interactive viewer. Reads from a pipe if given one,
+# else the clipboard.
+#   jview                # browse clipboard JSON
+#   curl -s url | jview  # browse piped JSON
+jview() {
+  if [ -t 0 ]; then _clip_paste; else cat; fi | _json_trim | jless
+}

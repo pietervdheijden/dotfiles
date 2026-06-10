@@ -1,9 +1,15 @@
 local This = {}
 
+-- Strip any junk before the first { or [ and after the last } or ]. Useful when
+-- copying JSON from a browser that grabs stray characters around the payload.
+local function json_trim(s)
+  return s:match('[%[{].*[%]}]') or s
+end
+
 function This.setup()
   -- View clipboard JSON formatted in a scratch buffer
   vim.api.nvim_create_user_command('JsonView', function()
-    local raw = vim.fn.getreg('+')
+    local raw = json_trim(vim.fn.getreg('+'))
     if raw == '' then
       vim.notify('Clipboard is empty', vim.log.levels.WARN)
       return
