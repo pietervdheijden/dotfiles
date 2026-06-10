@@ -70,6 +70,11 @@ function This.setup()
   nnoremap('<leader>gd', function() require('gitsigns').diffthis() end, 'Git diff')
   nnoremap('<leader>lg', '<cmd>LazyGit<cr>', 'Open LazyGit')
 
+  -- json
+  nnoremap('<leader>jq', ':JsonFormat<CR>', 'Format JSON in buffer (jq)')
+  vnoremap('<leader>jq', ':JsonFormat<CR>', 'Format JSON selection (jq)')
+  nnoremap('<leader>jv', ':JsonView<CR>', 'View clipboard JSON formatted')
+
   -- quick actions
   nnoremap('<leader>m', function() require('util.find_cursor').flash() end, 'Highlight cursor line until next keystroke')
   nnoremap('<leader>w', ':w<CR>', 'Save file')
