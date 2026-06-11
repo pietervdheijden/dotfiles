@@ -10,84 +10,20 @@ eval "$(echo "$input" | jq -r '
   @sh "session_name=\(.session_name // empty)",
   @sh "used_pct=\(.context_window.used_percentage // empty)",
   @sh "output_style=\(.output_style.name // empty)",
-  @sh "total_input=\(.context_window.total_input_tokens // 0)",
-  @sh "total_output=\(.context_window.total_output_tokens // 0)",
-  @sh "total_cost=\(.cost.total_cost_usd // 0)",
-  @sh "session_id=\(.session_id // empty)",
-  @sh "transcript_path=\(.transcript_path // empty)"
+  @sh "total_cost=\(.cost.total_cost_usd // 0)"
 ')"
 
-# Calculate turn count from transcript
-turn_count=0
-if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
-    turn_count=$(grep -c '"type":"user"' "$transcript_path" 2>/dev/null || echo "0")
-fi
-
-# Per-interaction stat logging
+# Daily + monthly spend, recomputed from transcript token usage × model pricing
+# (the authoritative method; the per-render cost field undercounts due to
+# session-resume resets and cost-field lag). Cached for 60s to stay cheap.
 daily_cost=""
-if [ -n "$session_id" ]; then
-    log_dir="$HOME/.claude/usage"
-    mkdir -p "$log_dir"
-    log_file="$log_dir/$session_id.jsonl"
-
-    # Get previous cumulative values from last line
-    if [ -f "$log_file" ]; then
-        eval "$(tail -1 "$log_file" | jq -r '
-            @sh "prev_cost=\(.total_cost)",
-            @sh "prev_input=\(.total_input_tokens)",
-            @sh "prev_output=\(.total_output_tokens)"
-        ')"
-    else
-        # New session: seed baseline so future deltas are computed correctly.
-        # Use current cumulative totals to avoid inflated first delta when
-        # plan mode creates a new session mid-conversation.
-        prev_cost=$total_cost prev_input=$total_input prev_output=$total_output
-        jq -n -c \
-            --arg ts "$(date +%Y-%m-%dT%H:%M:%S)" \
-            --arg sid "$session_id" \
-            --arg model "$model" \
-            --argjson turn "$turn_count" \
-            --argjson total_cost "$total_cost" \
-            --argjson total_input "$total_input" \
-            --argjson total_output "$total_output" \
-            '{timestamp:$ts, session_id:$sid, model:$model, turn:$turn,
-              cost_delta:0, input_tokens_delta:0, output_tokens_delta:0,
-              context_used_pct:0, total_cost:$total_cost,
-              total_input_tokens:$total_input, total_output_tokens:$total_output}' \
-            >> "$log_file"
-    fi
-
-    # Compute deltas
-    cost_delta=$(awk "BEGIN {printf \"%.10g\", $total_cost - ${prev_cost:-0}}")
-    input_delta=$(( total_input - ${prev_input:-0} ))
-    output_delta=$(( total_output - ${prev_output:-0} ))
-
-    # Append to log if there's new activity
-    if [ "$input_delta" -gt 0 ] || [ "$output_delta" -gt 0 ]; then
-        jq -n -c \
-            --arg ts "$(date +%Y-%m-%dT%H:%M:%S)" \
-            --arg sid "$session_id" \
-            --arg model "$model" \
-            --argjson turn "$turn_count" \
-            --argjson cost_delta "$cost_delta" \
-            --argjson input_delta "$input_delta" \
-            --argjson output_delta "$output_delta" \
-            --argjson context_pct "${used_pct:-0}" \
-            --argjson total_cost "$total_cost" \
-            --argjson total_input "$total_input" \
-            --argjson total_output "$total_output" \
-            '{timestamp:$ts, session_id:$sid, model:$model, turn:$turn,
-              cost_delta:$cost_delta, input_tokens_delta:$input_delta, output_tokens_delta:$output_delta,
-              context_used_pct:$context_pct, total_cost:$total_cost,
-              total_input_tokens:$total_input, total_output_tokens:$total_output}' \
-            >> "$log_file"
-    fi
-
-    # Calculate daily cost by summing cost_delta for today across all log files
-    today=$(date +%Y-%m-%d)
-    daily_cost=$(cat "$log_dir"/*.jsonl 2>/dev/null | jq -s --arg today "$today" '
-        [.[] | select(.timestamp | startswith($today))] | map(.cost_delta) | add // 0
-    ')
+monthly_cost=""
+summary=$(python3 "$HOME/.claude/recompute_cost.py" --summary --cache 60 2>/dev/null)
+if [ -n "$summary" ]; then
+    eval "$(echo "$summary" | jq -r '
+        @sh "daily_cost=\(.day // 0)",
+        @sh "monthly_cost=\(.month // 0)"
+    ')"
 fi
 
 # Get directory name
@@ -164,10 +100,13 @@ if [ -n "$output_style" ] && [ "$output_style" != "default" ]; then
     parts+=("$(printf "\033[36m%s\033[0m" "$output_style")")
 fi
 
-# Add cost (session / daily)
+# Add cost (session / today / month)
 cost_display=$(awk "BEGIN {printf \"%.2f\", $total_cost}")
 daily_cost_display=$(awk "BEGIN {printf \"%.2f\", ${daily_cost:-0}}")
-if [ "$daily_cost_display" != "0.00" ]; then
+monthly_cost_display=$(awk "BEGIN {printf \"%.2f\", ${monthly_cost:-0}}")
+if [ "$monthly_cost_display" != "0.00" ]; then
+    parts+=("$(printf "\033[92m💰\$%s / \$%s / \$%s\033[0m" "$cost_display" "$daily_cost_display" "$monthly_cost_display")")
+elif [ "$daily_cost_display" != "0.00" ]; then
     parts+=("$(printf "\033[92m💰\$%s / \$%s\033[0m" "$cost_display" "$daily_cost_display")")
 elif [ "$cost_display" != "0.00" ]; then
     parts+=("$(printf "\033[92m💰\$%s\033[0m" "$cost_display")")

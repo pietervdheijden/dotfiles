@@ -1,69 +1,12 @@
 #!/bin/bash
 
-log_dir="$HOME/.claude/usage"
+# Per-day / per-month / total Claude Code spend, computed from transcript token
+# usage × model pricing (the authoritative method — see recompute_cost.py).
+# Single source of truth shared with the statusline.
+#
+# Note: figures only go back as far as Claude Code retains transcripts
+# (~30 days). Older months are not shown; for those the raw per-session logs
+# in ~/.claude/usage/*.jsonl are the only remaining record (delta-based, less
+# accurate).
 
-if [ ! -d "$log_dir" ] || [ -z "$(ls "$log_dir"/*.jsonl 2>/dev/null)" ]; then
-    echo "No stat data found."
-    exit 0
-fi
-
-# Aggregate costs per day across all JSONL files
-cat "$log_dir"/*.jsonl 2>/dev/null | jq -rs '
-    def fmt_tokens:
-        if . >= 1000000 then "\(. / 1000000 * 10 | round / 10)M"
-        elif . >= 1000 then "\(. / 1000 | round)K"
-        else "\(.)"
-        end;
-    # Compute per-session per-day turn deltas to avoid double-counting across days
-    [group_by(.session_id) | .[] |
-      sort_by(.timestamp) |
-      group_by(.timestamp[:10]) |
-      . as $groups |
-      [range(length)] | map(
-        $groups[.] as $g |
-        {
-          date: $g[0].timestamp[:10],
-          session_id: $g[0].session_id,
-          turns: (($g | map(.turn) | max) - (if . == 0 then 0 else ($groups[. - 1] | map(.turn) | max) end)),
-          cost: ($g | map(.cost_delta) | add),
-          input_tokens: ($g | map(.input_tokens_delta) | add),
-          output_tokens: ($g | map(.output_tokens_delta) | add),
-          models: ($g | map(.model))
-        }
-      )[]
-    ] |
-    group_by(.date) |
-    map({
-        date: .[0].date,
-        cost: (map(.cost) | add),
-        sessions: (map(.session_id) | unique | length),
-        turns: (map(.turns) | add),
-        input_tokens: (map(.input_tokens) | add),
-        output_tokens: (map(.output_tokens) | add),
-        model: ([map(.models) | add | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown")
-    })
-    | sort_by(.date)
-    | . as $days
-    | ($days | map(.cost) | add) as $total
-    | ($days | map(.turns) | add) as $total_turns
-    | ($days | map(.input_tokens) | add) as $total_input
-    | ($days | map(.output_tokens) | add) as $total_output
-    | ([$days | map(.model) | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown") as $total_model
-    | (
-        $days | group_by(.date[:7]) | map({
-            month: .[0].date[:7],
-            cost: (map(.cost) | add),
-            sessions: (map(.sessions) | add),
-            turns: (map(.turns) | add),
-            input_tokens: (map(.input_tokens) | add),
-            output_tokens: (map(.output_tokens) | add),
-            model: ([map(.model) | .[] | select(. != null)] | group_by(.) | sort_by(-length) | .[0][0] // "unknown"),
-            days: .
-        })
-        | .[]
-        | (.days[] | "  \(.date)  $\(.cost | . * 100 | round / 100)  \(.sessions) sessions, \(.turns) turns, \(.input_tokens | fmt_tokens) in, \(.output_tokens | fmt_tokens) out, \(.model)")
-        , "  \(.month)    $\(.cost | . * 100 | round / 100)  \(.sessions) sessions, \(.turns) turns, \(.input_tokens | fmt_tokens) in, \(.output_tokens | fmt_tokens) out, \(.model)"
-        , ""
-      )
-    , "Total      $\($total | . * 100 | round / 100)  \($total_turns) turns, \($total_input | fmt_tokens) in, \($total_output | fmt_tokens) out, \($total_model)"
-'
+exec python3 "$HOME/.claude/recompute_cost.py" --report
