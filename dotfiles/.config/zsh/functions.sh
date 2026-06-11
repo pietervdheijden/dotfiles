@@ -224,3 +224,13 @@ jpp() {
 jview() {
   if [ -t 0 ]; then _clip_paste; else cat; fi | _json_trim | jless
 }
+
+# POST the clipboard contents (trimmed as JSON) as the request body. Extra args
+# are forwarded to curl, so you can add headers, auth, etc. Put the URL last.
+#   cpost https://api.example.com/endpoint
+#   cpost -H 'Authorization: Bearer xyz' https://api.example.com/endpoint
+#   cpost https://api.example.com/endpoint | jpp   # pretty-print the response
+cpost() {
+  _clip_paste | _json_trim |
+    curl -sS -X POST -H 'Content-Type: application/json' --data-binary @- "$@"
+}
