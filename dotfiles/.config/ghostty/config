@@ -37,6 +37,8 @@ keybind = ctrl+b>n=next_tab
 keybind = ctrl+b>p=previous_tab
 keybind = shift+right=next_tab
 keybind = shift+left=previous_tab
+keybind = ctrl+shift+l=next_tab
+keybind = ctrl+shift+h=previous_tab
 
 # Reload config
 keybind = super+r=reload_config
