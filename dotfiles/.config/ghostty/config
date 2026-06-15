@@ -17,7 +17,12 @@ theme = Dracula
 bell-features = no-system,no-audio,attention,title,border
 
 mouse-hide-while-typing = true
-scrollback-limit = 1000000
+
+# Scrollback buffer size in BYTES (not lines), per surface. Includes the
+# active screen. When full, the oldest output is discarded. Uncomment and
+# raise it if you want to scroll back through more output history.
+# 10000000 = 10 MB is the default.
+# scrollback-limit = 10000000
 
 # Tmux key bindings
 keybind = ctrl+n=new_window
