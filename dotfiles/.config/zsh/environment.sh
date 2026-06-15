@@ -25,6 +25,23 @@ NPM_PACKAGES="${HOME}/.npm-packages"
 export PATH="$PATH:$NPM_PACKAGES/bin"
 export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 
+# Put nvm's default Node on PATH without sourcing nvm.sh (~400ms). nvm is
+# lazy-loaded in dependencies.sh via shell functions, but those only exist in
+# the interactive shell — child processes (e.g. nvim's copilot.lua running
+# `node --version`) inherit only PATH and otherwise find no `node` binary.
+if [[ -d "$HOME/.nvm/versions/node" ]]; then
+  # Read the `default` alias without forking cat; fall back to "node".
+  _nvm_default="${$(<$HOME/.nvm/alias/default):-node}"
+  if [[ "$_nvm_default" == v* ]]; then
+    _nvm_node="$HOME/.nvm/versions/node/$_nvm_default"
+  else
+    # Newest installed version: glob dirs, (n) numeric-sorts, [-1] takes the last.
+    _nvm_node=("$HOME"/.nvm/versions/node/v*(/Nn[-1]))
+  fi
+  [[ -x "$_nvm_node/bin/node" ]] && export PATH="$_nvm_node/bin:$PATH"
+  unset _nvm_default _nvm_node
+fi
+
 # WSL2 specific variables
 if [[ "$(uname -s)" == "Linux" ]] && grep -qi microsoft /proc/version 2>/dev/null; then
   # Use Windows browser (instead of WSL2 browser)
