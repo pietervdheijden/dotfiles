@@ -57,6 +57,12 @@ export PATH=$PATH:~/.dotnet
 # Load cargo
 . "$HOME/.cargo/env"
 
+# Merge all per-cluster kubeconfigs in ~/.kube/configs/ alongside the default.
+# (N) expands to nothing when there are no matches, so KUBECONFIG stays clean.
+typeset -a _kc=("$HOME/.kube/config" "$HOME"/.kube/configs/*.yaml(N))
+export KUBECONFIG="${(j.:.)_kc}"
+unset _kc
+
 # libpq — hardcode the brew prefix so we don't spawn `brew --prefix` twice
 # per shell (~60ms). Falls back to nothing if the path no longer exists.
 if [[ -d /opt/homebrew/opt/libpq ]]; then
