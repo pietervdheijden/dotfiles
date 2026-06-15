@@ -28,8 +28,24 @@ function This.setup()
   vim.opt.cursorline = true
   vim.opt.cursorlineopt = "both"
 
+  -- Always show the sign column so the text doesn't shift horizontally when
+  -- gitsigns/diagnostics appear or disappear.
+  vim.opt.signcolumn = "yes"
+
+  -- Case-insensitive search, unless the pattern contains an uppercase letter.
+  vim.opt.ignorecase = true
+  vim.opt.smartcase = true
+
+  -- Persist undo history to disk so it survives closing/reopening a file.
+  vim.opt.undofile = true
+
   -- Keep 8 lines of context above/below the cursor when scrolling
   vim.opt.scrolloff = 8
+
+  -- Set the terminal/tab title to "vim <cwd>" so multiple nvim instances
+  -- are easy to tell apart (otherwise the terminal just shows "vim").
+  vim.o.title = true
+  vim.o.titlestring = "vim %{fnamemodify(getcwd(), ':~')}"
 
   -- Configure winbar
   vim.o.winbar = '%=%m %{v:lua.require("util.winbar").get_winbar()}'
