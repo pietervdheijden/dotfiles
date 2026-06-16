@@ -69,6 +69,13 @@ function This.setup()
   nnoremap('<leader>gb', telescope.git_branches, 'Git branches')
   nnoremap('<leader>gd', function() require('gitsigns').diffthis() end, 'Git diff')
   nnoremap('<leader>lg', '<cmd>LazyGit<cr>', 'Open LazyGit')
+  nnoremap('<leader>lh', '<cmd>LazyGitFilterCurrentFile<cr>', 'LazyGit current file history')
+  nnoremap('<leader>lH', '<cmd>LazyGitFilter<cr>', 'LazyGit repo history')
+  -- diffview
+  nnoremap('<leader>gv', '<cmd>DiffviewOpen<cr>', 'Diffview: open working tree diff')
+  nnoremap('<leader>gV', '<cmd>DiffviewClose<cr>', 'Diffview: close')
+  nnoremap('<leader>gh', '<cmd>DiffviewFileHistory %<cr>', 'Diffview: current file history')
+  nnoremap('<leader>gH', '<cmd>DiffviewFileHistory<cr>', 'Diffview: repo history')
 
   -- json
   nnoremap('<leader>jq', ':JsonFormat<CR>', 'Format JSON in buffer (jq)')

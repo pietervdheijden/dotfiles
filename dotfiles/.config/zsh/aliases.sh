@@ -65,6 +65,7 @@ alias pir='pip install -r requirements.txt'
 
 # LazyGit
 alias lg='lazygit'
+alias lh='lazygit log'
 
 # Base64
 alias b64='base64'
