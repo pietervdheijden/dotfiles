@@ -1,4 +1,5 @@
 tap "azure/kubelogin"
+tap "fluxcd/tap"
 tap "hashicorp/tap"
 
 brew "azure-cli"
@@ -9,6 +10,7 @@ brew "crane"
 brew "docker"
 brew "docker-compose"
 brew "fd"
+brew "fluxcd/tap/flux"
 brew "fzf"
 brew "gh"
 brew "git"
