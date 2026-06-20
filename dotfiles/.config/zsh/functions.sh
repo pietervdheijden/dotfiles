@@ -6,7 +6,12 @@ kubectl_context() {
     return
   fi
 
-  context=$(kubectl config get-contexts -o name | fzf --prompt="Select Kubernetes context: ")
+  local current
+  current=$(kubectl config current-context 2>/dev/null)
+  context=$(kubectl config get-contexts -o name \
+    | awk -v cur="$current" '{printf "%s %s\n", ($0==cur ? "*" : " "), $0}' \
+    | fzf --prompt="Select Kubernetes context: " \
+    | sed 's/^..//')
 
   if [[ -n "$context" ]]; then
     kubectl config use-context "$context"
@@ -22,7 +27,12 @@ kubectl_namespace() {
     return
   fi
 
-  namespace=$(kubectl get namespaces -o name | sed 's|namespace/||' | fzf --prompt="Select Kubernetes namespace: ")
+  local current
+  current=$(kubectl config view --minify --output "jsonpath={..namespace}" 2>/dev/null)
+  namespace=$(kubectl get namespaces -o name | sed 's|namespace/||' \
+    | awk -v cur="$current" '{printf "%s %s\n", ($0==cur ? "*" : " "), $0}' \
+    | fzf --prompt="Select Kubernetes namespace: " \
+    | sed 's/^..//')
 
   if [[ -n "$namespace" ]]; then
     kubectl config set-context --current --namespace "$namespace"
