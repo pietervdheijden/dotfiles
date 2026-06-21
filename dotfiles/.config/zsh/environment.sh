@@ -2,6 +2,10 @@
 export EDITOR=nvim
 export MANPAGER="nvim +Man!"
 
+# fzf: prompt at the top with results reading top-to-bottom (default layout is
+# bottom-up), and open inline instead of taking the whole terminal.
+export FZF_DEFAULT_OPTS="--layout=reverse --height=~40%"
+
 # Vi mode at the shell prompt (like Claude Code's editorMode=vim). Esc -> normal
 # mode (hjkl, w/b, ciw, etc.), i/a -> insert. Sourced after oh-my-zsh so this
 # wins over its default emacs bindings.
