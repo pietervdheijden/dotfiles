@@ -1,11 +1,5 @@
 return {
   {
-		"zbirenbaum/copilot-cmp",
-		config = function()
-			require("copilot_cmp").setup()
-		end,
-	},
-  {
     "onsails/lspkind.nvim",
   },
   {
@@ -63,21 +57,18 @@ return {
           format = require("lspkind").cmp_format({
             mode = "symbol",
             max_width = 50,
-            symbol_map = { Copilot = "" },
             before = function(entry, vim_item)
               vim_item.menu = ({
                 nvim_lsp = "[LSP]",
                 luasnip = "[Snippet]",
                 buffer = "[Buffer]",
                 path = "[Path]",
-                copilot = "[Copilot]",
               })[entry.source.name]
               return vim_item
             end,
           })
         },
         sources = {
-          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'path' },
           { name = 'buffer' },
