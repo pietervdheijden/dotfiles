@@ -83,6 +83,9 @@ alias cc='claude'
 alias ccc='claude --continue'
 alias ccr='claude --resume'
 
+# Codex
+alias codex='command codex --profile personal'
+
 # JSON
 alias jp='jpp'
 alias jv='jview'
