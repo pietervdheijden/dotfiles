@@ -43,7 +43,8 @@ return {
     },
     filters = {
       dotfiles = false,
-      custom = { "^\\.git$", "node_modules", ".cache" }
+      git_ignored = false,
+      custom = { "^\\.git$" }
     },
     git = {
       ignore = false,

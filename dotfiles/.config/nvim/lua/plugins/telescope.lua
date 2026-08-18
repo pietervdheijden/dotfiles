@@ -7,9 +7,20 @@ return {
   },
   config = function()
     local telescope = require('telescope')
+
+    -- Directories/files to never show, even though we search ignored files.
+    local excludes = {
+      '--glob', '!.git',
+      '--glob', '!node_modules',
+      '--glob', '!.cache',
+      '--glob', '!**/dist/**',
+      '--glob', '!**/build/**',
+      '--glob', '!**/target/**',
+    }
+
     telescope.setup({
       defaults = {
-        vimgrep_arguments = {
+        vimgrep_arguments = vim.list_extend({
           'rg',
           '--color=never',
           '--no-heading',
@@ -17,9 +28,9 @@ return {
           '--line-number',
           '--column',
           '--smart-case',
-          '--hidden',
-          '--glob', '!.git',
-        },
+          '--hidden',     -- include dotfiles (e.g. .env)
+          '--no-ignore',  -- also search git-ignored files
+        }, vim.deepcopy(excludes)),
         path_display = function(opts, path)
           local tail = require("telescope.utils").path_tail(path)
           return string.format("%s - %s", tail, path)
@@ -44,12 +55,12 @@ return {
       },
       pickers = {
         find_files = {
-          find_command = {
+          find_command = vim.list_extend({
             'rg',
             '--files',
-            '--hidden',
-            '--glob', '!.git',
-          },
+            '--hidden',     -- include dotfiles (e.g. .env)
+            '--no-ignore',  -- also list git-ignored files
+          }, vim.deepcopy(excludes)),
         },
       }
     })
