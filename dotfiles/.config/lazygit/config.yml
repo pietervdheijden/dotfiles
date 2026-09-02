@@ -1,4 +1,6 @@
-git: 
-    paging:
-        colorArg: always
-        pager: delta --dark --paging=never --syntax-theme base16-256 -s
+# Esc quits lazygit from the top level (lazygit's default is false)
+quitOnTopLevelReturn: true
+git:
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never --syntax-theme base16-256 -s

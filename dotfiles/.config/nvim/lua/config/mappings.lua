@@ -105,12 +105,22 @@ function This.setup()
     })
     vim.cmd('terminal')
   end, 'Floating terminal')
-  vim.api.nvim_create_autocmd('TermOpen', {
-    callback = function(ev)
-      vim.cmd.startinsert()
-      -- Esc in terminal-normal mode returns to the running program, so an
-      -- accidental scroll/keypress out of terminal mode is easy to recover from.
-      vim.keymap.set('n', '<Esc>', 'i', { buffer = ev.buf, silent = true })
+  -- Terminals (including lazygit's float) own their keys, Esc included, so keep
+  -- them in terminal mode whenever they are focused. Terminal-normal mode makes
+  -- a TUI look frozen; enter it deliberately with <C-\><C-n> when needed.
+  vim.api.nvim_create_autocmd({ 'TermOpen', 'BufEnter', 'WinEnter' }, {
+    callback = function()
+      if vim.bo.buftype ~= 'terminal' or vim.b.terminal_job_id == nil then
+        return
+      end
+      -- Scheduled: at TermOpen the window is not entered yet, so an immediate
+      -- startinsert leaves you in terminal-normal mode.
+      vim.schedule(function()
+        if vim.bo.buftype == 'terminal' and vim.b.terminal_job_id ~= nil
+            and vim.api.nvim_get_mode().mode ~= 't' then
+          vim.cmd.startinsert()
+        end
+      end)
     end,
   })
 
