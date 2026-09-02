@@ -20,6 +20,11 @@ return {
 
     telescope.setup({
       defaults = {
+        mappings = {
+          i = {
+            ['<esc>'] = require('telescope.actions').close,
+          },
+        },
         vimgrep_arguments = vim.list_extend({
           'rg',
           '--color=never',

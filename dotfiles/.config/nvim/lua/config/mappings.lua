@@ -87,7 +87,7 @@ function This.setup()
   nnoremap('<leader>w', ':w<CR>', 'Save file')
   nnoremap('<leader>x', ':x<CR>', 'Save and close')
   inoremap('<C-s>', '<Esc>:w<CR>a', 'Save file (insert mode)')
-  nnoremap('<Esc><Esc>', ':nohlsearch<CR>', 'Clear search highlight')
+  noremap({ 'n', 'i' }, '<Esc>', '<cmd>nohlsearch<CR><Esc>', 'Clear search highlight')
   nnoremap('<leader>qa', ':qa<CR>', 'Quit all')
   nnoremap('<leader>qf', ':copen<CR>', "Open Quickfix List")
 
@@ -105,6 +105,14 @@ function This.setup()
     })
     vim.cmd('terminal')
   end, 'Floating terminal')
+  vim.api.nvim_create_autocmd('TermOpen', {
+    callback = function(ev)
+      vim.cmd.startinsert()
+      -- Esc in terminal-normal mode returns to the running program, so an
+      -- accidental scroll/keypress out of terminal mode is easy to recover from.
+      vim.keymap.set('n', '<Esc>', 'i', { buffer = ev.buf, silent = true })
+    end,
+  })
 
   -- which-key
   nnoremap('<leader>?', function()
