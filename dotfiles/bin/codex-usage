@@ -1,0 +1,192 @@
+#!/usr/bin/env bash
+# Read-only usage estimates from Codex's retained session logs.
+exec python3 - "$@" <<'PY'
+import argparse
+from collections import defaultdict
+from datetime import datetime
+from decimal import Decimal, InvalidOperation
+import json
+import os
+from pathlib import Path
+import sys
+from zoneinfo import ZoneInfo
+
+FIELDS = ('input_tokens', 'cached_input_tokens', 'output_tokens', 'cache_write_input_tokens')
+TZ = ZoneInfo('Europe/Amsterdam')
+
+
+def warn(message):
+    print(f'codex-usage: {message}', file=sys.stderr)
+
+
+def prices(path):
+    if not path.exists():
+        return 'USD', {}, {}
+    data = json.loads(path.read_text())
+    currency = data.get('currency', 'USD')
+    if not isinstance(currency, str) or not currency.strip():
+        raise ValueError('pricing currency must be a nonempty string')
+    result = {}
+    notes = {}
+    for model, rates in data.get('models', {}).items():
+        values = tuple(Decimal(str(rates.get(key, rates['input_tokens'])
+                                   if key == 'cache_write_input_tokens' else rates[key]))
+                       for key in FIELDS)
+        if any(not value.is_finite() or value < 0 for value in values):
+            raise ValueError(f'invalid pricing for {model}')
+        result[model] = values
+        if rates.get('note'):
+            notes[model] = str(rates['note'])
+    return currency, result, notes
+
+
+def sessions(root):
+    records = defaultdict(list)
+    for path in sorted(root.rglob('*.jsonl')):
+        session_id, model = path.stem, 'unknown'
+        with path.open() as stream:
+            for number, line in enumerate(stream, 1):
+                try:
+                    event = json.loads(line)
+                    payload = event.get('payload') or {}
+                    if event.get('type') == 'session_meta':
+                        session_id = payload.get('id') or session_id
+                        model = payload.get('model') or model
+                        records[session_id]  # Include sessions with no usage yet.
+                    elif event.get('type') == 'turn_context':
+                        model = payload.get('model') or 'unknown'
+                    elif (event.get('type') == 'event_msg'
+                          and payload.get('type') == 'token_count'):
+                        info = payload.get('info') or {}
+                        total = info.get('total_token_usage')
+                        if total is None:
+                            continue  # Rate-limit-only update.
+                        values = tuple(total.get(key, 0) if key == 'cache_write_input_tokens'
+                                       else total[key] for key in FIELDS)
+                        if any(type(v) is not int or v < 0 for v in values):
+                            raise ValueError('invalid token counters')
+                        if values[1] > values[0]:
+                            raise ValueError('cached input exceeds input')
+                        stamp = datetime.fromisoformat(event['timestamp'].replace('Z', '+00:00'))
+                        if stamp.tzinfo is None:
+                            raise ValueError('timestamp has no timezone')
+                        records[session_id].append((stamp, model, values))
+                except (ValueError, KeyError, TypeError, AttributeError) as error:
+                    warn(f'{path.name}:{number}: skipped malformed record ({error})')
+    return records
+
+
+def summarize(usage, rates):
+    totals = [sum(values[i] for values in usage.values()) for i in range(3)]
+    missing = sorted(model for model in usage if model not in rates)
+    cost = Decimal(0)
+    for model, (inputs, cached, outputs, writes) in usage.items():
+        if model in rates:
+            normal_rate, cached_rate, output_rate, write_rate = rates[model]
+            cost += ((inputs - cached - writes) * normal_rate + cached * cached_rate
+                     + writes * write_rate + outputs * output_rate) / 1_000_000
+    return totals, missing, cost
+
+
+def daily_report(days, day_sessions, usage, rates, currency):
+    print('Codex usage per day (Europe/Amsterdam)')
+    print('Input includes cached reads and writes. Costs are estimates.')
+    print()
+    def row(label, count, values):
+        totals, missing, cost = summarize(values, rates)
+        amount = 'unknown' if missing else f'{cost:,.2f}'
+        return [label, str(count), *(f'{value:,}' for value in totals), amount]
+    rows = [['Date', 'Sessions', 'Input', 'Cached input', 'Output', f'Cost ({currency})']]
+    for day in sorted(days):
+        rows.append(row(day.isoformat(), len(day_sessions[day]), days[day]))
+    all_sessions = set().union(*day_sessions.values())
+    rows.append(row('Total', len(all_sessions), usage))
+    widths = [max(len(r[i]) for r in rows) for i in range(len(rows[0]))]
+    for index, values in enumerate(rows):
+        if index == len(rows) - 1:
+            print('  '.join('-' * width for width in widths))
+        print('  '.join(value.ljust(width) if i == 0 else value.rjust(width)
+                        for i, (value, width) in enumerate(zip(values, widths))))
+    if not days:
+        print('No usage data found.')
+    missing = summarize(usage, rates)[1]
+    if missing:
+        print(f'Missing prices: {", ".join(missing)}. Affected days and total cost are unknown.')
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Read-only Codex token usage and Azure cost estimates.')
+    commands = parser.add_subparsers(dest='command')
+    parser.set_defaults(command='daily')
+    commands.add_parser('daily', help='daily overview of all retained logs (default)')
+    commands.add_parser('today', help='totals for today in Europe/Amsterdam')
+    session = commands.add_parser('session', help='totals for an exact session ID or unique prefix')
+    session.add_argument('id')
+    args = parser.parse_args()
+    home = Path(os.environ.get('CODEX_HOME', '~/.codex')).expanduser()
+    price_path = Path(os.environ.get('CODEX_USAGE_PRICES', str(home / 'usage-prices.json'))).expanduser()
+    currency, rates, price_notes = prices(price_path)
+    records = sessions(home / 'sessions')
+    today = datetime.now(TZ).date()
+    if args.command == 'session':
+        matches = [key for key in records if key == args.id]
+        if not matches:
+            matches = [key for key in records if key.startswith(args.id)]
+        if len(matches) != 1:
+            parser.error('session ID not found' if not matches else 'ambiguous session ID prefix')
+        records = {matches[0]: records[matches[0]]}
+        title = f'Session {matches[0]}'
+    else:
+        title = f'Today {today} (Europe/Amsterdam)'
+    usage = defaultdict(lambda: [0, 0, 0, 0])
+    days = defaultdict(lambda: defaultdict(lambda: [0, 0, 0, 0]))
+    day_sessions = defaultdict(set)
+    for session_id, events in records.items():
+        previous = (0, 0, 0, 0)
+        regression = False
+        for stamp, model, total in sorted(events, key=lambda row: row[0]):
+            # A high-water mark also ignores replayed events and copied logs.
+            if any(current < old for current, old in zip(total, previous)):
+                regression = True
+                continue
+            delta = tuple(current - old for current, old in zip(total, previous))
+            previous = total
+            if not any(delta):
+                continue
+            if delta[1] > delta[0]:
+                warn(f'{session_id}: inconsistent cached-input delta; estimate may be incomplete')
+                model = 'unknown'
+            day = stamp.astimezone(TZ).date()
+            if args.command == 'today' and day != today:
+                continue
+            day_sessions[day].add(session_id)
+            for index, value in enumerate(delta):
+                usage[model][index] += value
+                days[day][model][index] += value
+        if regression:
+            warn(f'{session_id}: decreasing counters ignored; a counter reset may undercount usage')
+    if args.command == 'daily':
+        daily_report(days, day_sessions, usage, rates, currency)
+    else:
+        totals, missing, cost = summarize(usage, rates)
+        print(title)
+        print(f'Input tokens:        {totals[0]:,} (includes cached)')
+        print(f'Cached input tokens: {totals[1]:,}')
+        print(f'Output tokens:       {totals[2]:,}')
+        if missing:
+            print(f'Estimated cost:      unknown (missing prices: {", ".join(missing)})')
+        else:
+            print(f'Estimated cost:      {currency} {cost:.6f}')
+    if rates:
+        print('Pricing: configured per-model rates; no context or deployment adjustments.')
+    for model in sorted(usage.keys() & price_notes.keys()):
+        print(f'Pricing note ({model}): {price_notes[model]}')
+    print('Retained logs only. Costs are estimates; Azure billing is authoritative.')
+
+
+try:
+    main()
+except (OSError, ValueError, KeyError, TypeError, AttributeError, InvalidOperation) as error:
+    warn(str(error))
+    sys.exit(1)
+PY

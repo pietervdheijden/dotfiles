@@ -1,0 +1,49 @@
+{
+  "currency": "USD",
+  "basis": "Azure Standard, short context; USD per million tokens. Global except the Data Zone alias. Auto-review uses a provisional Sol estimate.",
+  "checked_on": "2026-09-08",
+  "sources": [
+    "https://azure.microsoft.com/en-us/pricing/details/azure-openai/",
+    "https://azure.microsoft.com/en-us/blog/gpt-6-astra-frontier-intelligence-for-work-now-generally-available-in-microsoft-foundry/"
+  ],
+  "models": {
+    "gpt-5.6-sol": {
+      "input_tokens": 5.00,
+      "cached_input_tokens": 0.50,
+      "cache_write_input_tokens": 6.25,
+      "output_tokens": 30.00
+    },
+    "gpt-5.6-terra": {
+      "input_tokens": 2.00,
+      "cached_input_tokens": 0.20,
+      "cache_write_input_tokens": 2.50,
+      "output_tokens": 12.00
+    },
+    "gpt56sol-datazone-payg": {
+      "input_tokens": 5.50,
+      "cached_input_tokens": 0.55,
+      "cache_write_input_tokens": 6.875,
+      "output_tokens": 33.00,
+      "note": "Assumes GPT-5.6 Sol Standard Data Zone, short context, based on the deployment alias."
+    },
+    "codex-auto-review": {
+      "input_tokens": 5.00,
+      "cached_input_tokens": 0.50,
+      "cache_write_input_tokens": 6.25,
+      "output_tokens": 30.00,
+      "note": "Provisional estimate using Sol Global Standard rates; the underlying approval-review model and its actual price are unknown."
+    },
+    "gpt-5.6-luna": {
+      "input_tokens": 0.20,
+      "cached_input_tokens": 0.02,
+      "cache_write_input_tokens": 0.25,
+      "output_tokens": 1.20
+    },
+    "gpt-6-astra": {
+      "input_tokens": 10.00,
+      "cached_input_tokens": 1.00,
+      "cache_write_input_tokens": 12.50,
+      "output_tokens": 50.00
+    }
+  }
+}
