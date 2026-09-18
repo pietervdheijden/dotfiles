@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship"
+  short_description: "Create a branch, commit, push, and open a PR"
+  default_prompt: "Use $ship to create or reuse a task branch, validate and commit my changes, push, and open or update the pull request."
