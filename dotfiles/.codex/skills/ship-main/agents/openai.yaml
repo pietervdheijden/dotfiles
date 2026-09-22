@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ship Main"
+  short_description: "Commit and push task changes directly to main"
+  default_prompt: "Use $ship-main to validate and commit my current task's changes and push them directly to main."
