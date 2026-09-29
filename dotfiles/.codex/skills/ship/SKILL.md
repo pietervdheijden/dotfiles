@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Create or reuse a task branch, validate and commit the current task's changes, push, and open or update a GitHub pull request. Use when the user invokes $ship, says "ship this", or requests the combined branch/commit/push/PR workflow. A standalone review, commit-only, or push-only request retains its narrower scope.
+description: Create or reuse a task branch, validate and commit the current task's changes, push, and open or update a GitHub pull request; continue shipping follow-up changes to the same task. Use when the user invokes $ship, says "ship this", or requests the combined branch/commit/push/PR workflow. A standalone review, commit-only, or push-only request retains its narrower scope.
 ---
 
 # Ship
@@ -13,6 +13,12 @@ description: Create or reuse a task branch, validate and commit the current task
 - Honor explicit restrictions and overrides, such as "draft", a chosen branch name, or "commit only".
 - This shorthand does not authorize merging, deployment, force-pushing, rewriting history, deleting branches, or pushing directly to the default branch.
 - Determine task ownership from the conversation and diff. Preserve unrelated changes and staged work. Ask only when ambiguity prevents selecting the correct changes or remote safely.
+
+## Follow-up changes
+
+Invoking `$ship` enables continuous delivery for the current task. After each subsequent implementation change, complete cleanup and validation, commit and push task-owned changes to the task branch, and keep the existing PR title and description current. Do not wait for another commit or push request, or stop after reporting that completed changes are uncommitted.
+
+This authorization persists across follow-up turns until the user pauses or revokes it, or switches to an unrelated task. Questions and design discussions do not authorize implementation, and unrelated changes remain outside scope. Explicit restrictions such as "do not commit yet" or "commit only" take precedence. Merging and deployment remain unauthorized.
 
 ## Workflow
 
