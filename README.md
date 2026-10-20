@@ -21,6 +21,8 @@ the same session ID, and assigns each increase to its event timestamp's local
 date. Input includes cached input; output includes reasoning tokens already
 present in the recorded output count. Decreasing counters and malformed records
 produce warnings; resets may undercount. Only retained logs are included.
+Usage snapshots immediately before a model context at the same timestamp use
+that context's model. Unresolved model names remain `unknown`.
 
 Configure Azure rates per million tokens in `~/.codex/usage-prices.json`, or set
 `CODEX_USAGE_PRICES` to another JSON file. Use exact model names from the logs.
@@ -54,6 +56,8 @@ September 8, 2026. The `gpt56sol-datazone-payg` alias uses Sol Standard Data Zon
 rates. `codex-auto-review` uses **provisional Sol Global rates** because its
 underlying model and actual price are unknown. Reports show these assumptions
 when the relevant models have usage. Source URLs are in the pricing file.
+GPT-6 Luna and GPT-6.1 Sol use provisional OpenAI Standard rates checked
+October 20, 2026; their Azure rates have not been verified.
 Long-context and other service tiers can cost more; these estimates do not
 automatically select those rates. Optional per-model `note` fields appear in
 the report to explain pricing assumptions.

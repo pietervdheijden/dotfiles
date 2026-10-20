@@ -1,10 +1,11 @@
 {
   "currency": "USD",
-  "basis": "Azure Standard, short context; USD per million tokens. Global except the Data Zone alias. Auto-review uses a provisional Sol estimate.",
+  "basis": "Azure Standard, short context; USD per million tokens. Global except the Data Zone alias. Auto-review uses a provisional Sol estimate. GPT-6 Luna and GPT-6.1 Sol use provisional OpenAI Standard rates checked 2026-10-20.",
   "checked_on": "2026-09-08",
   "sources": [
     "https://azure.microsoft.com/en-us/pricing/details/azure-openai/",
-    "https://azure.microsoft.com/en-us/blog/gpt-6-astra-frontier-intelligence-for-work-now-generally-available-in-microsoft-foundry/"
+    "https://azure.microsoft.com/en-us/blog/gpt-6-astra-frontier-intelligence-for-work-now-generally-available-in-microsoft-foundry/",
+    "https://developers.openai.com/api/docs/pricing"
   ],
   "models": {
     "gpt-5.6-sol": {
@@ -44,6 +45,20 @@
       "cached_input_tokens": 1.00,
       "cache_write_input_tokens": 12.50,
       "output_tokens": 50.00
+    },
+    "gpt-6-luna": {
+      "input_tokens": 0.1,
+      "cached_input_tokens": 0.01,
+      "cache_write_input_tokens": 0.125,
+      "output_tokens": 0.5,
+      "note": "Provisional estimate using published OpenAI Standard rates checked 2026-10-20; Azure pricing has not been verified."
+    },
+    "gpt-6.1-sol": {
+      "input_tokens": 2,
+      "cached_input_tokens": 0.1,
+      "cache_write_input_tokens": 2.5,
+      "output_tokens": 10,
+      "note": "Provisional estimate using published OpenAI Standard rates checked 2026-10-20; Azure pricing has not been verified."
     }
   }
 }

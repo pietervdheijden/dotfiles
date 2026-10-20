@@ -102,6 +102,33 @@ class UsageTests(unittest.TestCase):
         self.assertNotEqual(self.run_usage('session', 'missing').returncode, 0)
         self.assertIn('No usage data found.', self.run_usage().stdout)
 
+    def test_snapshot_before_context_at_same_timestamp(self):
+        stamp = '2026-09-07T12:00:00Z'
+        self.write([event(stamp, 100, 20, 10),
+                    {'timestamp': stamp, 'type': 'turn_context',
+                     'payload': {'model': 'resolved'}}], model=None)
+        result = self.run_usage('session', 'session-123')
+        self.assertIn('missing prices: resolved)', result.stdout)
+        self.assertNotIn('missing prices: unknown)', result.stdout)
+
+    def test_later_context_does_not_guess_unknown_model(self):
+        self.write([event('2026-09-07T12:00:00Z', 100, 20, 10),
+                    {'timestamp': '2026-09-07T12:01:00Z', 'type': 'turn_context',
+                     'payload': {'model': 'resolved'}}], model=None)
+        self.assertIn('missing prices: unknown)',
+                      self.run_usage('session', 'session-123').stdout)
+
+    def test_included_new_model_prices(self):
+        configured = json.loads((SCRIPT.parent.parent / '.codex/usage-prices.json').read_text())
+        (self.home / 'prices.json').write_text(json.dumps(configured))
+        for model, cost in [('gpt-6-luna', '0.132000'), ('gpt-6.1-sol', '2.620000')]:
+            with self.subTest(model=model):
+                self.write([event('2026-09-07T12:00:00Z', 1000000, 200000, 100000)],
+                           model=model)
+                result = self.run_usage('session', 'session-123')
+                self.assertIn(f'USD {cost}', result.stdout)
+                self.assertIn('Azure pricing has not been verified.', result.stdout)
+
     def test_daily_default_midnight_duplicates_and_totals(self):
         first = event('2026-09-07T21:59:59Z', 1000000, 200000, 100000)
         last = event('2026-09-07T22:00:01Z', 3000000, 600000, 300000)

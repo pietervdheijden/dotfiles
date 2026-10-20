@@ -44,6 +44,7 @@ def sessions(root):
     records = defaultdict(list)
     for path in sorted(root.rglob('*.jsonl')):
         session_id, model = path.stem, 'unknown'
+        pending = []
         with path.open() as stream:
             for number, line in enumerate(stream, 1):
                 try:
@@ -55,6 +56,16 @@ def sessions(root):
                         records[session_id]  # Include sessions with no usage yet.
                     elif event.get('type') == 'turn_context':
                         model = payload.get('model') or 'unknown'
+                        # Resumed logs can emit a usage snapshot immediately before
+                        # its context. Only resolve snapshots at the same timestamp.
+                        if model != 'unknown' and event.get('timestamp'):
+                            context_stamp = datetime.fromisoformat(
+                                event['timestamp'].replace('Z', '+00:00'))
+                            for key, index in pending:
+                                stamp, _, values = records[key][index]
+                                if stamp == context_stamp:
+                                    records[key][index] = (stamp, model, values)
+                        pending = []
                     elif (event.get('type') == 'event_msg'
                           and payload.get('type') == 'token_count'):
                         info = payload.get('info') or {}
@@ -71,6 +82,8 @@ def sessions(root):
                         if stamp.tzinfo is None:
                             raise ValueError('timestamp has no timezone')
                         records[session_id].append((stamp, model, values))
+                        if model == 'unknown':
+                            pending.append((session_id, len(records[session_id]) - 1))
                 except (ValueError, KeyError, TypeError, AttributeError) as error:
                     warn(f'{path.name}:{number}: skipped malformed record ({error})')
     return records
