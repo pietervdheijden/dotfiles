@@ -127,7 +127,25 @@ class UsageTests(unittest.TestCase):
                            model=model)
                 result = self.run_usage('session', 'session-123')
                 self.assertIn(f'USD {cost}', result.stdout)
-                self.assertIn('Azure pricing has not been verified.', result.stdout)
+                self.assertIn('published Azure rates verified 2026-10-25.', result.stdout)
+
+    def test_updated_sol_and_unpriced_auto_review(self):
+        configured = json.loads((SCRIPT.parent.parent / '.codex/usage-prices.json').read_text())
+        (self.home / 'prices.json').write_text(json.dumps(configured))
+        for model, cost in [('gpt-5.6-sol', '5.280000'),
+                            ('gpt56sol-datazone-payg', '5.808000')]:
+            with self.subTest(model=model):
+                self.write([event('2026-10-25T12:00:00Z', 1000000, 200000, 100000)],
+                           model=model)
+                result = self.run_usage('session', 'session-123')
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(f'USD {cost}', result.stdout)
+        self.write([event('2026-10-25T12:00:00Z', 100, 20, 10)],
+                   model='codex-auto-review')
+        result = self.run_usage()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('Missing prices: codex-auto-review.', result.stdout)
+        self.assertIn('Pricing note (codex-auto-review): Unpriced:', result.stdout)
 
     def test_daily_default_midnight_duplicates_and_totals(self):
         first = event('2026-09-07T21:59:59Z', 1000000, 200000, 100000)

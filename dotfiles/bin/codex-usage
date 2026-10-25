@@ -29,14 +29,16 @@ def prices(path):
     result = {}
     notes = {}
     for model, rates in data.get('models', {}).items():
+        if rates.get('note'):
+            notes[model] = str(rates['note'])
+        if not any(key in rates for key in FIELDS):
+            continue  # Note-only entries explicitly leave a model unpriced.
         values = tuple(Decimal(str(rates.get(key, rates['input_tokens'])
                                    if key == 'cache_write_input_tokens' else rates[key]))
                        for key in FIELDS)
         if any(not value.is_finite() or value < 0 for value in values):
             raise ValueError(f'invalid pricing for {model}')
         result[model] = values
-        if rates.get('note'):
-            notes[model] = str(rates['note'])
     return currency, result, notes
 
 
@@ -191,7 +193,7 @@ def main():
         else:
             print(f'Estimated cost:      {currency} {cost:.6f}')
     if rates:
-        print('Pricing: configured per-model rates; no context or deployment adjustments.')
+        print('Pricing: configured per-model rates; service tier, context length and deployment are assumed, not inferred from logs.')
     for model in sorted(usage.keys() & price_notes.keys()):
         print(f'Pricing note ({model}): {price_notes[model]}')
     print('Retained logs only. Costs are estimates; Azure billing is authoritative.')

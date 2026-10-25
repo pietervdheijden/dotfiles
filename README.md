@@ -51,16 +51,18 @@ to all recorded usage of that model, without tier or historical price adjustment
 The script only reads files. Costs are estimates; Azure billing is authoritative.
 
 The included `dotfiles/.codex/usage-prices.json` configures Luna, Terra, Sol, and
-Astra using published Azure Global Standard short-context USD rates, checked
-September 8, 2026. The `gpt56sol-datazone-payg` alias uses Sol Standard Data Zone
-rates. `codex-auto-review` uses **provisional Sol Global rates** because its
-underlying model and actual price are unknown. Reports show these assumptions
-when the relevant models have usage. Source URLs are in the pricing file.
-GPT-6 Luna and GPT-6.1 Sol use provisional OpenAI Standard rates checked
-October 20, 2026; their Azure rates have not been verified.
-Long-context and other service tiers can cost more; these estimates do not
-automatically select those rates. Optional per-model `note` fields appear in
-the report to explain pricing assumptions.
+Astra using published Azure Global Standard short-context USD rates. GPT-5.6 Sol,
+GPT-6 Luna, GPT-6.1 Sol and the Sol Data Zone alias were verified October 25, 2026;
+other rates were last checked September 8, 2026. Sol uses promotional rates
+available at least through November 21, 2026. Source URLs are in the pricing file.
+The `gpt56sol-datazone-payg` alias assumes Sol Standard Data Zone rates.
+`codex-auto-review` is unpriced because its underlying model and actual price
+are unknown; usage of it makes the affected day and total cost `unknown`.
+Reports show pricing assumptions for models with usage. Optional per-model
+`note` fields explain assumptions; a note-only entry leaves the model unpriced.
+Long-context and other service tiers can cost more. The retained logs do not
+identify the billed tier or deployment, so the script does not infer them from
+the current Codex configuration or apply current Fast settings to past usage.
 
 Run the usage checks with `python3 -B -m unittest discover -s tests`.
 
