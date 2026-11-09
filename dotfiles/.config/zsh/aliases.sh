@@ -82,6 +82,9 @@ alias mvn17='JAVA_HOME=/usr/lib/jvm/java-17-openjdk mvn'
 alias cc='claude'
 alias ccc='claude --continue'
 alias ccr='claude --resume'
+alias opus='CLAUDE_CODE_EFFORT_LEVEL=medium claude --model "claude-opus-5-5"'
+alias opus-low='CLAUDE_CODE_EFFORT_LEVEL=low claude --model "claude-opus-5-5"'
+alias opus-high='CLAUDE_CODE_EFFORT_LEVEL=high claude --model "claude-opus-5-5"'
 
 # JSON
 alias jp='jpp'
