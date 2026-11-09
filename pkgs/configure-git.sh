@@ -50,6 +50,8 @@ gh auth setup-git
 PERSONAL_CONFIG_FILE=~/.gitconfig-pietervdheijden
 git config --global 'includeIf.gitdir:~/git/pietervdheijden/.path' $PERSONAL_CONFIG_FILE
 git config --file $PERSONAL_CONFIG_FILE user.email "pietervdheijden@gmail.com"
+# Remove the SSH rewrites that older versions of this script added (SSH to GitHub is blocked)
+git config --file $PERSONAL_CONFIG_FILE --remove-section 'url.git@github-personal:' 2>/dev/null || true
 # Repos under ~/git/pietervdheijden/ use HTTPS but always authenticate as the personal
 # account, regardless of the active gh account. The gh credential helper only serves
 # the active account, so ask gh for the personal account's token directly.
