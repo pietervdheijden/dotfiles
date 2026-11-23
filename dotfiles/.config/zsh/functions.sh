@@ -244,3 +244,10 @@ cpost() {
   _clip_paste | _json_trim |
     curl -sS -X POST -H 'Content-Type: application/json' --data-binary @- "$@"
 }
+
+
+# Claude Code with Opus. Functions (not aliases) so zsh-syntax-highlighting recognizes them as commands.
+# `command` bypasses alias expansion so these call the real binary, not the `claude` alias (see aliases.sh).
+opus()      { CLAUDE_CODE_EFFORT_LEVEL=medium command claude --model "claude-opus-5-5" "$@"; }
+opus-low()  { CLAUDE_CODE_EFFORT_LEVEL=low    command claude --model "claude-opus-5-5" "$@"; }
+opus-high() { CLAUDE_CODE_EFFORT_LEVEL=high   command claude --model "claude-opus-5-5" "$@"; }
